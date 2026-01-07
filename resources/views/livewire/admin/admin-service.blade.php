@@ -34,7 +34,7 @@
                             </td>
                             <td class="px-5 py-4 flex items-center gap-3">
                                 @if($service->image)
-                                    <img src="{{ asset('storage/'.$service->image) }}"
+                                    <img src="{{ $service->image_url }}"
                                         class="w-10 h-10 rounded-md object-cover">
                                 @endif
 
@@ -112,16 +112,19 @@
                             Uploading...
                         </div>
 
+                        {{-- New image preview (Livewire temp) --}}
                         @if ($image)
-                            <img src="{{ $image->temporaryUrl() }}"
-                                class="mt-3 h-24 rounded-md border object-cover">
+                            <img src="{{ $existingImageUrl }}?tr=w-300,h-200,fo-auto" class="mt-3 h-24 rounded-md border object-cover">
+
                         @endif
 
-                        @if (!$image && $existingImage)
-                            <img src="{{ asset('storage/'.$existingImage) }}"
-                                class="mt-3 h-24 rounded-md border object-cover">
+                        {{-- Existing image preview (ImageKit) --}}
+                        @if (!$image && $existingImageUrl)
+                            <img src="{{ $existingImageUrl }}?tr=w-300,h-200,fo-auto" class="mt-3 h-24 rounded-md border object-cover">
+
                         @endif
                     </div>
+
 
 
 

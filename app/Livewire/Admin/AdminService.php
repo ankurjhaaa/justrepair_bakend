@@ -4,10 +4,10 @@ namespace App\Livewire\Admin;
 
 use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Livewire\WithFileUploads;
 use App\Models\Service;
 use Illuminate\Support\Str;
-use Livewire\WithFileUploads;
-use Illuminate\Support\Facades\Storage;
+use ImageKit\ImageKit;
 
 #[Layout('layouts.admin')]
 class AdminService extends Component
@@ -18,13 +18,23 @@ class AdminService extends Component
 
     public $serviceId = null;
     public $name = '';
-    public $image = '';
-    public $existingImage;
+    public $image = null;
+    public $existingImage = null; // imagekit fileId
+    public $existingImageUrl = null;
 
     public $requirements = [];
 
     public $showModal = false;
     public $isEdit = false;
+
+    protected function imageKit()
+    {
+        return new ImageKit(
+            config('imagekit.public_key'),
+            config('imagekit.private_key'),
+            config('imagekit.url_endpoint')
+        );
+    }
 
     public function mount()
     {
@@ -49,37 +59,62 @@ class AdminService extends Component
 
         $this->serviceId = $service->id;
         $this->name = $service->name;
-        $this->existingImage = $service->image; // 👈 old image
+        $this->existingImage = $service->image; // fileId
+        $this->existingImageUrl = $service->image_url;
         $this->requirements = $service->requirements ?? [''];
 
-        $this->image = null; // reset new image
+        $this->image = null;
         $this->isEdit = true;
         $this->showModal = true;
+        
     }
 
-
+    /* ===============================
+        SAVE / UPDATE (IMAGEKIT)
+    ================================ */
     public function save()
     {
         $this->validate([
             'name' => 'required|min:3',
-            'image' => $this->isEdit ? 'nullable|image|max:2048' : 'required|image|max:2048',
+            'image' => $this->isEdit
+                ? 'nullable|image|max:2048'
+                : 'required|image|max:2048',
             'requirements' => 'array|min:1',
         ]);
 
-        $imagePath = $this->existingImage;
+        $fileId = $this->existingImage;
+        $imageUrl = $this->existingImageUrl;
 
         if ($this->image) {
-            $imagePath = $this->image->store('services', 'public');
+
+            // 🔥 delete old image from ImageKit (edit)
+            if ($this->isEdit && $this->existingImage) {
+                $this->imageKit()->deleteFile($this->existingImage);
+            }
+
+            // 🔥 upload to ImageKit
+            $upload = $this->imageKit()->upload([
+                'file' => base64_encode(file_get_contents($this->image->getRealPath())),
+                'fileName' => time() . '_' . Str::random(10) . '.' . $this->image->getClientOriginalExtension(),
+                'folder' => '/services',
+            ]);
+
+            if (isset($upload->error)) {
+                $this->addError('image', 'Image upload failed');
+                return;
+            }
+
+            $fileId = $upload->result->fileId;
+            $imageUrl = $upload->result->url;
         }
-        $imageUrl = asset('storage/' . $imagePath);
 
         Service::updateOrCreate(
             ['id' => $this->serviceId],
             [
                 'name' => $this->name,
                 'slug' => Str::slug($this->name),
-                'image' => $imagePath,
-                'image_url' => $imageUrl,
+                'image' => $fileId,          // 🔑 ImageKit fileId
+                'image_url' => $imageUrl,    // 🔗 ImageKit URL
                 'requirements' => array_values(array_filter($this->requirements)),
             ]
         );
@@ -88,18 +123,19 @@ class AdminService extends Component
         $this->fetchServices();
     }
 
-
-
+    /* ===============================
+        DELETE SERVICE (IMAGEKIT)
+    ================================ */
     public function delete($id)
     {
         $service = Service::findOrFail($id);
 
-        if ($service->image && Storage::disk('public')->exists($service->image)) {
-            Storage::disk('public')->delete($service->image);
+        // 🔥 delete image from ImageKit
+        if ($service->image) {
+            $this->imageKit()->deleteFile($service->image);
         }
 
         $service->delete();
-
         $this->fetchServices();
     }
 
@@ -113,9 +149,18 @@ class AdminService extends Component
         unset($this->requirements[$index]);
         $this->requirements = array_values($this->requirements);
     }
+
     private function resetForm()
     {
-        $this->reset(['serviceId', 'name', 'image', 'existingImage', 'requirements']);
+        $this->reset([
+            'serviceId',
+            'name',
+            'image',
+            'existingImage',
+            'existingImageUrl',
+            'requirements',
+        ]);
+
         $this->showModal = false;
         $this->isEdit = false;
     }
