@@ -10,7 +10,7 @@ Route::get('/user', function (Request $request) {
 
 Route::controller(ApiController::class)->group(function () {
     Route::get('faq', 'faq')->name('faq');
-    Route::get('service', 'service')->name('service');
+    Route::get('services', 'service')->name('service');
     Route::get('service/{slug}', 'viewService')->name('viewService');
 
 
