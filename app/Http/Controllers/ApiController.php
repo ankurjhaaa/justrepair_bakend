@@ -16,7 +16,7 @@ class ApiController extends Controller
             "message" => "faq fetched success",
             "data" => $faqs,
         ]);
-    }
+    } 
     public function service(){
         $services = Service::select('id','name','slug','image','requirements')->get();
         return response()->json([
