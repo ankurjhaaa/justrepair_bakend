@@ -52,13 +52,13 @@
             <!-- NAV -->
             <nav class="flex-1 px-3 py-4 space-y-1 text-sm overflow-y-auto">
 
-                <a href="#"
+                <a wire:navigate href="{{ route('admin.dashboard') }}"
                     class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-gray-700">
                     <i class="fa-solid fa-chart-line"></i>
                     Dashboard
                 </a>
 
-                <a href="#"
+                <a wire:navigate href="{{ route('admin.service') }}"
                     class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-gray-700">
                     <i class="fa-solid fa-screwdriver-wrench"></i>
                     Services

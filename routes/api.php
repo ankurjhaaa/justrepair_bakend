@@ -11,6 +11,7 @@ Route::get('/user', function (Request $request) {
 Route::controller(ApiController::class)->group(function () {
     Route::get('faq', 'faq')->name('faq');
     Route::get('service', 'service')->name('service');
-    
+    Route::get('viewservice/{slug}', 'viewService')->name('viewService');
+
 
 });

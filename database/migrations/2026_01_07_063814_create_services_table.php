@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug')->nullable();
             $table->string('image')->nullable();
+            $table->string('image_url')->nullable();
             $table->json('requirements')->nullable();
             $table->timestamps();
         });

@@ -71,6 +71,7 @@ class AdminService extends Component
         if ($this->image) {
             $imagePath = $this->image->store('services', 'public');
         }
+        $imageUrl = asset('storage/' . $imagePath);
 
         Service::updateOrCreate(
             ['id' => $this->serviceId],
@@ -78,6 +79,7 @@ class AdminService extends Component
                 'name' => $this->name,
                 'slug' => Str::slug($this->name),
                 'image' => $imagePath,
+                'image_url' => $imageUrl,
                 'requirements' => array_values(array_filter($this->requirements)),
             ]
         );
