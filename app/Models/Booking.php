@@ -10,4 +10,12 @@ class Booking extends Model
     protected $casts = [
         'requirements' => 'array',
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    public function service()
+    {
+        return $this->belongsTo(Service::class);
+    }
 }

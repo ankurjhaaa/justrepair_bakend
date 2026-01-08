@@ -17,12 +17,17 @@ Route::controller(ApiController::class)->name('api.')->group(function () {
     Route::post('bookservice', 'bookservice')->name('bookservice');
     Route::get('userAddress/{id}', 'userAddress')->name('userAddress');
     Route::post('addUserAddress', 'addUserAddress')->name('addUserAddress');
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/profile', 'profile')->name('profile');
+        Route::get('/my-booked-services', 'myBookedServices')->name('myBookedServices');
 
+    });
 });
 Route::controller(AuthController::class)->name('api.')->group(function () {
     Route::post('signup', 'signup')->name('signup');
     Route::post('login', 'login')->name('login');
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
+
     });
 });

@@ -232,4 +232,40 @@ class ApiController extends Controller
             ], 500);
         }
     }
+
+    public function profile(Request $request)
+    {
+        try {
+            $user = $request->user();
+            return response()->json([
+                "status" => true,
+                "message" => "user profile fetched successfully",
+                "data" => $user,
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                "status" => false,
+                "message" => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function myBookedServices(Request $request)
+    {
+        try {
+            $user = $request->user();
+            $bookings = Booking::where('user_id', $user->id)->with('service')->get();
+            return response()->json([
+                "status" => true,
+                "message" => "user booked services fetched successfully",
+                "data" => $bookings,
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                "status" => false,
+                "message" => $e->getMessage()
+            ]);
+        }
+    }
+
 }
