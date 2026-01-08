@@ -63,6 +63,11 @@
                     <i class="fa-solid fa-screwdriver-wrench"></i>
                     Services
                 </a>
+                <a wire:navigate href="{{ route('admin.servicerate') }}"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-gray-700">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                    Services Rates
+                </a>
 
                 <a href="#"
                     class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-gray-700">

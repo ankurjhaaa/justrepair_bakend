@@ -15,9 +15,16 @@ return new class extends Migration {
             $table->string('booking_id')->nullable()->unique();
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->foreignId('service_id')->nullable()->constrained('services');
-            $table->foreignId('address_id')->nullable()->constrained('addresses');
             $table->timestamp('date')->nullable();
-            $table->string('shift')->nullable();
+            $table->string('time')->nullable();
+            
+            
+            $table->string('name')->nullable();
+            $table->string('mobile')->nullable();
+            $table->string('address')->nullable();
+            $table->string('city')->nullable();
+            $table->string('landmark')->nullable();
+
             $table->json('requirements')->nullable();
             $table->timestamps();
         });

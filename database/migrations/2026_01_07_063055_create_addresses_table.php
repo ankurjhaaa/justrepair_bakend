@@ -17,15 +17,13 @@ return new class extends Migration {
 
             $table->string('name');
             $table->string('mobile', 15);
-
-            $table->string('house_no')->nullable();
-            $table->string('street')->nullable();
             $table->string('landmark')->nullable();
-
+            $table->text('address')->nullable();
             $table->string('city');
-            $table->string('district')->nullable();
-            $table->string('state');
-            $table->string('pincode', 6);
+ 
+
+            $table->string('state')->nullable();
+            $table->string('pincode', 6)->nullable();
 
             $table->enum('address_type', ['home', 'office', 'other'])
                 ->default('home');

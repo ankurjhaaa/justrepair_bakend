@@ -12,6 +12,9 @@ Route::controller(ApiController::class)->group(function () {
     Route::get('faq', 'faq')->name('faq');
     Route::get('services', 'service')->name('service');
     Route::get('service/{slug}', 'viewService')->name('viewService');
-
+    Route::get('servicerates/{slug}', 'servicerates')->name('servicerates');
+    Route::post('bookservice','bookservice')->name('boooking');
+    Route::get('userAddress/{id}','userAddress')->name('userAddress');
+    Route::post('addUserAddress','addUserAddress')->name('addUserAddress');
 
 });
