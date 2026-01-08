@@ -22,5 +22,7 @@ Route::controller(ApiController::class)->name('api.')->group(function () {
 Route::controller(AuthController::class)->name('api.')->group(function () {
     Route::post('signup', 'signup')->name('signup');
     Route::post('login', 'login')->name('login');
-    Route::post('logout', 'logout')->name('logout');
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/logout', [AuthController::class, 'logout']);
+    });
 });

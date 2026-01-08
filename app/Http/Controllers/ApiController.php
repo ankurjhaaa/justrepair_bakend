@@ -110,7 +110,7 @@ class ApiController extends Controller
             'mobile' => 'required|string',
             'address' => 'required|string',
             'city' => 'required|string',
-            'landmark' => 'required|string',
+            'landmark' => 'nullable|string',
             'date' => 'required|date',
             'time' => 'required|string',
             'requirements' => 'nullable|array|min:1',

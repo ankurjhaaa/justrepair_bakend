@@ -14,14 +14,14 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'phone' => 'required|string',
+            'mobile' => 'required|string',
             'password' => 'required|string',
         ]);
 
         try {
             $user = User::create([
                 'name' => $request->name,
-                'phone' => $request->phone,
+                'phone' => $request->mobile,
                 'password' => Hash::make($request->password),
             ]);
             $token = $user->createToken('auth_token')->plainTextToken;
@@ -32,7 +32,7 @@ class AuthController extends Controller
                 "user" => $user,
                 "token" => $token
 
-            ],201);
+            ], 201);
         } catch (\Throwable $e) {
             return response()->json([
                 "status" => false,
@@ -40,7 +40,49 @@ class AuthController extends Controller
             ]);
         }
     }
-    public function login(){
-        
+    public function login(Request $request)
+    {
+        $request->validate([
+            'mobile' => 'required|string',
+            'password' => 'required|string',
+        ]);
+        try {
+            $user = User::where('phone', $request->mobile)->first();
+            if (!$user || !Hash::check($request->password, $user->password)) {
+                throw ValidationException::withMessages([
+                    'mobile' => ['Invalid mobile or password']
+                ]);
+            }
+            $user->tokens()->delete();
+            $token = $user->createToken('auth_token')->plainTextToken;
+            return response()->json([
+                'status' => true,
+                'message' => 'Login successful',
+                'token' => $token,
+                'user' => $user,
+            ], 201);
+        } catch (\Throwable $e) {
+            return response()->json([
+                "status" => false,
+                "message" => $e->getMessage()
+            ]);
+        }
+
+    }
+    public function logout(Request $request)
+    {
+        try {
+
+            $request->user()->currentAccessToken()->delete();
+            return response()->json([
+                'status' => true,
+                'message' => 'Logged out successfully',
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 }
