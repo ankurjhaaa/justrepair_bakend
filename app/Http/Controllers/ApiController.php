@@ -113,7 +113,7 @@ class ApiController extends Controller
             'landmark' => 'required|string',
             'date' => 'required|date',
             'time' => 'required|string',
-            'requirements' => 'required|array|min:1',
+            'requirements' => 'nullable|array|min:1',
             'requirements.*' => 'string',
         ]);
 

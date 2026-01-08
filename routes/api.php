@@ -9,7 +9,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::controller(ApiController::class)->group(function () {
+Route::controller(ApiController::class)->name('api.')->group(function () {
     Route::get('faq', 'faq')->name('faq');
     Route::get('services', 'service')->name('service');
     Route::get('service/{slug}', 'viewService')->name('viewService');
@@ -19,7 +19,7 @@ Route::controller(ApiController::class)->group(function () {
     Route::post('addUserAddress', 'addUserAddress')->name('addUserAddress');
 
 });
-Route::controller(AuthController::class)->group(function () {
+Route::controller(AuthController::class)->name('api.')->group(function () {
     Route::post('signup', 'signup')->name('signup');
     Route::post('login', 'login')->name('login');
     Route::post('logout', 'logout')->name('logout');
