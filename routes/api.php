@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -13,8 +14,13 @@ Route::controller(ApiController::class)->group(function () {
     Route::get('services', 'service')->name('service');
     Route::get('service/{slug}', 'viewService')->name('viewService');
     Route::get('servicerates/{slug}', 'servicerates')->name('servicerates');
-    Route::post('bookservice','bookservice')->name('boooking');
-    Route::get('userAddress/{id}','userAddress')->name('userAddress');
-    Route::post('addUserAddress','addUserAddress')->name('addUserAddress');
+    Route::post('bookservice', 'bookservice')->name('bookservice');
+    Route::get('userAddress/{id}', 'userAddress')->name('userAddress');
+    Route::post('addUserAddress', 'addUserAddress')->name('addUserAddress');
 
+});
+Route::controller(AuthController::class)->group(function () {
+    Route::post('signup', 'signup')->name('signup');
+    Route::post('login', 'login')->name('login');
+    Route::post('logout', 'logout')->name('logout');
 });

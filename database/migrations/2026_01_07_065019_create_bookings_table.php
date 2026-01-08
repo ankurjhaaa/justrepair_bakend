@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            $table->string('booking_id')->nullable()->unique();
+            $table->string('booking_id')->nullable();
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->foreignId('service_id')->nullable()->constrained('services');
             $table->timestamp('date')->nullable();
@@ -24,6 +24,10 @@ return new class extends Migration {
             $table->string('address')->nullable();
             $table->string('city')->nullable();
             $table->string('landmark')->nullable();
+
+            $table->boolean('is_paid')->default(false);
+            $table->enum('status',['pending','confirm','success'])->default('pending');
+
 
             $table->json('requirements')->nullable();
             $table->timestamps();

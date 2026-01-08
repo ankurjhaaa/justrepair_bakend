@@ -9,6 +9,7 @@ use App\Models\Service;
 use App\Models\ServiceRate;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
@@ -16,56 +17,87 @@ class ApiController extends Controller
 {
     public function faq()
     {
-        $faqs = Faq::select('id', 'title', 'description')->get();
-        return response()->json([
-            "status" => true,
-            "message" => "faq fetched success",
-            "data" => $faqs,
-        ]);
+        try {
+            $faqs = Faq::select('id', 'title', 'description')->get();
+            return response()->json([
+                "status" => true,
+                "message" => "faq fetched success",
+                "data" => $faqs,
+            ]);
+
+        } catch (\Throwable $e) {
+            return response()->json([
+                "status" => false,
+                "message" => $e->getMessage()
+            ]);
+        }
     }
     public function service()
     {
-        $services = Service::select('id', 'name', 'slug', 'image_url', 'requirements')->get();
-        return response()->json([
-            "statue" => true,
-            "message" => "service api fetced",
-            "data" => $services,
-        ]);
+        try {
+            $services = Service::select('id', 'name', 'slug', 'image_url', 'requirements')->get();
+            return response()->json([
+                "statue" => true,
+                "message" => "service api fetced",
+                "data" => $services,
+            ]);
+
+        } catch (\Throwable $e) {
+            return response()->json([
+                "status" => false,
+                "message" => $e->getMessage()
+            ]);
+        }
     }
     public function viewService($slug)
     {
-        $service = Service::where('slug', $slug)->select('name', 'slug', 'image_url', 'requirements')->first();
-        if (!$service) {
+        try {
+            $service = Service::where('slug', $slug)->select('name', 'slug', 'image_url', 'requirements')->first();
+            if (!$service) {
+                return response()->json([
+                    "status" => false,
+                    "message" => "service not found",
+                    "data" => []
+                ]);
+            }
+            return response()->json([
+                "status" => true,
+                "message" => "success",
+                "data" => $service
+            ]);
+
+        } catch (\Throwable $e) {
             return response()->json([
                 "status" => false,
-                "message" => "service not found",
-                "data" => []
+                "message" => $e->getMessage()
             ]);
         }
-        return response()->json([
-            "status" => true,
-            "message" => "success",
-            "data" => $service
-        ]);
     }
     public function servicerates($slug)
     {
-        $serviceId = Service::where('slug', $slug)->first();
-        if (!$serviceId) {
+        try {
+            $serviceId = Service::where('slug', $slug)->first();
+            if (!$serviceId) {
+                return response()->json([
+                    "status" => false,
+                    "message" => "Service not found",
+                    "data" => []
+                ], 404);
+            }
+            $servicerates = ServiceRate::where('service_id', $serviceId->id)
+                ->select('title', 'duration', 'price', 'discount_price', 'includes')->get();
+            return response()->json([
+                "status" => true,
+                "message" => "ye slug se find hoga serviserate wala table se ",
+                "data" => $servicerates,
+
+            ]);
+        } catch (\Throwable $e) {
             return response()->json([
                 "status" => false,
-                "message" => "Service not found",
-                "data" => []
-            ], 404);
+                "message" => $e->getMessage()
+            ]);
         }
-        $servicerates = ServiceRate::where('service_id', $serviceId->id)
-            ->select('title', 'duration', 'price', 'discount_price', 'includes')->get();
-        return response()->json([
-            "status" => true,
-            "message" => "ye slug se find hoga serviserate wala table se ",
-            "data" => $servicerates,
-
-        ]);
     }
 
 
@@ -81,6 +113,8 @@ class ApiController extends Controller
             'landmark' => 'required|string',
             'date' => 'required|date',
             'time' => 'required|string',
+            'requirements' => 'required|array|min:1',
+            'requirements.*' => 'string',
         ]);
 
         DB::beginTransaction();
@@ -89,17 +123,27 @@ class ApiController extends Controller
 
             $userId = $request->user_id;
 
+
             if (!$userId) {
-                $user = User::create([
-                    'name' => $request->name,
-                    'phone' => $request->mobile,
-                    'password' => Str::random(6)
-                ]);
-                $userId = $user->id;
+                if ($request->mobile) {
+                    $user = User::where('phone', $request->mobile)->first();
+                    if ($user) {
+                        $userId = $user->id;
+                    } else {
+                        $user = User::create([
+                            'name' => $request->name,
+                            'phone' => $request->mobile,
+                            'password' => Hash::make('password'),
+                        ]);
+                        $userId = $user->id;
+                    }
+                }
+
+
             }
 
             do {
-                $bookingId = 'BK-' . now()->format('Ymd') . '-' . strtoupper(Str::random(6));
+                $bookingId = 'JR-' . now()->format('Ymd') . strtoupper(Str::random(6));
             } while (Booking::where('booking_id', $bookingId)->exists());
 
             $booking = Booking::create([
@@ -113,6 +157,7 @@ class ApiController extends Controller
                 'address' => $request->address,
                 'city' => $request->city,
                 'landmark' => $request->landmark,
+                'requirements' => $request->requirements,
             ]);
 
             DB::commit();
@@ -121,11 +166,12 @@ class ApiController extends Controller
                 'status' => true,
                 'message' => 'Booking Success',
                 'data' => [
-                    'booking_id' => $booking->booking_id
+                    'booking' => $booking,
+                    'user' => $user,
                 ]
             ], 201);
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
 
             DB::rollBack();
 
@@ -139,25 +185,32 @@ class ApiController extends Controller
 
     public function userAddress($id)
     {
-        $addresses = Address::where('user_id', $id)->get();
-        return response()->json([
-            "status" => true,
-            "message" => "address fetched successfully",
-            "data" => $addresses,
-        ]);
+        try {
+            $addresses = Address::where('user_id', $id)->get();
+            return response()->json([
+                "status" => true,
+                "message" => "address fetched successfully",
+                "data" => $addresses,
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                "status" => false,
+                "message" => $e->getMessage()
+            ]);
+        }
     }
     public function addUserAddress(Request $request)
     {
-        try {
-            $request->validate([
-                'user_id' => 'nullable|exists:users,id',
-                'name' => 'required|string',
-                'mobile' => 'required|string',
-                'address' => 'required|string',
-                'city' => 'required|string',
-                'landmark' => 'required|string',
+        $request->validate([
+            'user_id' => 'nullable|exists:users,id',
+            'name' => 'required|string',
+            'mobile' => 'required|string',
+            'address' => 'required|string',
+            'city' => 'required|string',
+            'landmark' => 'required|string',
 
-            ]);
+        ]);
+        try {
             Address::create([
                 'user_id' => $request->user_id,
                 'name' => $request->name,
