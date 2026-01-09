@@ -15,7 +15,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-xs text-gray-500">Total Services</p>
-                    <p class="text-2xl font-bold">77639</p>
+                    <p class="text-2xl font-bold">7763</p>
                 </div>
                 <i class="fa-solid fa-screwdriver-wrench text-2xl text-indigo-500"></i>
             </div>
