@@ -169,13 +169,27 @@ class ApiController extends Controller
                 'requirements' => $request->requirements,
             ]);
 
+            $services = Service::whereIn('id', $booking->service_ids)->get();
+
+            $booking_detail = [
+                'id' => $booking->id,
+                'booking_id' => $booking->booking_id,
+                'date' => $booking->date,
+                'time' => $booking->time,
+                'status' => $booking->status,
+                'total_amount' => $booking->total_amount,
+                'created_at' => $booking->created_at,
+                'updated_at' => $booking->updated_at,
+                'services' => $services, 
+            ];
+
             DB::commit();
 
             return response()->json([
                 'status' => true,
                 'message' => 'Booking Success',
                 'data' => [
-                    'booking' => $booking,
+                    'booking' => $booking_detail,
                     'user' => $user,
                 ]
             ], 201);
@@ -287,7 +301,7 @@ class ApiController extends Controller
                     'date' => $booking->date,
                     'time' => $booking->time,
                     'data' => $services,
-                    
+
                 ];
             });
 
