@@ -106,7 +106,8 @@ class ApiController extends Controller
     {
         $valodator = Validator::make($request->all(), [
             'user_id' => 'nullable|exists:users,id',
-            'service_id' => 'required|exists:services,id',
+            'service_ids' => 'required|array|min:1',
+            'service_ids.*' => 'exists:services,id',
             'name' => 'required|string',
             'mobile' => 'required|string',
             'address' => 'required|string',
@@ -157,7 +158,7 @@ class ApiController extends Controller
             $booking = Booking::create([
                 'user_id' => $userId,
                 'booking_id' => $bookingId,
-                'service_id' => $request->service_id,
+                'service_ids' => $request->service_ids,
                 'date' => $request->date,
                 'time' => $request->time,
                 'name' => $request->name,
@@ -268,12 +269,34 @@ class ApiController extends Controller
     {
         try {
             $user = $request->user();
-            $bookings = Booking::where('user_id', $user->id)->with('service')->get();
+
+            $bookings = Booking::where('user_id', $user->id)->get();
+
+            $booking_detail = $bookings->map(function ($booking) {
+
+                $services = Service::whereIn('id', $booking->service_ids)->get();
+
+                return [
+                    'id' => $booking->id,
+                    'booking_date' => $booking->booking_date,
+                    'total_amount' => $booking->total_amount,
+                    'status' => $booking->status,
+                    'created_at' => $booking->created_at,
+                    'updated_at' => $booking->updated_at,
+                    'booking_id' => $booking->booking_id,
+                    'date' => $booking->date,
+                    'time' => $booking->time,
+                    'data' => $services,
+                    
+                ];
+            });
+
             return response()->json([
                 "status" => true,
                 "message" => "user booked services fetched successfully",
-                "data" => $bookings,
+                "data" => $booking_detail,
             ]);
+
         } catch (\Throwable $e) {
             return response()->json([
                 "status" => false,

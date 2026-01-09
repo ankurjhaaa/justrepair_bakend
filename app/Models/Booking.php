@@ -9,7 +9,9 @@ class Booking extends Model
     protected $guarded = [];
     protected $casts = [
         'requirements' => 'array',
+        'service_ids' => 'array',
     ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -14,11 +14,15 @@ return new class extends Migration {
             $table->id();
             $table->string('booking_id')->nullable();
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
-            $table->foreignId('service_id')->nullable()->constrained('services');
             $table->timestamp('date')->nullable();
             $table->string('time')->nullable();
             
-            
+            //new
+            $table->json('service_ids')->nullable();
+            $table->string('payment_method')->nullable();
+            $table->decimal('total_amount', 10, 2)->default(0);
+
+
             $table->string('name')->nullable();
             $table->string('mobile')->nullable();
             $table->string('address')->nullable();
@@ -26,7 +30,14 @@ return new class extends Migration {
             $table->string('landmark')->nullable();
 
             $table->boolean('is_paid')->default(false);
-            $table->enum('status',['pending','confirm','success'])->default('pending');
+            $table->enum('status', ['pending', 'confirm', 'success'])->default('pending');
+
+            $table->foreignId('assigned_to')->nullable()->constrained('users')->onDelete('set null');
+            $table->timestamp('assigned_at')->nullable();
+            $table->timestamp('completed_at')->nullable();
+            $table->text('admin_note')->nullable();
+            $table->text('user_note')->nullable();
+            $table->text('rejection_reason')->nullable();
 
 
             $table->json('requirements')->nullable();
