@@ -18,8 +18,9 @@ Route::controller(ApiController::class)->name('api.')->group(function () {
     Route::get('userAddress/{id}', 'userAddress')->name('userAddress');
     Route::post('addUserAddress', 'addUserAddress')->name('addUserAddress');
     Route::middleware('auth:sanctum')->group(function () {
-        Route::get('/profile', 'profile')->name('profile');
         Route::get('/my-booked-services', 'myBookedServices')->name('myBookedServices');
+        Route::post('/cancel-booking', 'cancelBooking')->name('cancelBooking');
+        Route::get('/view-service-booking/{booking_id}', 'viewServiceBooking')->name('viewServiceBooking');
 
     });
 });
@@ -28,6 +29,8 @@ Route::controller(AuthController::class)->name('api.')->group(function () {
     Route::post('login', 'login')->name('login');
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
+        Route::get('/profile', 'profile')->name('profile');
+        Route::post('/editprofile', 'editProfile')->name('editProfile');
 
     });
 });

@@ -180,7 +180,7 @@ class ApiController extends Controller
                 'total_amount' => $booking->total_amount,
                 'created_at' => $booking->created_at,
                 'updated_at' => $booking->updated_at,
-                'services' => $services, 
+                'services' => $services,
             ];
 
             DB::commit();
@@ -262,22 +262,7 @@ class ApiController extends Controller
         }
     }
 
-    public function profile(Request $request)
-    {
-        try {
-            $user = $request->user();
-            return response()->json([
-                "status" => true,
-                "message" => "user profile fetched successfully",
-                "data" => $user,
-            ]);
-        } catch (\Throwable $e) {
-            return response()->json([
-                "status" => false,
-                "message" => $e->getMessage()
-            ]);
-        }
-    }
+
 
     public function myBookedServices(Request $request)
     {
@@ -310,6 +295,79 @@ class ApiController extends Controller
                 "message" => "user booked services fetched successfully",
                 "data" => $booking_detail,
             ]);
+
+        } catch (\Throwable $e) {
+            return response()->json([
+                "status" => false,
+                "message" => $e->getMessage()
+            ]);
+        }
+    }
+
+
+    public function cancleBooking(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'booking_id' => "required|exist:bookings,id"
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => $validator->errors()
+            ]);
+        }
+        try {
+            $booking = Booking::where('booking_id', $request->booking_id)->first();
+            if ($booking) {
+                $booking->status = "cancelled";
+                $booking->save();
+                return response()->json([
+                    'status' => true,
+                    'message' => 'booking cancelled successfully'
+                ]);
+            }
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+    public function viewServiceBooking(Request $request,$booking_id)
+    {
+
+        
+        try {
+            $booking = Booking::where('booking_id', $booking_id)->first();
+            if ($booking) {
+                $services = Service::whereIn('id', $booking->service_ids)->get();
+
+                $booking_detail = [
+                    'id' => $booking->id,
+                    'booking_date' => $booking->booking_date,
+                    'total_amount' => $booking->total_amount,
+                    'status' => $booking->status,
+                    'created_at' => $booking->created_at,
+                    'updated_at' => $booking->updated_at,
+                    'booking_id' => $booking->booking_id,
+                    'date' => $booking->date,
+                    'time' => $booking->time,
+                    'data' => $services,
+
+                ];
+
+                return response()->json([
+                    "status" => true,
+                    "message" => "service booking details fetched successfully",
+                    "data" => $booking_detail,
+                ]);
+            }else{
+                return response()->json([
+                    "status" => false,
+                    "message" => "booking not found",
+                    "data" => []
+                ]);
+            }
 
         } catch (\Throwable $e) {
             return response()->json([

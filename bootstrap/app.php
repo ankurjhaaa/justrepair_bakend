@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\RoleMiddleware;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -17,6 +18,14 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => RoleMiddleware::class,
         ]);
     })
-    ->withExceptions(function (Exceptions $exceptions): void {
-        //
-    })->create();
+    ->withExceptions(function ($exceptions) {
+
+        $exceptions->render(function (AuthenticationException $e, \Illuminate\Http\Request $request) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Not logged in'
+            ], 401);
+        });
+
+    })
+    ->create();

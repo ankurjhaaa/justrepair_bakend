@@ -101,4 +101,57 @@ class AuthController extends Controller
             ]);
         }
     }
+    public function profile(Request $request)
+    {
+        try {
+            $user = $request->user();
+            return response()->json([
+                "status" => true,
+                "message" => "user profile fetched successfully",
+                "data" => $user,
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                "status" => false,
+                "message" => $e->getMessage()
+            ]);
+        }
+    }
+    public function editProfile(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|min:3|max:100',
+            'email' => 'required|email',
+            'password' => 'nullable|min:6',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "status" => false,
+                "message" => $validator->errors(),
+            ], 422);
+        }
+        try {
+            $user = $request->user();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            if ($request->filled('password')) {
+                $user->password = Hash::make($request->password);
+
+            }
+            $user->save();
+            return response()->json([
+                "status" => true,
+                "message" => "profile edit successfully",
+                "user" => $user
+            ]);
+
+        } catch (\Throwable $e) {
+            return response()->json([
+                "status" => false,
+                "message" => $e->getMessage()
+            ]);
+
+        }
+    }
 }

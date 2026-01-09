@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamp('date')->nullable();
             $table->string('time')->nullable();
-            
+
             //new
             $table->json('service_ids')->nullable();
             $table->string('payment_method')->nullable();
@@ -30,7 +30,18 @@ return new class extends Migration {
             $table->string('landmark')->nullable();
 
             $table->boolean('is_paid')->default(false);
-            $table->enum('status', ['pending', 'confirm', 'success'])->default('pending');
+            $table->enum('status', [
+                'pending',
+                'confirmed',
+                'assigned',
+                'in_progress',
+                'completed',
+                'payment_pending',
+                'cancelled',
+                'failed',
+                'rescheduled'
+            ])->default('pending');
+
 
             $table->foreignId('assigned_to')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamp('assigned_at')->nullable();
