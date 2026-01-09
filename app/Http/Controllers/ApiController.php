@@ -104,7 +104,7 @@ class ApiController extends Controller
 
     public function bookService(Request $request)
     {
-        $valodator = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'user_id' => 'nullable|exists:users,id',
             'service_ids' => 'required|array|min:1',
             'service_ids.*' => 'exists:services,id',
@@ -119,10 +119,10 @@ class ApiController extends Controller
             'requirements.*' => 'string',
         ]);
 
-        if ($valodator->fails()) {
+        if ($validator->fails()) {
             return response()->json([
-                "ststus" => false,
-                "message" => $valodator->errors()
+                "status" => false,
+                "message" => $validator->errors()->first()
             ]);
         }
 
@@ -236,7 +236,7 @@ class ApiController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 "status" => false,
-                "message" => $validator->errors()
+                "message" => $validator->errors()->first()
             ]);
         }
         try {
@@ -305,15 +305,15 @@ class ApiController extends Controller
     }
 
 
-    public function cancleBooking(Request $request)
+    public function cancelBooking(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'booking_id' => "required|exist:bookings,id"
+            'booking_id' => "required|exists:bookings,booking_id"
         ]);
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
-                'message' => $validator->errors()
+                'message' => $validator->errors()->first()
             ]);
         }
         try {
@@ -324,6 +324,11 @@ class ApiController extends Controller
                 return response()->json([
                     'status' => true,
                     'message' => 'booking cancelled successfully'
+                ]);
+            }else{
+                return response()->json([
+                    'status' => false,
+                    'message' => 'booking not found'
                 ]);
             }
         } catch (\Throwable $e) {
