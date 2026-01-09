@@ -10,6 +10,7 @@ use App\Models\ServiceRate;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
@@ -103,7 +104,7 @@ class ApiController extends Controller
 
     public function bookService(Request $request)
     {
-        $request->validate([
+        $valodator = Validator::make($request->all(), [
             'user_id' => 'nullable|exists:users,id',
             'service_id' => 'required|exists:services,id',
             'name' => 'required|string',
@@ -116,6 +117,13 @@ class ApiController extends Controller
             'requirements' => 'nullable|array|min:1',
             'requirements.*' => 'string',
         ]);
+
+        if ($valodator->fails()) {
+            return response()->json([
+                "ststus" => false,
+                "message" => $valodator->errors()
+            ]);
+        }
 
         DB::beginTransaction();
 
@@ -201,15 +209,21 @@ class ApiController extends Controller
     }
     public function addUserAddress(Request $request)
     {
-        $request->validate([
-            'user_id' => 'nullable|exists:users,id',
+
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|exists:users,id',
             'name' => 'required|string',
             'mobile' => 'required|string',
             'address' => 'required|string',
             'city' => 'required|string',
             'landmark' => 'required|string',
-
         ]);
+        if ($validator->fails()) {
+            return response()->json([
+                "status" => false,
+                "message" => $validator->errors()
+            ]);
+        }
         try {
             Address::create([
                 'user_id' => $request->user_id,

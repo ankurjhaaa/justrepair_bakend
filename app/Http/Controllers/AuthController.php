@@ -14,9 +14,9 @@ class AuthController extends Controller
     public function signup(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'mobile' => 'required|string',
-            'password' => 'required|string|min:6',
+            'name' => 'required|string|min:3|max:100',
+            'mobile' => 'required|digits:10|unique:users,phone',
+            'password' => 'required|min:6',
         ]);
 
         if ($validator->fails()) {
