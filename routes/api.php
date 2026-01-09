@@ -21,6 +21,7 @@ Route::controller(ApiController::class)->name('api.')->group(function () {
         Route::get('/my-booked-services', 'myBookedServices')->name('myBookedServices');
         Route::post('/cancel-booking', 'cancelBooking')->name('cancelBooking');
         Route::get('/view-service-booking/{booking_id}', 'viewServiceBooking')->name('viewServiceBooking');
+        Route::post('re-shedule-booking', 'rescheduleBooking')->name('rescheduleBooking');
 
     });
 });

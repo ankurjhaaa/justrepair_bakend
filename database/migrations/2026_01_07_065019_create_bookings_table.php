@@ -50,6 +50,9 @@ return new class extends Migration {
             $table->text('user_note')->nullable();
             $table->text('rejection_reason')->nullable();
 
+            $table->string('otp')->nullable();
+            $table->timestamp('otp_verified_at')->nullable();
+            
 
             $table->json('requirements')->nullable();
             $table->timestamps();

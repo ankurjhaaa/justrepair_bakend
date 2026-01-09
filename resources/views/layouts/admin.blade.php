@@ -29,12 +29,13 @@
     @livewireStyles
 </head>
 
-<body class="h-full bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors">
+<body class="h-full bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors overflow-x-hidden">
 
     <!-- MOBILE OVERLAY -->
     <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-30 hidden md:hidden"></div>
 
-    <div class="min-h-screen flex">
+    <div class="min-h-screen flex w-full overflow-x-hidden">
+
 
         <!-- ================= SIDEBAR ================= -->
         <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-white dark:bg-gray-800
@@ -112,7 +113,8 @@
         </aside>
 
         <!-- ================= MAIN ================= -->
-        <div class="flex-1 flex flex-col md:ml-64">
+            <div class="flex-1 flex flex-col md:ml-64 min-w-0">
+
 
             <!-- TOPBAR -->
             <header class="sticky top-0 z-30 h-16 bg-white dark:bg-gray-800
@@ -140,7 +142,7 @@
             </header>
 
             <!-- CONTENT -->
-            <main class="flex-1 p-5">
+            <main class="flex-1 p-3 md:p-7 overflow-x-hidden">
                 {{ $slot }}
             </main>
 

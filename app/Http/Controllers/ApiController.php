@@ -138,6 +138,7 @@ class ApiController extends Controller
                     $user = User::where('phone', $request->mobile)->first();
                     if ($user) {
                         $userId = $user->id;
+                        $token = $user->createToken('auth_token')->plainTextToken;
                     } else {
                         $user = User::create([
                             'name' => $request->name,
@@ -145,10 +146,12 @@ class ApiController extends Controller
                             'password' => Hash::make('password'),
                         ]);
                         $userId = $user->id;
+                        $token = $user->createToken('auth_token')->plainTextToken;
                     }
                 }
-
-
+            }else {
+                $user = User::find($userId);
+                $token = null;
             }
 
             do {
@@ -161,6 +164,7 @@ class ApiController extends Controller
                 'service_ids' => $request->service_ids,
                 'date' => $request->date,
                 'time' => $request->time,
+                'otp' => rand(100000, 999999),
                 'name' => $request->name,
                 'mobile' => $request->mobile,
                 'address' => $request->address,
@@ -174,6 +178,7 @@ class ApiController extends Controller
             $booking_detail = [
                 'id' => $booking->id,
                 'booking_id' => $booking->booking_id,
+                'otp' => $booking->otp,
                 'date' => $booking->date,
                 'time' => $booking->time,
                 'status' => $booking->status,
@@ -191,6 +196,7 @@ class ApiController extends Controller
                 'data' => [
                     'booking' => $booking_detail,
                     'user' => $user,
+                    'token' => $token,
                 ]
             ], 201);
 
@@ -378,6 +384,45 @@ class ApiController extends Controller
             return response()->json([
                 "status" => false,
                 "message" => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function rescheduleBooking(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'booking_id' => "required|exists:bookings,booking_id",
+            'date' => 'required|date',
+            'time' => 'required|string',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => $validator->errors()->first()
+            ]);
+        }
+        try {
+            $booking = Booking::where('booking_id', $request->booking_id)->first();
+            if ($booking) {
+                $booking->date = $request->date;
+                $booking->time = $request->time;
+                $booking->status = "rescheduled";
+                $booking->save();
+                return response()->json([
+                    'status' => true,
+                    'message' => 'booking rescheduled successfully',
+                    "data" => $booking,
+                ]);
+            }else{
+                return response()->json([
+                    'status' => false,
+                    'message' => 'booking not found'
+                ]);
+            }
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
             ]);
         }
     }
