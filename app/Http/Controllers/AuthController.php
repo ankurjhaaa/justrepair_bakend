@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
 
@@ -12,11 +13,18 @@ class AuthController extends Controller
 {
     public function signup(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'mobile' => 'required|string',
-            'password' => 'required|string',
+            'password' => 'required|string|min:6',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "status" => false,
+                "message" => $validator->errors(),
+            ], 422);
+        }
 
         try {
             $user = User::create([
@@ -24,28 +32,36 @@ class AuthController extends Controller
                 'phone' => $request->mobile,
                 'password' => Hash::make($request->password),
             ]);
+
             $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
                 "status" => true,
-                "message" => "signup success",
+                "message" => "Signup success",
                 "user" => $user,
                 "token" => $token
-
             ], 201);
-        } catch (\Throwable $e) {
+
+        } catch (\Exception $e) {
             return response()->json([
                 "status" => false,
-                "message" => $e->getMessage(),
-            ]);
+                "message" => $e->getMessage()
+            ], 500);
         }
     }
     public function login(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'mobile' => 'required|string',
             'password' => 'required|string',
+
         ]);
+        if ($validator->fails()) {
+            return response()->json([
+                "status" => false,
+                "message" => $validator->errors(),
+            ]);
+        }
         try {
             $user = User::where('phone', $request->mobile)->first();
             if (!$user || !Hash::check($request->password, $user->password)) {
