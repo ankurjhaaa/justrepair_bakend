@@ -10,4 +10,9 @@ class Service extends Model
     protected $casts = [
         'requirements' => 'array',
     ];
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+
 }

@@ -120,48 +120,58 @@
             <!-- NAV -->
             <nav class="flex-1 px-3 py-4 space-y-1 text-sm overflow-y-auto">
 
+                @php
+                    $linkBase = 'flex items-center gap-3 px-4 py-3 rounded-xl transition';
+                    $active = 'bg-indigo-100 text-indigo-700 font-semibold
+                            dark:bg-indigo-900/40 dark:text-indigo-300';
+                    $inactive = 'hover:bg-indigo-50 text-gray-700
+                                dark:text-gray-300 dark:hover:bg-gray-700';
+                @endphp
+
                 <a wire:navigate href="{{ route('admin.dashboard') }}"
-                    class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-gray-700">
+                class="{{ $linkBase }} {{ request()->routeIs('admin.dashboard') ? $active : $inactive }}">
                     <i class="fa-solid fa-chart-line"></i>
                     Dashboard
                 </a>
 
                 <a wire:navigate href="{{ route('admin.service') }}"
-                    class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-gray-700">
+                class="{{ $linkBase }} {{ request()->routeIs('admin.service') ? $active : $inactive }}">
                     <i class="fa-solid fa-screwdriver-wrench"></i>
                     Services
                 </a>
+
                 <a wire:navigate href="{{ route('admin.servicerate') }}"
-                    class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-gray-700">
+                class="{{ $linkBase }} {{ request()->routeIs('admin.servicerate') ? $active : $inactive }}">
                     <i class="fa-solid fa-screwdriver-wrench"></i>
                     Services Rates
                 </a>
 
                 <a wire:navigate href="{{ route('admin.bookings') }}"
-                    class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-gray-700">
+                class="{{ $linkBase }} {{ request()->routeIs('admin.bookings','admin.bookingview') ? $active : $inactive }}">
                     <i class="fa-solid fa-calendar-check"></i>
                     Bookings
                 </a>
 
                 <a wire:navigate href="{{ route('admin.customer') }}"
-                    class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-gray-700">
+                class="{{ $linkBase }} {{ request()->routeIs('admin.customer','admin.customerview') ? $active : $inactive }}">
                     <i class="fa-solid fa-users"></i>
                     Customers
                 </a>
-        
+
                 <a wire:navigate href="{{ route('admin.faqs') }}"
-                    class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-gray-700">
+                class="{{ $linkBase }} {{ request()->routeIs('admin.faqs*') ? $active : $inactive }}">
                     <i class="fa-solid fa-circle-question"></i>
                     FAQs
                 </a>
 
                 <a href="#"
-                    class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-gray-700">
+                class="{{ $linkBase }} {{ $inactive }}">
                     <i class="fa-solid fa-gear"></i>
                     Settings
                 </a>
 
             </nav>
+
 
 
             <!-- LOGOUT -->
