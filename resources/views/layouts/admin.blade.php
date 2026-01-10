@@ -36,6 +36,73 @@
 
     <div class="min-h-screen flex w-full overflow-x-hidden">
 
+    <div
+        x-data="{
+            show: false,
+            message: '',
+            type: 'success',
+            progress: 100,
+            timer: null,
+            start() {
+                this.progress = 100;
+                clearInterval(this.timer);
+                this.timer = setInterval(() => {
+                    this.progress -= 2.5;
+                    if (this.progress <= 0) {
+                        clearInterval(this.timer);
+                        this.show = false;
+                    }
+                }, 100);
+            }
+        }"
+        x-on:toast.window="
+            message = $event.detail.message;
+            type = $event.detail.type ?? 'success';
+            show = true;
+            start();
+        "
+        x-show="show"
+        x-transition
+        x-cloak
+        class="fixed z-50
+            top-4 right-4
+            w-[calc(100%-2rem)] sm:w-full sm:max-w-sm"
+    >
+
+        <div
+            :class="{
+                'bg-green-600': type === 'success',
+                'bg-red-600': type === 'error',
+                'bg-amber-500': type === 'warning',
+                'bg-sky-600': type === 'info'
+            }"
+            class="relative overflow-hidden
+                text-white
+                rounded-md shadow-xl"
+        >
+
+            <!-- CONTENT -->
+            <div class="flex items-start gap-3 px-4 py-3">
+                <div class="flex-1 text-sm font-medium leading-snug"
+                    x-text="message"></div>
+
+                <button
+                    @click="show = false; clearInterval(timer)"
+                    class="text-white/80 hover:text-white text-lg leading-none">
+                    ×
+                </button>
+            </div>
+
+            <!-- PROGRESS BAR -->
+            <div class="h-1 bg-white/20">
+                <div
+                    class="h-1 bg-white/80 transition-all duration-100"
+                    :style="`width: ${progress}%`">
+                </div>
+            </div>
+
+        </div>
+    </div>
 
         <!-- ================= SIDEBAR ================= -->
         <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-white dark:bg-gray-800
@@ -70,19 +137,19 @@
                     Services Rates
                 </a>
 
-                <a href="#"
+                <a wire:navigate href="{{ route('admin.bookings') }}"
                     class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-gray-700">
                     <i class="fa-solid fa-calendar-check"></i>
                     Bookings
                 </a>
 
-                <a href="#"
+                <a wire:navigate href="{{ route('admin.customer') }}"
                     class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-gray-700">
                     <i class="fa-solid fa-users"></i>
                     Customers
                 </a>
-
-                <a href="#"
+        
+                <a wire:navigate href="{{ route('admin.faqs') }}"
                     class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-gray-700">
                     <i class="fa-solid fa-circle-question"></i>
                     FAQs
@@ -113,7 +180,7 @@
         </aside>
 
         <!-- ================= MAIN ================= -->
-            <div class="flex-1 flex flex-col md:ml-64 min-w-0">
+        <div class="flex-1 flex flex-col md:ml-64 min-w-0">
 
 
             <!-- TOPBAR -->

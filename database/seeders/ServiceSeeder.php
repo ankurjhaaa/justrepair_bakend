@@ -14,7 +14,8 @@ class ServiceSeeder extends Seeder
             [
                 'name' => 'Mobile Repair',
                 'slug' => Str::slug('Mobile Repair'),
-                'image' => 'services/mobile-repair.png',
+                'image' => 'https://ik.imagekit.io/0j4v080uc/services/1768033616_Mls7qoVn87_a3GfZJq15.png',
+                'image_url' => 'https://ik.imagekit.io/0j4v080uc/services/1768033616_Mls7qoVn87_a3GfZJq15.png',
                 'requirements' => json_encode([
                     'Device model',
                     'Problem description',
@@ -26,7 +27,8 @@ class ServiceSeeder extends Seeder
             [
                 'name' => 'Laptop Repair',
                 'slug' => Str::slug('Laptop Repair'),
-                'image' => 'services/laptop-repair.png',
+                'image' => 'https://ik.imagekit.io/0j4v080uc/services/1768033410_buHS0X3J7p_inMq0reak.png',
+                'image_url' => 'https://ik.imagekit.io/0j4v080uc/services/1768033410_buHS0X3J7p_inMq0reak.png',
                 'requirements' => json_encode([
                     'Laptop brand',
                     'Operating system',
@@ -38,7 +40,8 @@ class ServiceSeeder extends Seeder
             [
                 'name' => 'AC Repair',
                 'slug' => Str::slug('AC Repair'),
-                'image' => 'services/ac-repair.png',
+                'image' => 'https://ik.imagekit.io/0j4v080uc/services/1768033352_jgISKOxeuc_6pg9WW7fM.png',
+                'image_url' => 'https://ik.imagekit.io/0j4v080uc/services/1768033352_jgISKOxeuc_6pg9WW7fM.png',
                 'requirements' => json_encode([
                     'AC type (Split/Window)',
                     'Brand name',
@@ -50,7 +53,8 @@ class ServiceSeeder extends Seeder
             [
                 'name' => 'Washing Machine Repair',
                 'slug' => Str::slug('Washing Machine Repair'),
-                'image' => 'services/washing-machine.png',
+                'image' => 'https://ik.imagekit.io/0j4v080uc/services/1768033323_08jVwwbtRY_lwE1BCtdE.png',
+                'image_url' => 'https://ik.imagekit.io/0j4v080uc/services/1768033323_08jVwwbtRY_lwE1BCtdE.png',
                 'requirements' => json_encode([
                     'Machine type (Top/Front load)',
                     'Brand',
@@ -62,7 +66,8 @@ class ServiceSeeder extends Seeder
             [
                 'name' => 'Refrigerator Repair',
                 'slug' => Str::slug('Refrigerator Repair'),
-                'image' => 'services/refrigerator.png',
+                'image' => 'https://ik.imagekit.io/0j4v080uc/services/1768033339_QmPMQFGqui_2h8FN-8ts.png',
+                'image_url' => 'https://ik.imagekit.io/0j4v080uc/services/1768033339_QmPMQFGqui_2h8FN-8ts.png',
                 'requirements' => json_encode([
                     'Refrigerator type',
                     'Brand name',

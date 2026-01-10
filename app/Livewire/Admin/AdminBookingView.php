@@ -3,14 +3,86 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Booking;
-use Livewire\Attributes\Layout;
+use App\Models\Service;
+use App\Models\User;
 use Livewire\Component;
+use Livewire\Attributes\Layout;
+
 #[Layout('layouts.admin')]
 class AdminBookingView extends Component
 {
+    public Booking $booking;
+
+    public $status;
+    public $admin_note;
+    public $assigned_to;
+    public $total_amount;
+    public $payment_method;
+    public $is_paid = false;
+
+    public function mount($id)
+    {
+        $this->booking = Booking::findOrFail($id);
+
+        $this->status = $this->booking->status;
+        $this->admin_note = $this->booking->admin_note;
+        $this->assigned_to = $this->booking->assigned_to;
+        $this->total_amount = $this->booking->total_amount;
+        $this->payment_method = $this->booking->payment_method;
+        $this->is_paid = $this->booking->is_paid;
+
+    }
+
+    public function updateAmount()
+    {
+        $this->booking->update([
+            'total_amount' => $this->total_amount,
+            'payment_method' => $this->payment_method,
+            'is_paid' => $this->is_paid,
+        ]);
+
+        session()->flash('success', 'Payment details updated');
+    }
+
+    public function updateStatus()
+    {
+        $this->booking->update([
+            'status' => $this->status,
+        ]);
+
+        $this->dispatch(
+            'toast',
+            type: 'success',
+            message: 'Status updated successfully'
+        );
+
+    }
+
+    public function saveAdminNote()
+    {
+        $this->booking->update([
+            'admin_note' => $this->admin_note,
+        ]);
+
+        session()->flash('success', 'Admin note saved');
+    }
+
+    public function assignTechnician()
+    {
+        $this->booking->update([
+            'assigned_to' => $this->assigned_to,
+            'assigned_at' => now(),
+            'status' => 'assigned',
+        ]);
+
+        session()->flash('success', 'Technician assigned');
+    }
+
     public function render()
     {
-        $service = Booking::where('id', 1)->first();
-        return view('livewire.admin.admin-booking-view',compact('service'));
+        return view('livewire.admin.admin-booking-view', [
+            'servicesMap' => Service::pluck('name', 'id'),
+            'technicians' => User::where('role', 'technician')->get(),
+        ]);
     }
 }

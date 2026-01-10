@@ -19,18 +19,24 @@ class UserSeeder extends Seeder
                 'phone' => '7763972896',
                 'password' => Hash::make('password'),
                 'role' => 'admin',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'name' => 'rupesh',
                 'phone' => '2222222222',
                 'password' => Hash::make('password'),
                 'role' => 'user',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'name' => 'avisekh tripathi',
                 'phone' => '1111111111',
                 'password' => Hash::make('password'),
                 'role' => 'user',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
         ]);
     }

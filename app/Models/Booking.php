@@ -8,8 +8,9 @@ class Booking extends Model
 {
     protected $guarded = [];
     protected $casts = [
-        'requirements' => 'array',
         'service_ids' => 'array',
+        'requirements' => 'array',
+        'date' => 'datetime',
     ];
 
     public function user()
@@ -19,5 +20,9 @@ class Booking extends Model
     public function service()
     {
         return $this->belongsTo(Service::class);
+    }
+    public function services()
+    {
+        return Service::whereIn('id', $this->service_ids ?? []);
     }
 }
