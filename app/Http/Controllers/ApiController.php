@@ -275,7 +275,7 @@ class ApiController extends Controller
         try {
             $user = $request->user();
 
-            $bookings = Booking::where('user_id', $user->id)->get();
+            $bookings = Booking::where('user_id', $user->id)->latest()->get();
 
             $booking_detail = $bookings->map(function ($booking) {
 
