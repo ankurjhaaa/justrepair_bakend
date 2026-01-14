@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
+use App\Models\Service;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Validator;
@@ -30,19 +31,23 @@ class TechnicianApiController extends Controller
     }
     public function viewServiceBooking(Request $request, $booking_id)
     {
-        $user = $request->user();
         $booking_detail = Booking::where('booking_id', $booking_id)->first();
         if (!$booking_detail) {
             return response()->json([
                 "status" => false,
-                "message" => "bookinhg not found"
+                "message" => "booking not found"
             ]);
         }
         try {
+            $booking_services = Service::whereIn('id', $booking_detail->service_ids)->get();
+            $data = [
+                "booking_detail" => $booking_detail,
+                "booking_services" => $booking_services
+            ];
             return response()->json([
                 "status" => true,
                 "message" => "service detail fetched",
-                "data" => $booking_detail
+                "data" => $data
             ]);
         } catch (\Throwable $e) {
             return response()->json([
@@ -217,7 +222,7 @@ class TechnicianApiController extends Controller
                         "message" => "otp varified successfully",
                         "data" => $booking
                     ]);
-                }else{
+                } else {
                     return response()->json([
                         "status" => false,
                         "message" => "invalid otp"
