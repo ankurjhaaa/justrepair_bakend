@@ -54,6 +54,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'mobile' => 'required|string',
             'password' => 'required|string',
+            'role' => 'string|in:user,technician',
 
         ]);
         if ($validator->fails()) {
@@ -68,6 +69,12 @@ class AuthController extends Controller
                 throw ValidationException::withMessages([
                     'mobile' => ['Invalid mobile or password']
                 ]);
+            }
+            if ($request->has('role') && $user->role !== $request->role) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Unauthorized access for the specified role',
+                ], 403);
             }
             $user->tokens()->delete();
             $token = $user->createToken('auth_token')->plainTextToken;

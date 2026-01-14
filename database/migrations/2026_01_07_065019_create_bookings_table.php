@@ -45,10 +45,12 @@ return new class extends Migration {
 
             $table->foreignId('assigned_to')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamp('assigned_at')->nullable();
+            $table->timestamp('start_at')->nullable();
             $table->timestamp('completed_at')->nullable();
             $table->text('admin_note')->nullable();
             $table->text('user_note')->nullable();
             $table->text('rejection_reason')->nullable();
+            $table->text('cancel_reason')->nullable();
 
             $table->string('otp')->nullable();
             $table->timestamp('otp_verified_at')->nullable();
