@@ -12,8 +12,10 @@ class TechnicianApiController extends Controller
         $user = $request->user();
         $services = Booking::where('assigned_to', $user->id)->get();
         return response()->json([
-        "status" => true,
-        "data" => $services
+            "status" => true,
+            "message" => "services fetched successfully",
+            "data" => $services
         ]);
     }
+    
 }

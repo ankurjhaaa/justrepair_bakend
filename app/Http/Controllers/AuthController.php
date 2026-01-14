@@ -54,7 +54,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'mobile' => 'required|string',
             'password' => 'required|string',
-            'role' => 'string|in:user,technician',
+            'role' => 'string|in:user,technician|required',
 
         ]);
         if ($validator->fails()) {

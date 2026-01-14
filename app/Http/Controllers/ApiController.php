@@ -149,7 +149,7 @@ class ApiController extends Controller
                         $token = $user->createToken('auth_token')->plainTextToken;
                     }
                 }
-            }else {
+            } else {
                 $user = User::find($userId);
                 $token = null;
             }
@@ -331,7 +331,7 @@ class ApiController extends Controller
                     'status' => true,
                     'message' => 'booking cancelled successfully'
                 ]);
-            }else{
+            } else {
                 return response()->json([
                     'status' => false,
                     'message' => 'booking not found'
@@ -344,10 +344,10 @@ class ApiController extends Controller
             ]);
         }
     }
-    public function viewServiceBooking(Request $request,$booking_id)
+    public function viewServiceBooking(Request $request, $booking_id)
     {
 
-        
+
         try {
             $booking = Booking::where('booking_id', $booking_id)->first();
             if ($booking) {
@@ -372,7 +372,7 @@ class ApiController extends Controller
                     "message" => "service booking details fetched successfully",
                     "data" => $booking_detail,
                 ]);
-            }else{
+            } else {
                 return response()->json([
                     "status" => false,
                     "message" => "booking not found",
@@ -413,7 +413,7 @@ class ApiController extends Controller
                     'message' => 'booking rescheduled successfully',
                     "data" => $booking,
                 ]);
-            }else{
+            } else {
                 return response()->json([
                     'status' => false,
                     'message' => 'booking not found'
