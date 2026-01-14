@@ -26,12 +26,18 @@ Route::controller(ApiController::class)->name('api.')->group(function () {
 
     });
 });
-Route::controller(TechnicianApiController::class)->name('api.')->group(function () {
+Route::controller(TechnicianApiController::class)->prefix('technician')->name('api.technician')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/technician-bookings', 'technicianBookings')->name('technicianBookings');
-        Route::post('/update-booking-status', 'updateBookingStatus')->name('updateBookingStatus');
-        Route::get('/technician-profile', 'technicianProfile')->name('technicianProfile');
-        Route::post('/edit-technician-profile', 'editTechnicianProfile')->name('editTechnicianProfile');
+        Route::get('/view-service-booking/{booking_id}', 'viewServiceBooking')->name('viewServiceBooking');
+        Route::get('/assigned-service-count', 'assignedServiceCount')->name('assignedServiceCount');
+        Route::get('/assigned-service-in-progress', 'assignedServiceInProgress')->name('assignedServiceInProgress');
+        Route::get('/today-jobs', 'todayJobs')->name('todayjobs');
+        Route::get('/today-schedule', 'todaySchedule')->name('todaySchedule');
+        Route::get('/upcoming-schedule', 'upcomingSchedule')->name('upcomingSchedule');
+        Route::get('/start-service/{booking_id}','startService')->name('startservice');
+        Route::get('/mark-complete/{booking_id}','markComplete')->name('markComplete');
+        Route::post('otp-verify','otpVerify')->name('otpVerify');
     });
 });
 Route::controller(AuthController::class)->name('api.')->group(function () {
