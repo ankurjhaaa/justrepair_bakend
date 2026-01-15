@@ -28,6 +28,7 @@ Route::controller(ApiController::class)->name('api.')->group(function () {
 });
 Route::controller(TechnicianApiController::class)->prefix('technician')->name('api.technician')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/stats', 'stats')->name('stats');
         Route::get('/technician-bookings', 'technicianBookings')->name('technicianBookings');
         Route::get('/view-service-booking/{booking_id}', 'viewServiceBooking')->name('viewServiceBooking');
         Route::get('/assigned-service-count', 'assignedServiceCount')->name('assignedServiceCount');

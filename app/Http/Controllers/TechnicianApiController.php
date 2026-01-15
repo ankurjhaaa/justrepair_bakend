@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Models\Service;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Validator;
@@ -11,6 +12,37 @@ use function Illuminate\Support\now;
 
 class TechnicianApiController extends Controller
 {
+    public function stats(Request $request)
+    {
+        try {
+            $user = $request->user();
+            $totalAssignedServices = Booking::where('assigned_to', $user->id)->count();
+            $totalCompletedServices = Booking::where('assigned_to', $user->id)->where('status', 'completed')->count();
+            $totalInProgressServices = Booking::where('assigned_to', $user->id)->where('status', 'in_progress')->count();
+            $countJobs = Booking::where('assigned_to', $user->id)->where('date', '=', now())->count();
+            $todaySchedule = Booking::where('assigned_to', $user->id)->where('date', date('Y-m-d'))->count();
+            $upcomingSchedule = Booking::where('assigned_to', $user->id)->where('date', '>', date('Y-m-d'))->orderBy('date', 'asc')->count();
+            $data = [
+                "total_assigned_services" => $totalAssignedServices,
+                "total_completed_services" => $totalCompletedServices,
+                "total_in_progress_services" => $totalInProgressServices,
+                "total_in_countJobs" => $countJobs,
+                "total_in_todaySchedule" => $todaySchedule,
+                "total_in_upcomingSchedule" => $upcomingSchedule,
+            ];
+
+            return response()->json([
+                "status" => true,
+                "message" => "stats fetched successfully",
+                "data" => $data
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                "status" => false,
+                "message" => $e->getMessage()
+            ]);
+        }
+    }
     public function technicianBookings(Request $request)
     {
         try {
@@ -40,8 +72,10 @@ class TechnicianApiController extends Controller
         }
         try {
             $booking_services = Service::whereIn('id', $booking_detail->service_ids)->get();
+            $user_detal = User::find($booking_detail->user_id);
             $data = [
                 "booking_detail" => $booking_detail,
+                "user_detal" => $user_detal,
                 "booking_services" => $booking_services
             ];
             return response()->json([

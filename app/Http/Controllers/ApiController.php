@@ -156,7 +156,7 @@ class ApiController extends Controller
             }
 
             do {
-                $bookingId = 'JR-' . now()->format('Ymd') . strtoupper(Str::random(6));
+                $bookingId = 'JR-' . strtoupper(rand(1000,9999));
             } while (Booking::where('booking_id', $bookingId)->exists());
 
             $booking = Booking::create([
