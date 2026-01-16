@@ -37,7 +37,7 @@ Route::controller(TechnicianApiController::class)->prefix('technician')->name('a
         Route::get('/today-schedule', 'todaySchedule')->name('todaySchedule');
         Route::get('/upcoming-schedule', 'upcomingSchedule')->name('upcomingSchedule');
         Route::get('/start-service/{booking_id}','startService')->name('startservice');
-        Route::get('/mark-complete/{booking_id}','markComplete')->name('markComplete');
+        Route::post('/mark-complete/{booking_id}','markComplete')->name('markComplete');
         Route::post('otp-verify','otpVerify')->name('otpVerify');
     });
 });

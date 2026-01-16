@@ -209,7 +209,15 @@ class TechnicianApiController extends Controller
     }
     public function markComplete(Request $request, $booking_id)
     {
-        $user = $request->user();
+        $validator = Validator::make($request->all(), [
+            'otp' => "required",
+        ]);
+        if ($validator->failed()) {
+            return response()->json([
+                'status' => false,
+                'message' => $validator->errors()->first()
+            ]);
+        }
         if (!$booking_id) {
             return response()->json([
                 "status" => false,
@@ -218,6 +226,19 @@ class TechnicianApiController extends Controller
         }
         try {
             $booking = Booking::where('booking_id', $booking_id)->first();
+            if (!$booking) {
+                return response()->json([
+                    "status" => false,
+                    "message" => "booking not found"
+                ]);
+            }
+            $bookingOtp = $booking->otp;
+            if ($bookingOtp != $request->otp) {
+                return response()->json([
+                    "status" => false,
+                    "message" => "invalid otp"
+                ]);
+            }
             $booking->completed_at = now();
             $booking->status = "completed";
             $booking->save();
