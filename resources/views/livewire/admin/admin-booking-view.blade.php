@@ -20,6 +20,17 @@
                 dark:hover:bg-gray-700">
             ← Back
         </a>
+        <form action="{{ route('pdf.generate') }}" method="post">
+            @csrf
+            <input type="hidden" name="booking_id" value="{{ $booking->id }}">
+            <button type="submit" class="px-4 py-2 rounded-md border text-sm
+                    bg-white text-gray-700
+                    hover:bg-gray-100
+                    dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600
+                    dark:hover:bg-gray-700">
+                Download Invoice
+            </button>
+        </form>
 
     </div>
 

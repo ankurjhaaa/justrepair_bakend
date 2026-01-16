@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\TechnicianApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -36,10 +37,10 @@ Route::controller(TechnicianApiController::class)->prefix('technician')->name('a
         Route::get('/today-jobs', 'todayJobs')->name('todayjobs');
         Route::get('/today-schedule', 'todaySchedule')->name('todaySchedule');
         Route::get('/upcoming-schedule', 'upcomingSchedule')->name('upcomingSchedule');
-        Route::get('/start-service/{booking_id}','startService')->name('startservice');
-        Route::post('/mark-complete/{booking_id}','markComplete')->name('markComplete');
-        Route::post('otp-verify','otpVerify')->name('otpVerify');
-        Route::post('/add-additional-info/{booking_id}','addAdditionalInfo')->name('addAdditionalInfo');
+        Route::get('/start-service/{booking_id}', 'startService')->name('startservice');
+        Route::post('/mark-complete/{booking_id}', 'markComplete')->name('markComplete');
+        Route::post('otp-verify', 'otpVerify')->name('otpVerify');
+        Route::post('/add-additional-info/{booking_id}', 'addAdditionalInfo')->name('addAdditionalInfo');
     });
 });
 Route::controller(AuthController::class)->name('api.')->group(function () {
@@ -52,3 +53,5 @@ Route::controller(AuthController::class)->name('api.')->group(function () {
 
     });
 });
+
+Route::post('pdf/generate', [PdfController::class, 'generatePdf'])->name('pdf.generate');

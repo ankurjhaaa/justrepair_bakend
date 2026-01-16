@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PdfController;
 use App\Livewire\Admin\AdminBooking;
 use App\Livewire\Admin\AdminBookingView;
 use App\Livewire\Admin\AdminCustomer;
@@ -32,3 +33,5 @@ Route::get('/logout', function () {
     Auth::logout();
     return redirect()->route('login');
 })->name('logout');
+
+Route::post('pdf/generate', [PdfController::class, 'generatePdf'])->name('pdf.generate');
