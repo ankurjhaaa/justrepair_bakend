@@ -39,7 +39,7 @@ Route::controller(TechnicianApiController::class)->prefix('technician')->name('a
         Route::get('/start-service/{booking_id}','startService')->name('startservice');
         Route::post('/mark-complete/{booking_id}','markComplete')->name('markComplete');
         Route::post('otp-verify','otpVerify')->name('otpVerify');
-        Route::post('/add-additional-info','addAdditionalInfo')->name('addAdditionalInfo');
+        Route::post('/add-additional-info/{booking_id}','addAdditionalInfo')->name('addAdditionalInfo');
     });
 });
 Route::controller(AuthController::class)->name('api.')->group(function () {
