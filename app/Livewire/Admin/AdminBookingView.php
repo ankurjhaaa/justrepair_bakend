@@ -7,6 +7,7 @@ use App\Models\Service;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Illuminate\Support\Facades\Http;
 
 #[Layout('layouts.admin')]
 class AdminBookingView extends Component
@@ -71,7 +72,7 @@ class AdminBookingView extends Component
             type: 'success',
             message: 'Admin note saved successfully'
         );
-       
+
     }
 
     public function assignTechnician()
@@ -81,10 +82,30 @@ class AdminBookingView extends Component
             'assigned_at' => now(),
             'status' => 'assigned',
         ]);
+        $user = User::find($this->assigned_to);
+        // 2️⃣ Expo Push Notification API hit
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+        ])->post('https://exp.host/--/api/v2/push/send', [
+                    "to" => $user->expo_push_token,
+                    "title" => "Assigned New Order",
+                    "body" => "You have been assigned a new order. Please check your app for details.",
+                    "sound" => "default",
+                    "sticky" => true,
+                    "data" => [
+                        "screen" => "orders"
+                    ]
+                ]);
+
+        // 3️⃣ (Optional) response log karo
+        // logger($response->json());
+
+        // 4️⃣ Livewire toast
         $this->dispatch(
             'toast',
             type: 'success',
-            message: 'Technician assigned successfully'
+            message: 'Technician assigned successfully & notification sent'
         );
     }
 
