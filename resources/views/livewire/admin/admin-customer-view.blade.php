@@ -11,8 +11,7 @@
             </p>
         </div>
 
-        <a href="javascript:history.back()"
-           class="px-4 py-2 rounded-md border text-sm
+        <a href="javascript:history.back()" class="px-4 py-2 rounded-md border text-sm
                   bg-white text-gray-700
                   hover:bg-gray-100
                   dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
@@ -23,24 +22,24 @@
     <!-- CUSTOMER SUMMARY -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow">
+        <div class="bg-white dark:bg-gray-800 rounded-md p-4 shadow">
             <p class="text-xs text-gray-500">Name</p>
             <p class="font-semibold">{{ $customer->name ?? '—' }}</p>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow">
+        <div class="bg-white dark:bg-gray-800 rounded-md p-4 shadow">
             <p class="text-xs text-gray-500">Mobile</p>
             <p class="font-semibold">{{ $customer->phone ?? '—' }}</p>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow">
+        <div class="bg-white dark:bg-gray-800 rounded-md p-4 shadow">
             <p class="text-xs text-gray-500">Joined On</p>
             <p class="font-semibold">
                 {{ $customer->created_at->format('d M Y') }}
             </p>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow">
+        <div class="bg-white dark:bg-gray-800 rounded-md p-4 shadow">
             <p class="text-xs text-gray-500">Total Bookings</p>
             <p class="font-semibold">
                 {{ $bookings->total() }}
@@ -50,7 +49,7 @@
     </div>
 
     <!-- BOOKING HISTORY -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow overflow-x-auto">
+    <div class="bg-white dark:bg-gray-800 rounded-md shadow overflow-x-auto">
 
         <div class="p-4 border-b dark:border-gray-700">
             <h2 class="font-semibold">Booking History</h2>
@@ -89,16 +88,15 @@
                         </td>
 
                         <td class="px-4 py-3">
-                            <span class="px-2 py-1 text-xs rounded-full" >
-                                {{ ucfirst(str_replace('_',' ', $booking->status)) }}
+                            <span class="px-2 py-1 text-xs rounded-full">
+                                {{ ucfirst(str_replace('_', ' ', $booking->status)) }}
                             </span>
                         </td>
 
                         <td class="px-4 py-3 text-right">
-                            <a wire:navigate href="{{ route('admin.bookingview', $booking->id) }}"
-                               class="px-3 py-1.5 text-xs rounded-md
-                                      bg-indigo-100 text-indigo-700
-                                      dark:bg-indigo-900 dark:text-indigo-200">
+                            <a wire:navigate href="{{ route('admin.bookingview', $booking->id) }}" class="px-3 py-1.5 text-xs rounded-md
+                                          bg-indigo-100 text-indigo-700
+                                          dark:bg-indigo-900 dark:text-indigo-200">
                                 View
                             </a>
                         </td>
@@ -106,8 +104,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5"
-                            class="px-4 py-6 text-center text-gray-500">
+                        <td colspan="5" class="px-4 py-6 text-center text-gray-500">
                             No bookings found
                         </td>
                     </tr>

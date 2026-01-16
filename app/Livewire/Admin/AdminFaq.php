@@ -96,25 +96,37 @@ class AdminFaq extends Component
             ]
         );
 
-        $this->dispatch('toast',
+        $this->dispatch(
+            'toast',
             type: 'success',
             message: $this->isEdit ? 'FAQ updated successfully' : 'FAQ added successfully'
         );
 
         $this->resetForm();
         $this->fetchFaqs();
+        $this->dispatch(
+            'toast',
+            type: 'success',
+            message: 'faq updated successfully'
+        );
     }
 
     public function delete($id)
     {
         Faq::findOrFail($id)->delete();
 
-        $this->dispatch('toast',
+        $this->dispatch(
+            'toast',
             type: 'success',
             message: 'FAQ deleted'
         );
 
         $this->fetchFaqs();
+        $this->dispatch(
+            'toast',
+            type: 'error',
+            message: 'FAQ deleted'
+        );
     }
 
     private function resetForm()

@@ -47,7 +47,7 @@
                 this.progress = 100;
                 clearInterval(this.timer);
                 this.timer = setInterval(() => {
-                    this.progress -= 2.5;
+                    this.progress -= 1.5;
                     if (this.progress <= 0) {
                         clearInterval(this.timer);
                         this.show = false;

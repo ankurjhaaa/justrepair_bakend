@@ -66,7 +66,7 @@ class AdminService extends Component
         $this->image = null;
         $this->isEdit = true;
         $this->showModal = true;
-        
+
     }
 
     /* ===============================
@@ -121,11 +121,13 @@ class AdminService extends Component
 
         $this->resetForm();
         $this->fetchServices();
+        $this->dispatch(
+            'toast',
+            type: 'success',
+            message: 'Service update successfully'
+        );
     }
 
-    /* ===============================
-        DELETE SERVICE (IMAGEKIT)
-    ================================ */
     public function delete($id)
     {
         $service = Service::findOrFail($id);

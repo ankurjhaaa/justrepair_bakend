@@ -55,6 +55,7 @@ class AuthController extends Controller
             'mobile' => 'required|string',
             'password' => 'required|string',
             'role' => 'string|in:user,technician|required',
+            'expo_push_token' => 'string|required',
 
         ]);
         if ($validator->fails()) {
@@ -78,6 +79,8 @@ class AuthController extends Controller
             }
             $user->tokens()->delete();
             $token = $user->createToken('auth_token')->plainTextToken;
+            $user->expo_push_token = $request->expo_push_token;
+            $user->save();
             return response()->json([
                 'status' => true,
                 'message' => 'Login successful',

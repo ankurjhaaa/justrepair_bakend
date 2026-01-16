@@ -56,8 +56,9 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
         <div class="bg-white dark:bg-gray-800 rounded-md shadow">
-            <div class="p-4 border-b dark:border-gray-700">
+            <div class="p-4 border-b dark:border-gray-700 flex-auto justify-between flex">
                 <h2 class="font-semibold text-lg">Recent Bookings</h2>
+                <a wire:navigate href="{{ route('admin.bookings') }}" class="text-sm hover:underline text-blue-500">view all</a>
             </div>
 
             <div class="overflow-x-auto">
@@ -68,25 +69,33 @@
                             <th class="px-4 py-3 text-left">Service</th>
                             <th class="px-4 py-3 text-left">Date</th>
                             <th class="px-4 py-3 text-left">Status</th>
+                            <th class="px-4 py-3 text-left">action</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y dark:divide-gray-700">
                         @foreach ($recentBookings as $booking)
-                        <tr>
+                            <tr>
                                 <td class="px-4 py-3">{{ $booking->user->name }}</td>
-                                 <td>
+                                <td>
                                     @foreach($booking->services()->get() as $service)
-                                <span class="px-2 py-0.5 text-xs rounded-full bg-indigo-50 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-200">
-                                    {{ $service->name }}
-                                </span>
-                                @endforeach
-                                 </td>
+                                        <span
+                                            class="px-2 py-0.5 text-xs rounded-full bg-indigo-50 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-200">
+                                            {{ $service->name }}
+                                        </span>
+                                    @endforeach
+                                </td>
                                 <td class="px-4 py-3">{{ $booking->created_at->format('d M') }}</td>
                                 <td class="px-4 py-3">
-                                <span class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700">
-                                    Pending
-                                </span>
-                        </tr>
+                                    <span class="px-2 py-0.5 text-xs rounded-full bg-indigo-50 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-200">
+                                        {{ $booking->status }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <a wire:navigate href="{{ route('admin.bookingview', $booking->id) }}" class="px-2 py-1 text-xs rounded-full hover:underline text-blue-600 cursor-pointer">
+                                        View
+                                    </a>
+                                </td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>

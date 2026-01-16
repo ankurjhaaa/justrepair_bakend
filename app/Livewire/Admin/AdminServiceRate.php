@@ -83,12 +83,22 @@ class AdminServiceRate extends Component
 
         $this->resetForm();
         $this->fetchRates();
+        $this->dispatch(
+            'toast',
+            type: 'success',
+            message: 'Service rate updated successfully'
+        );
     }
 
     public function delete($id)
     {
         ServiceRate::findOrFail($id)->delete();
         $this->fetchRates();
+        $this->dispatch(
+            'toast',
+            type: 'error',
+            message: 'Service rate Delete successfully'
+        );
     }
 
     public function addInclude()

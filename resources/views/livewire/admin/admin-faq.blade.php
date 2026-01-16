@@ -1,85 +1,87 @@
-<div class="space-y-6">
+<div >
+    <div class="space-y-6">
 
-    <!-- HEADER -->
-    <div class="flex justify-between items-center">
-        <div>
-            <h1 class="text-2xl font-bold">FAQs</h1>
-            <p class="text-sm text-gray-500">
-                Manage service specific & global FAQs
-            </p>
-        </div>
-
-        <button wire:click="create" class="px-4 py-2 rounded-md bg-indigo-600 text-white">
-            + Add FAQ
-        </button>
-    </div>
-
-    <!-- FILTER BAR -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4">
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-
-            <input type="text" wire:model.live="search" placeholder="Search FAQ title" class="h-11 px-3 rounded-md border
-                       bg-white dark:bg-gray-700 dark:text-white dark:border-gray-600">
-
-            <select wire:modellive="filterService" class="h-11 px-3 rounded-md border
-                       bg-white dark:bg-gray-700 dark:text-white dark:border-gray-600">
-                <option value="">All FAQs</option>
-                <option value="global">Global FAQs</option>
-                @foreach($services as $service)
-                    <option value="{{ $service->id }}">{{ $service->name }}</option>
-                @endforeach
-            </select>
-
-            <button wire:click="$set('filterService',''); $set('search','')" class="h-11 rounded-md border
-                       bg-gray-50 dark:bg-gray-700">
-                Reset
-            </button>
-        </div>
-    </div>
-
-    <!-- FAQ LIST -->
-    <div class="space-y-3">
-
-        @forelse($faqs as $faq)
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4">
-
-                <div class="flex justify-between items-start gap-3">
-                    <div>
-                        <h3 class="font-semibold">{{ $faq->title }}</h3>
-
-                        <p class="text-xs text-gray-500 mt-1">
-                            {{ $faq->service_id
-            ? ($services->firstWhere('id', $faq->service_id)?->name)
-            : 'Global FAQ'
-                                }}
-                        </p>
-                    </div>
-
-                    <div class="flex gap-2">
-                        <button wire:click="edit({{ $faq->id }})" class="px-3 py-1.5 text-xs rounded-md
-                                       bg-blue-100 text-blue-700
-                                       dark:bg-blue-900 dark:text-blue-200">
-                            Edit
-                        </button>
-
-                        <button wire:click="delete({{ $faq->id }})" class="px-3 py-1.5 text-xs rounded-md
-                                       bg-red-100 text-red-700
-                                       dark:bg-red-900 dark:text-red-200">
-                            Delete
-                        </button>
-                    </div>
-                </div>
-
-                <p class="text-sm text-gray-600 dark:text-gray-300 mt-3">
-                    {{ $faq->description }}
+        <!-- HEADER -->
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold">FAQs</h1>
+                <p class="text-sm text-gray-500">
+                    Manage service specific & global FAQs
                 </p>
             </div>
-        @empty
-            <p class="text-center text-gray-500">
-                No FAQs found
-            </p>
-        @endforelse
-
+    
+            <button wire:click="create" class="px-4 py-2 rounded-md bg-indigo-600 text-white">
+                + Add FAQ
+            </button>
+        </div>
+    
+        <!-- FILTER BAR -->
+        <div class="bg-white dark:bg-gray-800 rounded-md shadow p-4">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+    
+                <input type="text" wire:model.live="search" placeholder="Search FAQ title" class="h-11 px-3 rounded-md border
+                           bg-white dark:bg-gray-700 dark:text-white dark:border-gray-600">
+    
+                <select wire:modellive="filterService" class="h-11 px-3 rounded-md border
+                           bg-white dark:bg-gray-700 dark:text-white dark:border-gray-600">
+                    <option value="">All FAQs</option>
+                    <option value="global">Global FAQs</option>
+                    @foreach($services as $service)
+                        <option value="{{ $service->id }}">{{ $service->name }}</option>
+                    @endforeach
+                </select>
+    
+                <button wire:click="$set('filterService',''); $set('search','')" class="h-11 rounded-md border
+                           bg-gray-50 dark:bg-gray-700">
+                    Reset
+                </button>
+            </div>
+        </div>
+    
+        <!-- FAQ LIST -->
+        <div class="space-y-3">
+    
+            @forelse($faqs as $faq)
+                <div class="bg-white dark:bg-gray-800 rounded-md shadow p-4">
+    
+                    <div class="flex justify-between items-start gap-3">
+                        <div>
+                            <h3 class="font-semibold">{{ $faq->title }}</h3>
+    
+                            <p class="text-xs text-gray-500 mt-1">
+                                {{ $faq->service_id
+                ? ($services->firstWhere('id', $faq->service_id)?->name)
+                : 'Global FAQ'
+                                    }}
+                            </p>
+                        </div>
+    
+                        <div class="flex gap-2">
+                            <button wire:click="edit({{ $faq->id }})" class="px-3 py-1.5 text-xs rounded-md
+                                           bg-blue-100 text-blue-700
+                                           dark:bg-blue-900 dark:text-blue-200">
+                                Edit
+                            </button>
+    
+                            <button wire:click="delete({{ $faq->id }})" class="px-3 py-1.5 text-xs rounded-md
+                                           bg-red-100 text-red-700
+                                           dark:bg-red-900 dark:text-red-200">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+    
+                    <p class="text-sm text-gray-600 dark:text-gray-300 mt-3">
+                        {{ $faq->description }}
+                    </p>
+                </div>
+            @empty
+                <p class="text-center text-gray-500">
+                    No FAQs found
+                </p>
+            @endforelse
+    
+        </div>
     </div>
 
     <!-- MODAL -->

@@ -11,7 +11,7 @@
     </div>
 
     <!-- FILTER BAR -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-md shadow p-4">
         <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
 
             <!-- Search -->
@@ -52,7 +52,7 @@
     </div>
 
     <!-- BOOKINGS TABLE -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow overflow-x-auto">
+    <div class="bg-white dark:bg-gray-800 rounded-md shadow overflow-x-auto">
 
         <table class="w-full text-sm whitespace-nowrap
               text-gray-700 dark:text-gray-200">

@@ -40,8 +40,11 @@ class AdminBookingView extends Component
             'payment_method' => $this->payment_method,
             'is_paid' => $this->is_paid,
         ]);
-
-        session()->flash('success', 'Payment details updated');
+        $this->dispatch(
+            'toast',
+            type: 'success',
+            message: 'Payment details updated'
+        );
     }
 
     public function updateStatus()
@@ -63,8 +66,12 @@ class AdminBookingView extends Component
         $this->booking->update([
             'admin_note' => $this->admin_note,
         ]);
-
-        session()->flash('success', 'Admin note saved');
+        $this->dispatch(
+            'toast',
+            type: 'success',
+            message: 'Admin note saved successfully'
+        );
+       
     }
 
     public function assignTechnician()
@@ -74,8 +81,11 @@ class AdminBookingView extends Component
             'assigned_at' => now(),
             'status' => 'assigned',
         ]);
-
-        session()->flash('success', 'Technician assigned');
+        $this->dispatch(
+            'toast',
+            type: 'success',
+            message: 'Technician assigned successfully'
+        );
     }
 
     public function render()
