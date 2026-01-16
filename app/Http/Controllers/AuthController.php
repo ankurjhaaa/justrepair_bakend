@@ -100,6 +100,8 @@ class AuthController extends Controller
         try {
 
             $request->user()->currentAccessToken()->delete();
+            $request->user()->expo_push_token = null;
+            $request->user()->save();
             return response()->json([
                 'status' => true,
                 'message' => 'Logged out successfully',
