@@ -22,7 +22,7 @@
         </a>
         <form action="{{ route('pdf.generate') }}" method="post">
             @csrf
-            <input type="hidden" name="booking_id" value="{{ $booking->id }}">
+            <input type="hidden" name="booking_id" value="{{ $booking->booking_id }}">
             <button type="submit" class="px-4 py-2 rounded-md border text-sm
                     bg-white text-gray-700
                     hover:bg-gray-100

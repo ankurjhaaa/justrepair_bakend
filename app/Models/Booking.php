@@ -10,6 +10,7 @@ class Booking extends Model
     protected $casts = [
         'service_ids' => 'array',
         'requirements' => 'array',
+        'additional_info' => 'array',
         'date' => 'datetime',
     ];
 
