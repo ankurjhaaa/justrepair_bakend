@@ -356,6 +356,7 @@ class ApiController extends Controller
 
                 $booking_detail = [
                     'id' => $booking->id,
+                    'otp' => $booking->otp,
                     'booking_date' => $booking->booking_date,
                     'total_amount' => $booking->total_amount,
                     'status' => $booking->status,
