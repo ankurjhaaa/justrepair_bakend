@@ -297,4 +297,38 @@ class TechnicianApiController extends Controller
             ]);
         }
     }
+
+    public function addAdditionalInfo(Request $request, $booking_id)
+    {
+        $validator = Validator::make($request->all(), [
+            'additional_info' => "required|array",
+        ]);
+        if ($validator->failed()) {
+            return response()->json([
+                'status' => false,
+                'message' => $validator->errors()->first()
+            ]);
+        }
+        try {
+            $booking = Booking::where('booking_id', $booking_id)->first();
+            if (!$booking) {
+                return response()->json([
+                    "status" => false,
+                    "message" => "booking not found"
+                ]);
+            }
+            $booking->additional_info = $request->additional_info;
+            $booking->save();
+            return response()->json([
+                "status" => true,
+                "message" => "additional info added successfully",
+                "data" => $booking
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                "status" => false,
+                "message" => $e->getMessage()
+            ]);
+        }
+    }
 }

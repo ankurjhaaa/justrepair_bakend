@@ -54,6 +54,8 @@ return new class extends Migration {
 
             $table->string('otp')->nullable();
             $table->timestamp('otp_verified_at')->nullable();
+
+            $table->json('additional_info')->nullable();
             
 
             $table->json('requirements')->nullable();
