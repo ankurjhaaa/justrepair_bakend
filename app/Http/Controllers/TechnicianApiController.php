@@ -19,9 +19,9 @@ class TechnicianApiController extends Controller
             $totalAssignedServices = Booking::where('assigned_to', $user->id)->count();
             $totalCompletedServices = Booking::where('assigned_to', $user->id)->where('status', 'completed')->count();
             $totalInProgressServices = Booking::where('assigned_to', $user->id)->where('status', 'in_progress')->count();
-            $countJobs = Booking::where('assigned_to', $user->id)->where('date', '=', now())->count();
-            $todaySchedule = Booking::where('assigned_to', $user->id)->where('date', date('Y-m-d'))->count();
-            $upcomingSchedule = Booking::where('assigned_to', $user->id)->where('date', '>', date('Y-m-d'))->orderBy('date', 'asc')->count();
+            $countJobs = Booking::where('assigned_to', $user->id)->whereDate('date', now()->toDateString())->count();
+            $todaySchedule = Booking::where('assigned_to', $user->id)->whereDate('date', now()->toDateString())->count();
+            $upcomingSchedule = Booking::where('assigned_to', $user->id)->whereDate('date', '>', now()->toDateString())->count();
             $data = [
                 "total_assigned_services" => $totalAssignedServices,
                 "total_completed_services" => $totalCompletedServices,
@@ -136,7 +136,7 @@ class TechnicianApiController extends Controller
     {
         $user = $request->user();
         try {
-            $countJobs = Booking::where('assigned_to', $user->id)->where('date', '=', now())->count();
+            $countJobs = Booking::where('assigned_to', $user->id)->whereDate('date', now()->toDateString())->count();
             return response()->json([
                 "status" => true,
                 "message" => "today jobs count successfully",
@@ -154,7 +154,7 @@ class TechnicianApiController extends Controller
         $user = $request->user();
         try {
             $todaySchedule = Booking::where('assigned_to', $user->id)
-                ->where('date', date('Y-m-d'))
+                ->whereDate('date', now()->toDateString())
                 ->get();
             return response()->json([
                 "status" => true,
@@ -173,13 +173,13 @@ class TechnicianApiController extends Controller
         $user = $request->user();
         try {
             $upcomingSchedule = Booking::where('assigned_to', $user->id)
-                ->where('date', '>', date('Y-m-d'))
+                ->whereDate('date', '>', now()->toDateString())
                 ->orderBy('date', 'asc')
                 ->get();
 
             return response()->json([
                 "status" => true,
-                "message" => "today jobs count successfully",
+                "message" => "upcoming schedule fetched successfully",
                 "data" => $upcomingSchedule
             ]);
         } catch (\Throwable $e) {
