@@ -177,6 +177,12 @@ class TechnicianApiController extends Controller
                 ->orderBy('date', 'asc')
                 ->get();
 
+             
+
+            $upcomingSchedule->each(function ($booking) {
+                $booking->service_names = Service::whereIn('id', $booking->service_ids)->pluck('name');
+            });
+
             return response()->json([
                 "status" => true,
                 "message" => "upcoming schedule fetched successfully",
