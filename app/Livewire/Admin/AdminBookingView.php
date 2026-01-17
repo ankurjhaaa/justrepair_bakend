@@ -84,8 +84,7 @@ class AdminBookingView extends Component
         ]);
         $user = User::find($this->assigned_to);
         // 2️⃣ Expo Push Notification API hit
-        $i = 0;
-        while ($i < 100) {
+       
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
@@ -94,15 +93,13 @@ class AdminBookingView extends Component
                         "title" => "Hi, {$user->name} new appointment assigned",
                         "body" => "You have been assigned a new appointment. Please check your app for details.",
                         "sound" => "default",
-                        "sticky" => true,
                         "data" => [
                             "type" => "NEW_APPOINTMENT",
                             "id" => $this->booking->booking_id,
                         ]
                     ]);
 
-            $i++;
-        }
+         
 
         // 3️⃣ (Optional) response log karo
         // logger($response->json());
