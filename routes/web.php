@@ -11,6 +11,7 @@ use App\Livewire\Admin\AdminFaq;
 use App\Livewire\Admin\AdminService;
 use App\Livewire\Admin\AdminServiceRate;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\ApiExplorer;
 
 Route::get('/', function () {
     return view('welcome');
@@ -24,6 +25,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin/')->name('admin.')->gro
     Route::get('customers', AdminCustomer::class)->name('customer');
     Route::get('customers-view/{id}', AdminCustomerView::class)->name('customerview');
     Route::get('faqs', AdminFaq::class)->name('faqs');
+    Route::get('/api-explorer', ApiExplorer::class)->name('apis');
+
 
 });
 
@@ -35,3 +38,5 @@ Route::get('/logout', function () {
 })->name('logout');
 
 Route::post('pdf/generate', [PdfController::class, 'generatePdf'])->name('pdf.generate');
+
+
