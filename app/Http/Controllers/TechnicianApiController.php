@@ -48,11 +48,18 @@ class TechnicianApiController extends Controller
         try {
 
             $user = $request->user();
-            $services = Booking::where('assigned_to', $user->id)->get();
+            $bookings = Booking::where('assigned_to', $user->id)->get();
+            $service_name = Service::whereIn('id', $bookings->pluck('service_ids')->flatten())->pluck('name', 'id')->toArray();
+            $data = [
+                "bookings" => $bookings,
+                "service_name" => $service_name
+
+            ];
             return response()->json([
                 "status" => true,
                 "message" => "services fetched successfully",
-                "data" => $services
+                "data" => $data,
+                
             ]);
         } catch (\Throwable $e) {
             return response()->json([
@@ -75,8 +82,8 @@ class TechnicianApiController extends Controller
             $user_detal = User::find($booking_detail->user_id);
             $data = [
                 "booking_detail" => $booking_detail,
-                "user_detal" => $user_detal,
-                "booking_services" => $booking_services
+                "user_detail" => $user_detal,
+                "service_detail" => $booking_services
             ];
             return response()->json([
                 "status" => true,
