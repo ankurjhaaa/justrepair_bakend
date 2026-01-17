@@ -95,7 +95,7 @@ class AdminBookingView extends Component
                         "sound" => "default",
                         "data" => [
                             "type" => "NEW_APPOINTMENT",
-                            "id" => $this->booking->booking_id,
+                            "id" => $this->booking->booking_id->toString(),
                         ]
                     ]);
 
