@@ -163,6 +163,11 @@
                     <i class="fa-solid fa-circle-question"></i>
                     FAQs
                 </a>
+                <a wire:navigate href="{{ route('admin.apis') }}"
+                class="{{ $linkBase }} {{ request()->routeIs('admin.faqs*') ? $active : $inactive }}">
+                    <i class="fa-solid fa-circle-question"></i>
+                    Api`s
+                </a>
 
                 <a href="#"
                 class="{{ $linkBase }} {{ $inactive }}">
