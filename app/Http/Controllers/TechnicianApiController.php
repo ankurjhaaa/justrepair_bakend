@@ -49,11 +49,12 @@ class TechnicianApiController extends Controller
 
             $user = $request->user();
             $bookings = Booking::where('assigned_to', $user->id)->get();
-            $service_name = Service::whereIn('id', $bookings->pluck('service_ids')->flatten())->pluck('name', 'id')->toArray();
-            $data = [
-                "bookings" => $bookings,
-                "service_name" => $service_name
+            $bookings->each(function ($booking) {
+                $booking->service_names = Service::whereIn('id', $booking->service_ids)->pluck('name');
+            });
 
+            $data = [
+                "bookings" => $bookings
             ];
             return response()->json([
                 "status" => true,
