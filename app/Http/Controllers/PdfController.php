@@ -8,15 +8,18 @@ use App\Models\Booking;
 
 class PdfController extends Controller
 {
-    public function generatePdf(Request $request)
+    public function generatePdf(Request $request, $booking_id)
     {
-        // 1️⃣ Validate
-        $request->validate([
-            'booking_id' => 'required|string'
-        ]);
+
+        if (!$booking_id) {
+            return response()->json([
+                "status" => false,
+                "message" => "send booking id"
+            ]);
+        }
 
         // 2️⃣ Booking fetch (booking_id column se)
-        $booking = Booking::where('booking_id', $request->booking_id)->firstOrFail();
+        $booking = Booking::where('booking_id', $booking_id)->firstOrFail();
 
         /*
         |--------------------------------------------------------------------------

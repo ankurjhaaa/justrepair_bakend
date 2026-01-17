@@ -54,4 +54,4 @@ Route::controller(AuthController::class)->name('api.')->group(function () {
     });
 });
 
-Route::post('pdf/generate', [PdfController::class, 'generatePdf'])->name('pdf.generate');
+Route::get('pdf/generate/{booking_id}', [PdfController::class, 'generatePdf'])->name('pdf.generate');
