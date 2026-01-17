@@ -156,6 +156,10 @@ class TechnicianApiController extends Controller
             $todaySchedule = Booking::where('assigned_to', $user->id)
                 ->whereDate('date', now()->toDateString())
                 ->get();
+
+            $todaySchedule->each(function ($booking) {
+                $booking->service_names = Service::whereIn('id', $booking->service_ids)->pluck('name');
+            });
             return response()->json([
                 "status" => true,
                 "message" => "today jobs count successfully",
