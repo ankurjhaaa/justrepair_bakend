@@ -89,12 +89,13 @@ class AdminBookingView extends Component
             'Content-Type' => 'application/json',
         ])->post('https://exp.host/--/api/v2/push/send', [
                     "to" => $user->expo_push_token,
-                    "title" => "Hi, {$user->name} Assigned New Order",
-                    "body" => "You have been assigned a new order. Please check your app for details.",
+                    "title" => "Hi, {$user->name} new appointment assigned",
+                    "body" => "You have been assigned a new appointment. Please check your app for details.",
                     "sound" => "default",
                     "sticky" => true,
                     "data" => [
-                        "screen" => "orders"
+                        "type" => "NEW_APPOINTMENT",
+                        "id" => $this->booking->booking_id,
                     ]
                 ]);
 
