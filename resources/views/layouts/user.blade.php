@@ -22,6 +22,7 @@
             }
         }
     </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     @livewireStyles
 </head>
@@ -33,12 +34,10 @@
             <div class="flex items-center justify-between h-16">
 
                 <!-- LOGO -->
-                <a wire:navigate href="{{ route('home') }}" class="flex items-center gap-3">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3063/3063822.png" class="w-9 h-9 rounded-md" />
-                    <span class="font-bold text-lg text-gray-900">
-                        Just<span class="text-primary">Repair</span>
-                    </span>
+                <a wire:navigate href="{{ route('home') }}" class="flex items-center gap-3 w-40 md:w-48">
+                    <img src="{{ asset('logo.jpeg') }}" class="h-9 w-full object-contain" alt="JustRepair Logo" />
                 </a>
+
 
                 <!-- DESKTOP NAV -->
                 <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-700">
@@ -81,9 +80,9 @@
 
         <!-- SHEET -->
         <div id="sheetPanel" class="absolute bottom-0 left-0 right-0 bg-white
-               rounded-t-2xl p-6
-               transition-transform duration-300
-               translate-y-full">
+                rounded-t-2xl p-6
+                transition-transform duration-300
+                translate-y-full">
 
             <!-- HANDLE -->
             <div class="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-6"></div>
@@ -104,56 +103,32 @@
             <div class="mt-8 space-y-5 text-gray-800 text-base">
 
                 <a href="#" class="flex items-center gap-4">
-                    <!-- Home -->
-                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V12H9v8a2 2 0 0 1-2 2H3z" />
-                    </svg>
+                    <i class="fa-solid fa-house text-primary text-lg w-6"></i>
                     <span>Home</span>
                 </a>
 
                 <a href="#services" class="flex items-center gap-4">
-                    <!-- Services -->
-                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M14.7 6.3a1 1 0 0 0-1.4 0L6 13.6V18h4.4l7.3-7.3a1 1 0 0 0 0-1.4z" />
-                    </svg>
+                    <i class="fa-solid fa-screwdriver-wrench text-primary text-lg w-6"></i>
                     <span>Services</span>
                 </a>
 
                 <a href="#" class="flex items-center gap-4">
-                    <!-- Technicians -->
-                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M5 20h14v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2zM12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" />
-                    </svg>
+                    <i class="fa-solid fa-user-gear text-primary text-lg w-6"></i>
                     <span>Technicians</span>
                 </a>
 
                 <a href="#" class="flex items-center gap-4">
-                    <!-- Contact -->
-                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 5h18M8 5v14m8-14v14" />
-                    </svg>
+                    <i class="fa-solid fa-phone-volume text-primary text-lg w-6"></i>
                     <span>Contact</span>
                 </a>
 
                 <a href="#" class="flex items-center gap-4">
-                    <!-- Support -->
-                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M18.4 14.6a8 8 0 1 0-12.8 0" />
-                    </svg>
+                    <i class="fa-solid fa-circle-question text-primary text-lg w-6"></i>
                     <span>Help & Support</span>
                 </a>
 
                 <a href="#" class="flex items-center gap-4">
-                    <!-- Policy -->
-                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12h6m-6 4h6m2 6H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l5 5v13a2 2 0 0 1-2 2z" />
-                    </svg>
+                    <i class="fa-solid fa-file-shield text-primary text-lg w-6"></i>
                     <span>Terms & Privacy</span>
                 </a>
             </div>
@@ -162,7 +137,10 @@
             @auth
                 <form method="POST" action="{{ route('logout') }}" class="mt-8">
                     @csrf
-                    <button class="w-full py-3 rounded-md border border-gray-300 text-gray-700 font-medium">
+                    <button
+                        class="w-full py-3 rounded-md border border-gray-300
+                                                           text-gray-700 font-medium flex items-center justify-center gap-3">
+                        <i class="fa-solid fa-right-from-bracket"></i>
                         Logout
                     </button>
                 </form>
@@ -291,29 +269,48 @@
 
     @livewireScripts
 
-    <!-- MOBILE MENU JS -->
     <script>
-        const openMenu = document.getElementById('openMenu');
-        const sheet = document.getElementById('mobileSheet');
-        const panel = document.getElementById('sheetPanel');
-        const backdrop = document.getElementById('sheetBackdrop');
+        function initMobileMenu() {
+            const openMenu = document.getElementById('openMenu');
+            const sheet = document.getElementById('mobileSheet');
+            const panel = document.getElementById('sheetPanel');
+            const backdrop = document.getElementById('sheetBackdrop');
 
-        openMenu.addEventListener('click', () => {
-            sheet.classList.remove('hidden');
-            setTimeout(() => panel.classList.remove('translate-y-full'), 10);
-            document.body.classList.add('overflow-hidden');
-        });
+            // safety check (important)
+            if (!openMenu || !sheet || !panel || !backdrop) return;
 
-        backdrop.addEventListener('click', closeSheet);
+            // remove old listeners (avoid duplicate binding)
+            openMenu.onclick = null;
+            backdrop.onclick = null;
 
-        function closeSheet() {
-            panel.classList.add('translate-y-full');
-            setTimeout(() => {
-                sheet.classList.add('hidden');
-                document.body.classList.remove('overflow-hidden');
-            }, 300);
+            openMenu.onclick = () => {
+                sheet.classList.remove('hidden');
+                sheet.classList.add('block');
+                setTimeout(() => {
+                    panel.classList.remove('translate-y-full');
+                }, 10);
+                document.body.classList.add('overflow-hidden');
+            };
+
+            backdrop.onclick = closeSheet;
+
+            function closeSheet() {
+                panel.classList.add('translate-y-full');
+                setTimeout(() => {
+                    sheet.classList.add('hidden');
+                    sheet.classList.remove('block');
+                    document.body.classList.remove('overflow-hidden');
+                }, 300);
+            }
         }
+
+        // initial load
+        document.addEventListener('DOMContentLoaded', initMobileMenu);
+
+        // 🔥 IMPORTANT: re-init after wire:navigate
+        document.addEventListener('livewire:navigated', initMobileMenu);
     </script>
+
 
 
 </body>
