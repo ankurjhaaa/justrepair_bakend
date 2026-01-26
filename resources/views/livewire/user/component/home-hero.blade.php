@@ -56,7 +56,7 @@
             <!-- IMAGE CARD -->
             <div class="relative flex justify-center md:justify-end">
                 <div class="absolute -inset-4 rounded-3xl
-                bg-gradient-to-tr from-white/20 to-white/5 blur-2xl">
+                bg-linear-to-tr from-white/20 to-white/5 blur-2xl">
                 </div>
 
                 <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952" alt="Technician" class="relative w-full max-w-xs sm:max-w-sm md:max-w-md

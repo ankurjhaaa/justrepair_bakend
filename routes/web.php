@@ -11,6 +11,8 @@ use App\Livewire\Admin\AdminFaq;
 use App\Livewire\Admin\AdminService;
 use App\Livewire\Admin\AdminServiceRate;
 use App\Livewire\User\Home;
+use App\Livewire\User\Login;
+use App\Livewire\User\Signup;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\ApiExplorer;
 
@@ -18,6 +20,9 @@ use App\Livewire\ApiExplorer;
 //     return view('welcome');
 // });
 Route::get('/',Home::class)->name('home');
+Route::get('login',Login::class)->name('login');
+Route::get('signup',Signup::class)->name('register');
+
 Route::middleware(['auth', 'role:admin'])->prefix('admin/')->name('admin.')->group(function () {
     Route::get('dashboard', AdminDashboard::class)->name('dashboard');
     Route::get('service', AdminService::class)->name('service');
@@ -32,7 +37,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin/')->name('admin.')->gro
 
 });
 
-Route::get('login', [LoginController::class, 'login'])->name('login');
+// Route::get('admin/login', [LoginController::class, 'login'])->name('login');
 Route::post('loginsubmit', [LoginController::class, 'authenticate'])->name('login.submit');
 Route::get('/logout', function () {
     Auth::logout();
