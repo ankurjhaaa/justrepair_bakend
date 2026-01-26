@@ -10,12 +10,14 @@ use App\Livewire\Admin\AdminDashboard;
 use App\Livewire\Admin\AdminFaq;
 use App\Livewire\Admin\AdminService;
 use App\Livewire\Admin\AdminServiceRate;
+use App\Livewire\User\Home;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\ApiExplorer;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+Route::get('/',Home::class)->name('home');
 Route::middleware(['auth', 'role:admin'])->prefix('admin/')->name('admin.')->group(function () {
     Route::get('dashboard', AdminDashboard::class)->name('dashboard');
     Route::get('service', AdminService::class)->name('service');
