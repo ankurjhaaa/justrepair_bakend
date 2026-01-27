@@ -41,12 +41,12 @@
                 <div class="mt-10 flex flex-col sm:flex-row gap-4
                 justify-center md:justify-start">
 
-                    <a href="#" class="bg-white text-[#8B0000] px-9 py-3 rounded-xl
+                    <a wire:navigate href="{{ route('booking') }}" class="bg-white text-[#8B0000] px-9 py-3 rounded-xl
                     font-bold shadow-2xl hover:scale-105 transition">
                         Book a Service
                     </a>
 
-                    <a href="#services" class="border-2 border-white px-9 py-3 rounded-xl
+                    <a wire:navigate href="{{ route('service') }}" class="border-2 border-white px-9 py-3 rounded-xl
                     font-semibold hover:bg-white hover:text-[#8B0000] transition">
                         Explore Services
                     </a>

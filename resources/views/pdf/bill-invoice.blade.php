@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>Invoice</title>
@@ -48,7 +49,8 @@
             margin-top: 15px;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #444;
             padding: 8px;
         }
@@ -102,108 +104,132 @@
 
 <body>
 
-{{-- ================= HEADER ================= --}}
-<div class="header">
-    <div class="company">
-        <strong style="font-size:16px">{{ $company['name'] }}</strong><br>
-        {{ $company['address'] }}<br>
-        Phone: {{ $company['phone'] }}<br>
-        Email: {{ $company['email'] }}
+    {{-- ================= HEADER ================= --}}
+    <div class="header">
+        <div class="company">
+            <strong style="font-size:16px">{{ $company['name'] }}</strong><br>
+            {{ $company['address'] }}<br>
+            Phone: {{ $company['phone'] }}<br>
+            Email: {{ $company['email'] }}
+        </div>
+
+        <div class="invoice-box">
+            <div class="invoice-title">INVOICE</div>
+            <strong>Invoice No:</strong> {{ $invoice['invoice_no'] }}<br>
+            <strong>Date:</strong> {{ $invoice['date'] }}<br>
+            <strong>Status:</strong> {{ ucfirst($invoice['status']) }}
+        </div>
+
+        <div class="clear"></div>
     </div>
 
-    <div class="invoice-box">
-        <div class="invoice-title">INVOICE</div>
-        <strong>Invoice No:</strong> {{ $invoice['invoice_no'] }}<br>
-        <strong>Date:</strong> {{ $invoice['date'] }}<br>
-        <strong>Status:</strong> {{ ucfirst($invoice['status']) }}
-    </div>
+    {{-- ================= CUSTOMER ================= --}}
+    <table class="no-border">
+        <tr>
+            <td>
+                <strong>Bill To:</strong><br>
+                {{ $customer['name'] }}<br>
+                {{ $customer['phone'] }}<br>
+                {{ $customer['address'] }}
+            </td>
+            <td class="right">
+                <strong>Payment Method:</strong><br>
+                {{ ucfirst($invoice['payment_method'] ?? 'N/A') }}
+            </td>
+        </tr>
+    </table>
 
-    <div class="clear"></div>
-</div>
+    {{-- ================= REQUIREMENTS ================= --}}
+    {{-- ================= REQUIREMENTS ================= --}}
+    @if(!empty($requirements) && is_array($requirements))
+        <div class="section-title">Service Requirements</div>
 
-{{-- ================= CUSTOMER ================= --}}
-<table class="no-border">
-    <tr>
-        <td>
-            <strong>Bill To:</strong><br>
-            {{ $customer['name'] }}<br>
-            {{ $customer['phone'] }}<br>
-            {{ $customer['address'] }}
-        </td>
-        <td class="right">
-            <strong>Payment Method:</strong><br>
-            {{ ucfirst($invoice['payment_method'] ?? 'N/A') }}
-        </td>
-    </tr>
-</table>
+        <table>
+            <tbody>
+                @foreach($requirements as $serviceId => $reqs)
+                    {{-- Service name row --}}
+                    <tr>
+                        <td style="font-weight: bold; background: #f9f9f9;">
+                            {{ \App\Models\Service::find($serviceId)->name ?? 'Service #' . $serviceId }}
+                        </td>
+                    </tr>
 
-{{-- ================= REQUIREMENTS ================= --}}
-@if(count($requirements))
-    <div class="section-title">Service Requirements</div>
+                    {{-- Requirement rows --}}
+                    @if(is_array($reqs) && count($reqs))
+                        @foreach($reqs as $req)
+                            <tr>
+                                <td style="padding-left: 18px;">
+                                    • {{ $req }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td style="padding-left: 18px; color:#777;">
+                                No specific requirements
+                            </td>
+                        </tr>
+                    @endif
+                @endforeach
+            </tbody>
+        </table>
+    @endif
+
+
+    {{-- ================= TECHNICIAN ITEMS ================= --}}
+    <div class="section-title">Technician Added Items</div>
+
     <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Description</th>
+                <th class="right">Qty</th>
+                <th class="right">Rate</th>
+                <th class="right">Total</th>
+            </tr>
+        </thead>
         <tbody>
-            @foreach($requirements as $req)
+            @forelse($items as $i => $item)
                 <tr>
-                    <td>• {{ $req }}</td>
+                    <td>{{ $i + 1 }}</td>
+                    <td>{{ $item['description'] }}</td>
+                    <td class="right">{{ $item['qty'] }}</td>
+                    <td class="right">₹{{ number_format($item['amount'], 2) }}</td>
+                    <td class="right">₹{{ number_format($item['total'], 2) }}</td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="5" class="right">No items added</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
-@endif
 
-{{-- ================= TECHNICIAN ITEMS ================= --}}
-<div class="section-title">Technician Added Items</div>
-
-<table>
-    <thead>
+    {{-- ================= TOTALS ================= --}}
+    <table class="total-box">
         <tr>
-            <th>#</th>
-            <th>Description</th>
-            <th class="right">Qty</th>
-            <th class="right">Rate</th>
-            <th class="right">Total</th>
+            <td>Service Charge</td>
+            <td class="right">₹{{ number_format($invoice['service_charge'], 2) }}</td>
         </tr>
-    </thead>
-    <tbody>
-        @forelse($items as $i => $item)
-            <tr>
-                <td>{{ $i + 1 }}</td>
-                <td>{{ $item['description'] }}</td>
-                <td class="right">{{ $item['qty'] }}</td>
-                <td class="right">₹{{ number_format($item['amount'], 2) }}</td>
-                <td class="right">₹{{ number_format($item['total'], 2) }}</td>
-            </tr>
-        @empty
-            <tr>
-                <td colspan="5" class="right">No items added</td>
-            </tr>
-        @endforelse
-    </tbody>
-</table>
+        <tr>
+            <td>Items Subtotal</td>
+            <td class="right">₹{{ number_format($invoice['subtotal'], 2) }}</td>
+        </tr>
+        <tr class="grand">
+            <td>Final Amount</td>
+            <td class="right">₹{{ number_format($invoice['final_amount'], 2) }}</td>
+        </tr>
+    </table>
 
-{{-- ================= TOTALS ================= --}}
-<table class="total-box">
-    <tr>
-        <td>Service Charge</td>
-        <td class="right">₹{{ number_format($invoice['service_charge'], 2) }}</td>
-    </tr>
-    <tr>
-        <td>Items Subtotal</td>
-        <td class="right">₹{{ number_format($invoice['subtotal'], 2) }}</td>
-    </tr>
-    <tr class="grand">
-        <td>Final Amount</td>
-        <td class="right">₹{{ number_format($invoice['final_amount'], 2) }}</td>
-    </tr>
-</table>
+    <div class="clear"></div>
 
-<div class="clear"></div>
-
-{{-- ================= FOOTER ================= --}}
-<div class="footer">
-    Thank you for choosing {{ $company['name'] }} 🙏 <br>
-    This is a system generated invoice.
-</div>
+    {{-- ================= FOOTER ================= --}}
+    <div class="footer">
+        Thank you for choosing {{ $company['name'] }} 🙏 <br>
+        This is a system generated invoice.
+    </div>
 
 </body>
+
 </html>

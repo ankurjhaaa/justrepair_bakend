@@ -41,26 +41,91 @@
 
                 <!-- DESKTOP NAV -->
                 <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-700">
-                    <a href="#" class="hover:text-primary">Home</a>
-                    <a href="#services" class="hover:text-primary">Services</a>
-                    <a href="#" class="hover:text-primary">Technicians</a>
-                    <a href="#" class="hover:text-primary">Contact</a>
-                    <a href="#" class="hover:text-primary">Support</a>
+                    <a wire:navigate href="{{ route('home') }}" class="hover:text-primary">Home</a>
+                    <a wire:navigate href="{{ route('service') }}" class="hover:text-primary">Services</a>
+                    <a wire:navigate href="{{ route('aboutus') }}" class="hover:text-primary">About us</a>
+                    <a wire:navigate href="{{ route('helpcenter') }}" class="hover:text-primary">Help</a>
                 </nav>
 
                 <!-- DESKTOP ACTION -->
                 <div class="hidden md:flex items-center gap-4">
+
                     @auth
-                        <a href="#" class="bg-primary text-white px-5 py-2 rounded-md font-semibold">
-                            Book Service
-                        </a>
+                        <div class="relative group">
+
+                            <!-- PROFILE BUTTON -->
+                            <button class="flex items-center gap-3 px-3 py-2 rounded-md
+                                                                       hover:bg-gray-100 transition">
+
+                                <!-- AVATAR -->
+                                <div
+                                    class="w-9 h-9 rounded-md bg-primary text-white
+                                                                        flex items-center justify-center font-bold text-sm">
+                                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                                </div>
+
+                                <!-- NAME -->
+                                <div class="text-left leading-tight">
+                                    <p class="text-sm font-semibold text-gray-800">
+                                        {{ auth()->user()->name }}
+                                    </p>
+                                    <p class="text-xs text-gray-500">
+                                        User Account
+                                    </p>
+                                </div>
+
+                                <!-- ARROW -->
+                                <i class="fa-solid fa-chevron-down text-xs text-gray-500"></i>
+                            </button>
+
+                            <!-- DROPDOWN -->
+                            <div class="absolute right-0 mt-2 w-56
+                                                                    bg-white rounded-md shadow-lg
+                                                                    border border-gray-200
+                                                                    opacity-0 invisible
+                                                                    group-hover:opacity-100 group-hover:visible
+                                                                    transition-all duration-150 z-50">
+
+                                <a wire:navigate href="{{ route('mybookings') }}" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700
+                                                                      hover:bg-gray-100">
+                                    <i class="fa-solid fa-calendar-check text-primary"></i>
+                                    My Bookings
+                                </a>
+
+                                <a wire:navigate href="{{ route('profile') }}" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700
+                                                                      hover:bg-gray-100">
+                                    <i class="fa-solid fa-user text-primary"></i>
+                                    Profile
+                                </a>
+
+                                <a wire:navigate href="{{ route('booking') }}" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700
+                                                                      hover:bg-gray-100">
+                                    <i class="fa-solid fa-plus text-primary"></i>
+                                    Book Service
+                                </a>
+
+                                <div class="border-t border-gray-200"></div>
+
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="w-full flex items-center gap-3 px-4 py-3
+                                                                               text-sm text-red-600 hover:bg-red-50">
+                                        <i class="fa-solid fa-right-from-bracket"></i>
+                                        Logout
+                                    </button>
+                                </form>
+                            </div>
+
+                        </div>
+
                     @else
-                        <a wire:navigate href="{{ route('login') }}"
-                            class="bg-primary text-white px-5 py-2 rounded-md font-semibold">
+                        <a wire:navigate href="{{ route('login') }}" class="bg-primary text-white px-5 py-2 rounded-md
+                                                                  font-semibold hover:bg-primary/90 transition">
                             Login
                         </a>
                     @endauth
                 </div>
+
 
                 <!-- MOBILE BUTTON -->
                 <button id="openMenu" class="md:hidden">
@@ -139,7 +204,7 @@
                     @csrf
                     <button
                         class="w-full py-3 rounded-md border border-gray-300
-                                                           text-gray-700 font-medium flex items-center justify-center gap-3">
+                                                                                                                       text-gray-700 font-medium flex items-center justify-center gap-3">
                         <i class="fa-solid fa-right-from-bracket"></i>
                         Logout
                     </button>
@@ -154,6 +219,61 @@
     <main class="min-h-screen">
         {{ $slot }}
     </main>
+    <!-- ================= MOBILE BOTTOM NAV ================= -->
+    <div class="md:hidden fixed bottom-0 inset-x-0 z-50 bg-white border-t">
+
+        <div class="grid grid-cols-5 h-16">
+
+            <!-- HOME -->
+            <a wire:navigate href="{{ route('home') }}" class="flex flex-col items-center justify-center text-xs
+           {{ request()->routeIs('home')
+    ? 'text-primary font-semibold'
+    : 'text-gray-500' }}">
+                <i class="fa-solid fa-house text-lg"></i>
+                Home
+            </a>
+
+            <!-- SERVICES -->
+            <a wire:navigate href="{{ route('service') }}" class="flex flex-col items-center justify-center text-xs
+           {{ request()->routeIs('service*')
+    ? 'text-primary font-semibold'
+    : 'text-gray-500' }}">
+                <i class="fa-solid fa-screwdriver-wrench text-lg"></i>
+                Services
+            </a>
+
+            <!-- BOOK (CENTER HIGHLIGHT) -->
+            <a wire:navigate href="{{ route('booking') }}" class="flex flex-col items-center justify-center text-xs
+                  -mt-4">
+                <div class="w-12 h-12 rounded-full bg-primary text-white
+                        flex items-center justify-center shadow-md">
+                    <i class="fa-solid fa-plus text-lg"></i>
+                </div>
+                <span class="mt-1 text-primary font-semibold">
+                    Book
+                </span>
+            </a>
+
+            <!-- MY BOOKINGS -->
+            <a wire:navigate href="{{ route('mybookings') }}" class="flex flex-col items-center justify-center text-xs
+           {{ request()->routeIs('mybookings*')
+    ? 'text-primary font-semibold'
+    : 'text-gray-500' }}">
+                <i class="fa-solid fa-calendar-check text-lg"></i>
+                Orders
+            </a>
+
+            <!-- ACCOUNT -->
+            <a wire:navigate href="{{ route('mobileprofile') }}" class="flex flex-col items-center justify-center text-xs
+           {{ request()->routeIs('mobileprofile')
+    ? 'text-primary font-semibold'
+    : 'text-gray-500' }}">
+                <i class="fa-solid fa-user text-lg"></i>
+                Account
+            </a>
+
+        </div>
+    </div>
 
     <!-- ================= PREMIUM FOOTER ================= -->
     <footer class="bg-[#0e0e11] text-gray-400">
@@ -165,11 +285,7 @@
                 <!-- BRAND -->
                 <div>
                     <div class="flex items-center gap-3">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3063/3063822.png"
-                            class="w-10 h-10 bg-white rounded-full p-1" alt="JustRepair" />
-                        <span class="text-white text-xl font-bold">
-                            Just<span class="text-primary">Repair</span>
-                        </span>
+                        <img src="{{ asset('logo.jpeg') }}" class="h-9 w-full object-contain" alt="JustRepair Logo" />
                     </div>
 
                     <p class="text-sm mt-4 leading-relaxed">
@@ -207,8 +323,8 @@
                 <div>
                     <h4 class="text-white font-semibold mb-4">Company</h4>
                     <ul class="space-y-3 text-sm">
-                        <li><a href="#" class="hover:text-white">About Us</a></li>
-                        <li><a href="#" class="hover:text-white">Services</a></li>
+                        <li><a wire:navigate href="{{ route('aboutus') }}" class="hover:text-white">About Us</a></li>
+                        <li><a wire:navigate href="{{ route('service') }}" class="hover:text-white">Services</a></li>
                         <li><a href="#" class="hover:text-white">Become a Technician</a></li>
                         <li><a href="#" class="hover:text-white">Careers</a></li>
                     </ul>
@@ -218,9 +334,12 @@
                 <div>
                     <h4 class="text-white font-semibold mb-4">Support</h4>
                     <ul class="space-y-3 text-sm">
-                        <li><a href="#" class="hover:text-white">Help Center</a></li>
-                        <li><a href="#" class="hover:text-white">Terms & Conditions</a></li>
-                        <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
+                        <li><a wire:navigate href="{{ route('helpcenter') }}" class="hover:text-white">Help Center</a>
+                        </li>
+                        <li><a wire:navigate href="{{ route('termsandcondition') }}" class="hover:text-white">Terms &
+                                Conditions</a></li>
+                        <li><a wire:navigate href="{{ route('privacypolicy') }}" class="hover:text-white">Privacy
+                                Policy</a></li>
                     </ul>
                 </div>
 

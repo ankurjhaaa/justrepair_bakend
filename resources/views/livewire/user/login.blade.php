@@ -82,11 +82,11 @@
             </form>
 
             <!-- OTP TOGGLE (CLEAN PLACE) -->
-            <div class="text-center mt-6">
+            <!-- <div class="text-center mt-6">
                 <button wire:click="toggleOtp" class="text-sm text-primary font-medium hover:underline">
                     {{ $otpMode ? 'Login with Password' : 'Login with OTP' }}
                 </button>
-            </div>
+            </div> -->
 
         </div>
     </div>

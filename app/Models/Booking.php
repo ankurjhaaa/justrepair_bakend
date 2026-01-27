@@ -26,4 +26,9 @@ class Booking extends Model
     {
         return Service::whereIn('id', $this->service_ids ?? []);
     }
+    public function assignedTo()
+    {
+        return $this->belongsTo(User::class, 'assigned_to');
+    }
+
 }

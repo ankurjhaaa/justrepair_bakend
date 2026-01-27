@@ -82,8 +82,8 @@
             <div class="flex flex-wrap gap-2">
                 @foreach(($booking->service_ids ?? []) as $sid)
                     <span class="px-3 py-1 text-xs rounded-full
-                                         bg-indigo-50 text-indigo-700
-                                         dark:bg-indigo-900 dark:text-indigo-200">
+                                             bg-indigo-50 text-indigo-700
+                                             dark:bg-indigo-900 dark:text-indigo-200">
                         {{ $servicesMap[$sid] ?? 'Unknown Service' }}
                     </span>
                 @endforeach
@@ -93,18 +93,36 @@
         <!-- REQUIREMENTS -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
             <h3 class="text-sm font-semibold mb-3">Requirements</h3>
-            <div class="flex flex-wrap gap-2">
-                @forelse($booking->requirements ?? [] as $req)
-                    <span class="px-3 py-1 text-xs rounded-full
-                                         bg-green-50 text-green-700
-                                         dark:bg-green-900 dark:text-green-200">
-                        {{ $req }}
-                    </span>
-                @empty
-                    <p class="text-sm text-gray-500">No requirements</p>
-                @endforelse
-            </div>
+
+            @if(!empty($booking->requirements) && is_array($booking->requirements))
+                <div class="space-y-4">
+
+                    @foreach($booking->requirements as $serviceId => $reqs)
+                        <div>
+                            <!-- Service Name -->
+                            <p class="text-xs font-semibold text-gray-600 dark:text-gray-300 mb-2">
+                                {{ $servicesMap[$serviceId] ?? 'Service #' . $serviceId }}
+                            </p>
+
+                            <!-- Requirement Pills -->
+                            <div class="flex flex-wrap gap-2">
+                                @foreach($reqs as $req)
+                                    <span class="px-3 py-1 text-xs rounded-full
+                                                     bg-green-50 text-green-700
+                                                     dark:bg-green-900 dark:text-green-200">
+                                        {{ $req }}
+                                    </span>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endforeach
+
+                </div>
+            @else
+                <p class="text-sm text-gray-500">No requirements</p>
+            @endif
         </div>
+
         <!-- STATUS UPDATE -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6 space-y-3">
             <h3 class="text-sm font-semibold">Update Status</h3>
