@@ -17,10 +17,18 @@ class Profile extends Component
 
     public function mount()
     {
+        if (!Auth::check()) {
+            redirect()->route('login');
+        }
+        $this->profile();
+    }
+    public function profile()
+    {
         $user = Auth::user();
 
         $this->name = $user->name;
         $this->mobile = $user->phone; // read-only
+
     }
 
     public function updateProfile()

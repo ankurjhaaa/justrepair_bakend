@@ -11,9 +11,7 @@ class MobileProfile extends Component
 {
     public function mount()
     {
-        if (!Auth::check()) {
-            redirect()->route('login');
-        }
+        
     }
 
     public function render()

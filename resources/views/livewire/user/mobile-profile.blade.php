@@ -1,7 +1,7 @@
 <div class="md:hidden bg-gray-100 min-h-screen flex justify-center p-5">
 
     <!-- MAIN CONTAINER -->
-    <div class="w-full bg-white h-[90vh]  rounded-md shadow
+    <div class="w-full bg-white h-[80vh]  rounded-md shadow
                 flex flex-col">
 
         <!-- ================= HEADER ================= -->
@@ -10,15 +10,20 @@
             <div class="w-12 h-12 rounded-md bg-primary text-white
                         flex items-center justify-center
                         text-lg font-bold">
-                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                @auth
+                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                @else
+                    U
+                @endauth
+
             </div>
 
             <div>
                 <p class="font-semibold text-gray-900 text-base leading-tight">
-                    {{ auth()->user()->name }}
+                    {{ auth()->user()->name ?? "User" }}
                 </p>
                 <p class="text-xs text-gray-500">
-                    {{ auth()->user()->phone }}
+                    {{ auth()->user()->phone ?? "" }}
                 </p>
             </div>
         </div>
@@ -34,23 +39,24 @@
                 </p>
 
                 <div class="bg-gray-50 rounded-md divide-y">
+                    @auth
+                        <a wire:navigate href="{{ route('profile') }}" class="flex items-center justify-between px-4 py-4">
+                            <div class="flex items-center gap-4 text-gray-700">
+                                <i class="fa-solid fa-user text-primary"></i>
+                                Profile
+                            </div>
+                            <i class="fa-solid fa-chevron-right text-gray-400 text-xs"></i>
+                        </a>
 
-                    <a wire:navigate href="{{ route('profile') }}" class="flex items-center justify-between px-4 py-4">
-                        <div class="flex items-center gap-4 text-gray-700">
-                            <i class="fa-solid fa-user text-primary"></i>
-                            Profile
-                        </div>
-                        <i class="fa-solid fa-chevron-right text-gray-400 text-xs"></i>
-                    </a>
-
-                    <a wire:navigate href="{{ route('mybookings') }}"
-                        class="flex items-center justify-between px-4 py-4">
-                        <div class="flex items-center gap-4 text-gray-700">
-                            <i class="fa-solid fa-calendar-check text-primary"></i>
-                            My Bookings
-                        </div>
-                        <i class="fa-solid fa-chevron-right text-gray-400 text-xs"></i>
-                    </a>
+                        <a wire:navigate href="{{ route('mybookings') }}"
+                            class="flex items-center justify-between px-4 py-4">
+                            <div class="flex items-center gap-4 text-gray-700">
+                                <i class="fa-solid fa-calendar-check text-primary"></i>
+                                My Bookings
+                            </div>
+                            <i class="fa-solid fa-chevron-right text-gray-400 text-xs"></i>
+                        </a>
+                    @endauth
 
                     <a wire:navigate href="{{ route('booking') }}" class="flex items-center justify-between px-4 py-4">
                         <div class="flex items-center gap-4 text-gray-700">
@@ -98,6 +104,23 @@
                         </div>
                         <i class="fa-solid fa-chevron-right text-gray-400 text-xs"></i>
                     </a>
+                    <a wire:navigate href="{{ route('aboutus') }}" class="flex items-center justify-between px-4 py-4">
+                        <div class="flex items-center gap-4 text-gray-700">
+                            <i class="fa-solid fa-circle-info text-primary"></i>
+                            About Us
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-gray-400 text-xs"></i>
+                    </a>
+
+                    <a wire:navigate href="{{ route('service') }}" class="flex items-center justify-between px-4 py-4">
+                        <div class="flex items-center gap-4 text-gray-700">
+                            <i class="fa-solid fa-screwdriver-wrench text-primary"></i>
+                            Services
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-gray-400 text-xs"></i>
+                    </a>
+
+
 
                 </div>
             </div>
@@ -106,18 +129,22 @@
 
         <!-- ================= LOGOUT ================= -->
         <div class="px-4 pb-4 pt-2">
-
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button class="w-full flex items-center justify-center gap-3
-                           py-3 rounded-md
-                           text-red-600 font-semibold
-                           border border-red-200
-                           hover:bg-red-50 transition">
+            @auth
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button
+                        class="w-full flex items-center justify-center gap-3 py-3 rounded-md text-red-600 font-semibold border border-red-200 hover:bg-red-50 transition">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        Logout
+                    </button>
+                </form>
+            @else
+                <a wire:navigate href="{{ route('login') }}"
+                    class="w-full flex items-center justify-center gap-3 py-3 rounded-md text-red-600 font-semibold border border-red-200 hover:bg-red-50 transition">
                     <i class="fa-solid fa-right-from-bracket"></i>
-                    Logout
-                </button>
-            </form>
+                    Login
+                </a>
+            @endauth
 
         </div>
 

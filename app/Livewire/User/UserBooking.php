@@ -55,16 +55,25 @@ class UserBooking extends Component
                 ? array_map('strval', $services)
                 : [(string) $services];
 
+            // 🔥 YAHI IMPORTANT FIX 🔥
+            foreach ($this->selectedServiceIds as $id) {
+                $this->allRequirements[$id] = [];
+            }
+
             $this->step = 2;
         }
+
         $this->services = Service::latest()->get();
     }
+
 
     /* ================= SERVICE TOGGLE ================= */
 
     public function toggleService($serviceId)
     {
-        // if already selected → remove
+        $serviceId = (string) $serviceId;
+
+        // remove if already selected
         if (in_array($serviceId, $this->selectedServiceIds)) {
             $this->selectedServiceIds = array_values(
                 array_diff($this->selectedServiceIds, [$serviceId])
@@ -79,26 +88,40 @@ class UserBooking extends Component
             return;
         }
 
-        // else open modal
-        $this->activeService = Service::findOrFail($serviceId);
-        $this->selectedServiceRequirements = $this->activeService->requirements ?? [];
-        $this->selectedRequirements = $this->allRequirements[$serviceId] ?? [];
-        $this->showServiceModal = true;
+        // ⭐ SERVICE SELECTED BUT NO REQUIREMENTS YET
+        // yahin empty array inject karo
+        $this->selectedServiceIds[] = $serviceId;
+        $this->allRequirements[$serviceId] = [];
+
+        // agar requirements hain tab modal open karo
+        $service = Service::findOrFail($serviceId);
+
+        if (!empty($service->requirements)) {
+            $this->activeService = $service;
+            $this->selectedServiceRequirements = $service->requirements;
+            $this->selectedRequirements = [];
+            $this->showServiceModal = true;
+        } else {
+            // no requirements → directly next step
+            $this->step = 2;
+        }
     }
+
 
     public function confirmService()
     {
         $id = (string) $this->activeService->id;
 
-        if (!in_array($id, $this->selectedServiceIds)) {
-            $this->selectedServiceIds[] = $id;
-        }
+        // overwrite empty [] with selected values
+        $this->allRequirements[$id] = $this->selectedRequirements ?? [];
 
-        $this->allRequirements[$id] = $this->selectedRequirements;
-
+        $this->activeService = null;
+        $this->selectedRequirements = [];
         $this->showServiceModal = false;
+
         $this->step = 2;
     }
+
 
 
     public function cancelService()
@@ -128,6 +151,8 @@ class UserBooking extends Component
 
     public function bookService()
     {
+        // dd($this->allRequirements);
+
         $this->validate([
             'selectedServiceIds' => 'required|array|min:1',
             'name' => 'required|string|min:3',

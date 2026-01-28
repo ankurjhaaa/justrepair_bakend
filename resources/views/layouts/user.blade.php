@@ -54,13 +54,11 @@
                         <div class="relative group">
 
                             <!-- PROFILE BUTTON -->
-                            <button class="flex items-center gap-3 px-3 py-2 rounded-md
-                                                                       hover:bg-gray-100 transition">
+                            <button class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-100 transition">
 
                                 <!-- AVATAR -->
                                 <div
-                                    class="w-9 h-9 rounded-md bg-primary text-white
-                                                                        flex items-center justify-center font-bold text-sm">
+                                    class="w-9 h-9 rounded-md bg-primary text-white flex items-center justify-center font-bold text-sm">
                                     {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                                 </div>
 
@@ -79,27 +77,23 @@
                             </button>
 
                             <!-- DROPDOWN -->
-                            <div class="absolute right-0 mt-2 w-56
-                                                                    bg-white rounded-md shadow-lg
-                                                                    border border-gray-200
-                                                                    opacity-0 invisible
-                                                                    group-hover:opacity-100 group-hover:visible
-                                                                    transition-all duration-150 z-50">
+                            <div
+                                class="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50">
 
-                                <a wire:navigate href="{{ route('mybookings') }}" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700
-                                                                      hover:bg-gray-100">
+                                <a wire:navigate href="{{ route('mybookings') }}"
+                                    class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-100">
                                     <i class="fa-solid fa-calendar-check text-primary"></i>
                                     My Bookings
                                 </a>
 
-                                <a wire:navigate href="{{ route('profile') }}" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700
-                                                                      hover:bg-gray-100">
+                                <a wire:navigate href="{{ route('profile') }}"
+                                    class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-100">
                                     <i class="fa-solid fa-user text-primary"></i>
                                     Profile
                                 </a>
 
-                                <a wire:navigate href="{{ route('booking') }}" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700
-                                                                      hover:bg-gray-100">
+                                <a wire:navigate href="{{ route('booking') }}"
+                                    class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-100">
                                     <i class="fa-solid fa-plus text-primary"></i>
                                     Book Service
                                 </a>
@@ -108,8 +102,8 @@
 
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
-                                    <button type="submit" class="w-full flex items-center gap-3 px-4 py-3
-                                                                               text-sm text-red-600 hover:bg-red-50">
+                                    <button type="submit"
+                                        class="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50">
                                         <i class="fa-solid fa-right-from-bracket"></i>
                                         Logout
                                     </button>
@@ -119,15 +113,34 @@
                         </div>
 
                     @else
-                        <a wire:navigate href="{{ route('login') }}" class="bg-primary text-white px-5 py-2 rounded-md
-                                                                  font-semibold hover:bg-primary/90 transition">
+                        <a wire:navigate href="{{ route('login') }}"
+                            class="bg-primary text-white px-5 py-2 rounded-md font-semibold hover:bg-primary/90 transition">
                             Login
                         </a>
                     @endauth
                 </div>
+                <a href="tel:+919876543210" class="md:hidden flex items-center gap-2 bg-primary text-white
+          px-4 py-2 rounded-full font-semibold
+          active:scale-95 transition
+          select-none" style="-webkit-tap-highlight-color: transparent;">
+
+                    <!-- Phone Icon -->
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 5a2 2 0 012-2h2a2 2 0 012 2v1c0 .6-.3 1.1-.8 1.4l-1.2.8a16 16 0 006.6 6.6l.8-1.2c.3-.5.8-.8 1.4-.8h1a2 2 0 012 2v2a2 2 0 01-2 2h-1C9.8 21 3 14.2 3 6V5z" />
+                    </svg>
+
+                    Call Now
+                </a>
 
 
-                
+                <!-- MOBILE BUTTON -->
+                <!-- <button id="openMenu" class="md:hidden">
+                    <svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button> -->
             </div>
         </div>
     </header>
@@ -197,8 +210,7 @@
                 <form method="POST" action="{{ route('logout') }}" class="mt-8">
                     @csrf
                     <button
-                        class="w-full py-3 rounded-md border border-gray-300
-                                                                                                                       text-gray-700 font-medium flex items-center justify-center gap-3">
+                        class="w-full py-3 rounded-md border border-gray-300 text-gray-700 font-medium flex items-center justify-center gap-3">
                         <i class="fa-solid fa-right-from-bracket"></i>
                         Logout
                     </button>
@@ -210,7 +222,7 @@
 
 
     <!-- ================= PAGE CONTENT ================= -->
-    <main class="min-h-screen">
+    <main class="min-h-screen bg-gray-50">
         {{ $slot }}
     </main>
     <!-- ================= MOBILE BOTTOM NAV ================= -->
@@ -223,7 +235,7 @@
            {{ request()->routeIs('home')
     ? 'text-primary font-semibold'
     : 'text-gray-500' }}">
-                <i class="fa-solid fa-house text-lg"></i>
+                <i class="fa-solid fa-house text-2xl"></i>
                 Home
             </a>
 
@@ -232,7 +244,7 @@
            {{ request()->routeIs('service*')
     ? 'text-primary font-semibold'
     : 'text-gray-500' }}">
-                <i class="fa-solid fa-screwdriver-wrench text-lg"></i>
+                <i class="fa-solid fa-screwdriver-wrench text-2xl"></i>
                 Services
             </a>
 
@@ -241,7 +253,7 @@
                   -mt-4">
                 <div class="w-12 h-12 rounded-full bg-primary text-white
                         flex items-center justify-center shadow-md">
-                    <i class="fa-solid fa-plus text-lg"></i>
+                    <i class="fa-solid fa-plus text-2xl"></i>
                 </div>
                 <span class="mt-1 text-primary font-semibold">
                     Book
@@ -253,7 +265,7 @@
            {{ request()->routeIs('mybookings*')
     ? 'text-primary font-semibold'
     : 'text-gray-500' }}">
-                <i class="fa-solid fa-calendar-check text-lg"></i>
+                <i class="fa-solid fa-calendar-check text-2xl"></i>
                 Orders
             </a>
 
@@ -262,7 +274,7 @@
            {{ request()->routeIs('mobileprofile')
     ? 'text-primary font-semibold'
     : 'text-gray-500' }}">
-                <i class="fa-solid fa-user text-lg"></i>
+                <i class="fa-solid fa-user text-2xl"></i>
                 Account
             </a>
 
