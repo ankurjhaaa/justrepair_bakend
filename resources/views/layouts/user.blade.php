@@ -127,13 +127,7 @@
                 </div>
 
 
-                <!-- MOBILE BUTTON -->
-                <button id="openMenu" class="md:hidden">
-                    <svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
+                
             </div>
         </div>
     </header>
@@ -276,7 +270,7 @@
     </div>
 
     <!-- ================= PREMIUM FOOTER ================= -->
-    <footer class="bg-[#0e0e11] text-gray-400">
+    <footer class="bg-[#0e0e11] text-gray-400 hidden md:block">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-16">
 
             <!-- TOP GRID -->

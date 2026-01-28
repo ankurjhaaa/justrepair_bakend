@@ -1,118 +1,94 @@
-<div class="overflow-x-hidden">
+<section class=" pb-24 pt-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
 
-    {{-- HERO --}}
-    <livewire:user.component.home-hero />
-
-    <!-- ================= SERVICES ================= -->
-    <section id="services" class="bg-gray-50 py-20 sm:py-28 overflow-x-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6">
-
-            <h2 class="text-3xl sm:text-4xl font-extrabold text-center text-gray-900">
-                Our <span class="text-primary">Services</span>
+        <!-- HEADER -->
+        <div class="mb-6">
+            <h2 class="text-2xl font-bold text-gray-900">
+                Our Services
             </h2>
+           
+        </div>
 
-            <p class="mt-4 text-center text-gray-600 max-w-2xl mx-auto">
-                Premium home repair services by verified professionals.
-            </p>
+        <!-- SERVICES GRID -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
 
-            <!-- SERVICES LIST -->
-            <div class="mt-16 sm:mt-20 space-y-16 sm:space-y-20">
+            @foreach ($services as $service)
+                    @php
+                        $selected = in_array((string) $service->id, $selectedServices);
+                    @endphp
 
-                @foreach ($services as $index => $service)
-                    <div
-                        class="service-row {{ $index % 2 === 0 ? 'from-left' : 'from-right' }} flex flex-col md:flex-row {{ $index % 2 ? 'md:flex-row-reverse' : '' }} items-stretch md:items-center gap-8 sm:gap-10 md:gap-16">
+                    <div wire:click="toggleService({{ $service->id }})" class="relative cursor-pointer bg-white rounded-2xl p-4
+                                           flex flex-col items-center text-center
+                                           shadow-sm transition-all
+                                           {{ $selected
+                ? 'border-2 border-red-500 bg-red-50'
+                : 'border border-gray-200 hover:border-primary' }}">
 
-                        <!-- CARD -->
-                        <div
-                            class="w-full md:w-1/2 bg-white rounded-2xl p-6 sm:p-8 md:p-10 shadow-xl flex flex-col justify-between">
-
-                            <div class="flex items-center gap-4 sm:gap-5">
-                                <img src="{{ $service->image_url ?? asset('placeholder.png') }}" alt="{{ $service->name }}"
-                                    class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 object-contain" />
-
-                                <h3 class="text-lg sm:text-xl md:text-2xl font-bold text-primary">
-                                    {{ $service->name }}
-                                </h3>
+                        <!-- CHECK ICON -->
+                        @if($selected)
+                            <div class="absolute top-2 right-2 w-6 h-6 rounded-full
+                                                            bg-red-500 text-white flex items-center justify-center text-xs">
+                                ✓
                             </div>
+                        @endif
 
-                            <p class="mt-4 sm:mt-6 text-gray-600 text-sm sm:text-base md:text-lg leading-relaxed">
-                                {{ Str::limit($service->requirements[0] ?? 'Professional repair service available.', 120) }}
-                            </p>
-
-                            <a wire:navigate href="{{ route('booking', ['service' => $service->id]) }}"
-                                class="mt-6 sm:mt-8 inline-block w-fit text-sm sm:text-base font-semibold text-primary hover:underline">
-                                Book this service →
-                            </a>
+                        <!-- ICON -->
+                        <div class="w-14 h-14 flex items-center justify-center
+                                                bg-gray-50 rounded-xl mb-3">
+                            <img src="{{ $service->image_url }}" class="w-10 h-10 object-contain">
                         </div>
 
-                        <!-- EMPTY SPACE (DESKTOP ONLY) -->
-                        <div class="hidden md:block md:w-1/2"></div>
+                        <!-- NAME -->
+                        <span class="text-sm font-semibold text-gray-800">
+                            {{ $service->name }}
+                        </span>
                     </div>
-                @endforeach
+            @endforeach
 
+        </div>
+    </div>
+
+    <!-- BOTTOM BAR (LIKE APP) -->
+    @if(count($selectedServices))
+
+        <!-- MOBILE CTA -->
+        <div class="fixed inset-x-0 bottom-20 px-4 z-50 md:hidden">
+            <div class="bg-red-600 text-white rounded-xl shadow-xl
+                        flex items-center justify-between px-5 py-4">
+
+                <div class="flex items-center gap-2 text-sm font-semibold">
+                    <span class="bg-white text-red-600 w-6 h-6 rounded-full
+                                 flex items-center justify-center text-xs font-bold">
+                        {{ count($selectedServices) }}
+                    </span>
+                    Services Selected
+                </div>
+
+                <button wire:click="goToBooking" class="font-semibold flex items-center gap-1">
+                    Book Now →
+                </button>
             </div>
         </div>
-    </section>
 
-    <!-- ================= ANIMATION ================= -->
-    <style>
-        .service-row {
-            opacity: 0;
-            transition:
-                opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
-                transform 1s cubic-bezier(0.22, 1, 0.36, 1);
-            will-change: transform;
-        }
+        <!-- DESKTOP CTA -->
+        <div class="hidden md:block fixed bottom-6 left-1/2 -translate-x-1/2 z-40">
+            <div class="bg-white border border-gray-200 shadow-lg rounded-md
+                        px-6 py-4 flex items-center gap-8">
 
-        /* Desktop animation */
-        @media (min-width: 768px) {
-            .service-row.from-left {
-                transform: translateX(-120px);
-            }
+                <div>
+                    <p class="text-xs text-gray-500">Selected Services</p>
+                    <p class="text-lg font-bold text-gray-900">
+                        {{ count($selectedServices) }}
+                    </p>
+                </div>
 
-            .service-row.from-right {
-                transform: translateX(120px);
-            }
-        }
+                <button wire:click="goToBooking" class="bg-red-600 text-white px-6 py-2.5
+                           rounded-md font-semibold hover:bg-red-700 transition">
+                    Proceed to Booking →
+                </button>
+            </div>
+        </div>
 
-        /* Mobile animation — SAME LEFT/RIGHT but SAFE */
-        @media (max-width: 767px) {
-            .service-row.from-left {
-                transform: translateX(-24px);
-            }
+    @endif
 
-            .service-row.from-right {
-                transform: translateX(24px);
-            }
-        }
-
-        .service-row.show {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    </style>
-
-
-    <!-- ================= JS ================= -->
-    <script>
-        function initServiceAnimation() {
-            const rows = document.querySelectorAll('.service-row');
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('show');
-                    }
-                });
-            }, {
-                threshold: 0.35
-            });
-
-            rows.forEach(row => observer.observe(row));
-        }
-
-        document.addEventListener('DOMContentLoaded', initServiceAnimation);
-        document.addEventListener('livewire:navigated', initServiceAnimation);
-    </script>
-
-</div>
+</section>

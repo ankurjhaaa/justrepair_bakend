@@ -48,8 +48,14 @@ class UserBooking extends Component
 
     public function mount()
     {
-        if (request()->filled('service')) {
-            $this->toggleService(request('service'));
+        if (request()->has('service')) {
+            $services = request()->input('service');
+
+            $this->selectedServiceIds = is_array($services)
+                ? array_map('strval', $services)
+                : [(string) $services];
+
+            $this->step = 2;
         }
         $this->services = Service::latest()->get();
     }

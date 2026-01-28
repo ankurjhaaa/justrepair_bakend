@@ -23,8 +23,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
                     @foreach($services as $service)
-                        <div class="bg-white rounded-md p-6 shadow-sm
-                                                                    hover:shadow-md transition flex flex-col">
+                        <div class="bg-white rounded-md p-6 shadow-sm hover:shadow-md transition flex flex-col">
 
                             <!-- ICON / IMAGE -->
                             <div class="flex items-center gap-4">
