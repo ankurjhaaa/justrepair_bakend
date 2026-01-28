@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 #[Layout('layouts.user')]
@@ -30,10 +31,26 @@ class UserBooking extends Component
 
     /* -------- BOOKING DATA -------- */
     public $date, $time;
-    public $name, $mobile, $city, $address, $landmark;
+    #[Validate('required|min:3')]
+    public string $name = '';
+
+    #[Validate('required|digits:10')]
+    public string $mobile = '';
+
+    #[Validate('required|string')]
+    public string $city = '';
+
+    #[Validate('required|string|min:5')]
+    public string $address = '';
+
+    #[Validate('nullable|string|max:255')]
+    public string $landmark = '';
 
     public function mount()
     {
+        if (request()->filled('service')) {
+            $this->toggleService(request('service'));
+        }
         $this->services = Service::latest()->get();
     }
 

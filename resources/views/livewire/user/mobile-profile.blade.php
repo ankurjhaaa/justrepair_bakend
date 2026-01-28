@@ -1,4 +1,4 @@
-<div class="md:hidden bg-gray-100 min-h-screen flex justify-center">
+<div class="md:hidden bg-gray-100 min-h-screen flex justify-center p-5">
 
     <!-- MAIN CONTAINER -->
     <div class="w-full bg-white h-[90vh]  rounded-md shadow

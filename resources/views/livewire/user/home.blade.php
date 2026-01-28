@@ -19,19 +19,12 @@
             <div class="mt-16 sm:mt-20 space-y-16 sm:space-y-20">
 
                 @foreach ($services as $index => $service)
-                    <div class="service-row
-                                        {{ $index % 2 === 0 ? 'from-left' : 'from-right' }}
-                                        flex flex-col
-                                        md:flex-row {{ $index % 2 ? 'md:flex-row-reverse' : '' }}
-                                        items-stretch md:items-center
-                                        gap-8 sm:gap-10 md:gap-16">
+                    <div
+                        class="service-row {{ $index % 2 === 0 ? 'from-left' : 'from-right' }} flex flex-col md:flex-row {{ $index % 2 ? 'md:flex-row-reverse' : '' }} items-stretch md:items-center gap-8 sm:gap-10 md:gap-16">
 
                         <!-- CARD -->
-                        <div class="w-full md:w-1/2
-                                                   bg-white rounded-2xl
-                                                   p-6 sm:p-8 md:p-10
-                                                   shadow-xl
-                                                   flex flex-col justify-between">
+                        <div
+                            class="w-full md:w-1/2 bg-white rounded-2xl p-6 sm:p-8 md:p-10 shadow-xl flex flex-col justify-between">
 
                             <div class="flex items-center gap-4 sm:gap-5">
                                 <img src="{{ $service->image_url ?? asset('placeholder.png') }}" alt="{{ $service->name }}"
@@ -46,9 +39,8 @@
                                 {{ Str::limit($service->requirements[0] ?? 'Professional repair service available.', 120) }}
                             </p>
 
-                            <a href="#" class="mt-6 sm:mt-8 inline-block w-fit
-                                                      text-sm sm:text-base font-semibold text-primary
-                                                      hover:underline">
+                            <a wire:navigate href="{{ route('booking', ['service' => $service->id]) }}"
+                                class="mt-6 sm:mt-8 inline-block w-fit text-sm sm:text-base font-semibold text-primary hover:underline">
                                 Book this service →
                             </a>
                         </div>

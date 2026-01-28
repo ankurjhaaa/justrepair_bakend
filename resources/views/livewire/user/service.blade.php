@@ -24,7 +24,7 @@
 
                     @foreach($services as $service)
                         <div class="bg-white rounded-md p-6 shadow-sm
-                                                            hover:shadow-md transition flex flex-col">
+                                                                    hover:shadow-md transition flex flex-col">
 
                             <!-- ICON / IMAGE -->
                             <div class="flex items-center gap-4">
@@ -42,7 +42,8 @@
                             </p>
 
                             <!-- ACTION -->
-                            <a href="#" class="mt-6 inline-block text-primary font-semibold text-sm hover:underline">
+                            <a wire:navigate href="{{ route('booking', ['service' => $service->id]) }}"
+                                class="mt-6 inline-block text-primary font-semibold text-sm hover:underline">
                                 Book Service →
                             </a>
                         </div>

@@ -16,7 +16,7 @@
 
                             <div wire:click="toggleService({{ $service->id }})"
                                 class="bg-white border rounded-lg p-4 cursor-pointer transition
-                                                                                    {{ $selected ? 'border-primary ring-1 ring-primary' : 'hover:border-primary' }}">
+                                                                                                                                                                                                                                                                {{ $selected ? 'border-primary ring-1 ring-primary' : 'hover:border-primary' }}">
 
                                 <div class="flex items-center gap-4">
                                     <img src="{{ $service->image_url }}" class="w-12 h-12 object-contain">
@@ -71,14 +71,88 @@
                 @if($step >= 4)
                     <div>
                         <h2 class="font-bold text-lg mb-4">4. Address</h2>
-                        <input wire:model.defer="name" placeholder="Name" class="w-full border rounded-md px-4 py-3 mb-3">
-                        <input wire:model.defer="mobile" placeholder="Mobile"
-                            class="w-full border rounded-md px-4 py-3 mb-3">
-                        <input wire:model.defer="city" placeholder="City" class="w-full border rounded-md px-4 py-3 mb-3">
-                        <textarea wire:model.defer="address" placeholder="Address"
-                            class="w-full border rounded-md px-4 py-3"></textarea>
+
+                        <!-- NAME -->
+                        <div class="mb-3">
+                            <input wire:model.live="name" placeholder="Name"
+                                class="w-full border rounded-md px-4 py-3 @error('name') border-red-500 @enderror">
+
+                            @error('name')
+                                <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- MOBILE WITH +91 -->
+                        <div class="mb-3">
+                            <div class="flex border rounded-md @error('mobile') border-red-500 @enderror">
+
+                                <!-- PREFIX -->
+                                <span class="px-4 flex items-center bg-gray-100 text-gray-600 text-sm rounded-s-md">
+                                    +91
+                                </span>
+
+                                <!-- INPUT -->
+                                <input wire:model.live="mobile" type="tel" inputmode="numeric" maxlength="10"
+                                    pattern="[0-9]*" placeholder="Enter 10 digit mobile"
+                                    class="w-full px-4 py-3 outline-none rounded-r-md">
+                            </div>
+
+                            @error('mobile')
+                                <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3 mb-3">
+
+                            <!-- STATE (FIXED : BIHAR) -->
+                            <div>
+                                <select disabled
+                                    class="w-full border rounded-md px-4 py-3 bg-gray-100 text-gray-600 cursor-not-allowed">
+                                    <option selected>Bihar</option>
+                                </select>
+                            </div>
+
+                            <!-- CITY -->
+                            <div>
+                                <select wire:model.live="city" class="w-full border rounded-md px-4 py-3
+                                                   @error('city') border-red-500 @enderror">
+
+                                    <option value="">Select City</option>
+                                    <option value="Purnea">Purnea</option>
+                                    <option value="Patna">Patna</option>
+                                </select>
+
+                                @error('city')
+                                    <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                        </div>
+
+
+                        <!-- LANDMARK -->
+                        <div class="mb-3">
+                            <input wire:model.live="landmark" placeholder="Landmark (optional)"
+                                class="w-full border rounded-md px-4 py-3 @error('landmark') border-red-500 @enderror">
+
+                            @error('landmark')
+                                <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- ADDRESS -->
+                        <div>
+                            <textarea wire:model.live="address" placeholder="Full Address" rows="3"
+                                class="w-full border rounded-md px-4 py-3 @error('address') border-red-500 @enderror"></textarea>
+
+                            @error('address')
+                                <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
                     </div>
                 @endif
+
+
 
             </div>
 
@@ -121,14 +195,13 @@
 
                     <!-- DATE & TIME -->
                     <div class="text-sm space-y-2 mb-4">
-                        <p>Date: <b>{{ $date ?? '-' }}</b></p>
-                        <p>Time: <b>{{ $time ?? '-' }}</b></p>
+                        <p>Date: <b>{{ $date ?? 'No date selected' }}</b></p>
+                        <p>Time: <b>{{ $time ?? 'No time selected' }}</b></p>
                     </div>
 
                     <!-- CONFIRM BUTTON -->
-                    <button wire:click="bookService" {{ ($step < 4 || empty($selectedServiceIds)) ? 'disabled' : '' }}
-                        class="w-full py-3 rounded-md font-semibold transition
-            {{ ($step < 4 || empty($selectedServiceIds))
+                    <button wire:click="bookService" {{ ($step < 4 || empty($selectedServiceIds)) || $name == null || $mobile == null || $city == null || $address == null ? 'disabled' : '' }} class="w-full py-3 rounded-md font-semibold transition
+            {{ ($step < 4 || empty($selectedServiceIds)) || $name == null || $mobile == null || $city == null || $address == null
     ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
     : 'bg-primary text-white hover:bg-primary/90' }}">
                         Confirm Booking
@@ -151,8 +224,8 @@
 
                 <div class="mt-4 space-y-3">
                     @foreach($selectedServiceRequirements as $req)
-                        <label class="flex gap-3 text-sm">
-                            <input type="checkbox" wire:model="selectedRequirements" value="{{ $req }}">
+                        <label class="flex gap-3 text-sm cursor-pointer">
+                            <input type="checkbox" class="" wire:model="selectedRequirements" value="{{ $req }}">
                             {{ $req }}
                         </label>
                     @endforeach

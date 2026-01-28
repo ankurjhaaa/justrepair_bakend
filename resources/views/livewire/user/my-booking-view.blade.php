@@ -1,11 +1,11 @@
-<div class=" min-h-screen py-6 px-4 sm:px-6">
+<div class=" min-h-screen py-6 ">
 
     <div class="max-w-5xl mx-auto">
 
         <div class="bg-white rounded-md shadow overflow-hidden border border-red-200">
 
             {{-- ================= HEADER ================= --}}
-            <div class="p-5 border-b flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div class="p-5 border-b flex flex-col-2 sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div>
                     <p class="text-xs text-gray-500">Booking ID</p>
                     <h1 class="text-xl font-bold text-gray-900">
@@ -28,7 +28,7 @@
                     $badgeClass = $statusClasses[$booking->status] ?? 'bg-yellow-100 text-yellow-700';
                 @endphp
 
-                <span class="px-3 py-1 text-xs rounded-md font-semibold {{ $badgeClass }}">
+                <span class="px-3 py-1 text-xs rounded-md font-semibold h-6 {{ $badgeClass }}">
                     {{ ucfirst(str_replace('_', ' ', $booking->status)) }}
                 </span>
             </div>
@@ -116,7 +116,7 @@
                 {{-- OTP --}}
                 @if($booking->otp)
                     <div class="mt-3 inline-flex items-center gap-3
-                                    bg-gray-100 border rounded-md px-3 py-2">
+                                                        bg-gray-100 border rounded-md px-3 py-2">
                         <span class="text-xs text-gray-500">Service OTP</span>
 
                         <span class="text-lg font-bold tracking-widest text-primary">
@@ -155,7 +155,7 @@
             </div>
 
             {{-- ================= ACTIONS ================= --}}
-            <div class="p-5 flex flex-col sm:flex-row gap-3 justify-end border-t">
+            <div class="p-5 flex flex-col-2 sm:flex-row gap-3 justify-end border-t">
                 <a href="{{ route('pdf.generate.livewire', $booking->booking_id) }}"
                     class="px-6 py-2 rounded-md bg-primary text-white text-sm font-semibold hover:bg-primary/90">
                     Download Invoice

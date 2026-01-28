@@ -1,4 +1,4 @@
-<div class="min-h-screen py-8 px-4 sm:px-6">
+<div class="min-h-screen py-8">
 
     <div class="max-w-4xl mx-auto">
 
