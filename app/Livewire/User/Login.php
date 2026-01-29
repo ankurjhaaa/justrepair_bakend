@@ -24,12 +24,12 @@ class Login extends Component
         if ($this->otpMode) {
             return [
                 'mobile' => 'required|digits:10',
-                'otp'    => 'required|min:4',
+                'otp' => 'required|min:4',
             ];
         }
 
         return [
-            'mobile'   => 'required|digits:10',
+            'mobile' => 'required|digits:10',
             'password' => 'required|min:6',
         ];
     }
@@ -38,7 +38,6 @@ class Login extends Component
     {
         $this->validate();
 
-        // 🔐 NORMAL LOGIN (API MATCH)
         if (!$this->otpMode) {
             $user = User::where('phone', $this->mobile)->first();
 
@@ -49,11 +48,13 @@ class Login extends Component
 
             Auth::login($user, $this->remember);
             session()->regenerate();
+            if (Auth::user()->role === "admin") {
+                return redirect()->route('admin.dashboard');
+            }
 
             return redirect()->intended('/');
         }
 
-        // 🔑 OTP LOGIN (TEMP PLACEHOLDER)
         if ($this->otp === '1234') {
             $user = User::where('phone', $this->mobile)->first();
 

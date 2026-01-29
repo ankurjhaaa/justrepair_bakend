@@ -5,7 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel</title>
-
+    <script type="text/javascript">
+        (function (c, l, a, r, i, t, y) {
+            c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
+            t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
+            y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+        })(window, document, "clarity", "script", "v8un8eh8rq");
+    </script>
     <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -29,15 +35,15 @@
     @livewireStyles
 </head>
 
-<body class="h-full bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors overflow-x-hidden">
+<body class="bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors">
+
 
     <!-- MOBILE OVERLAY -->
     <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-30 hidden md:hidden"></div>
 
-    <div class="min-h-screen flex w-full overflow-x-hidden">
+    <div class="flex w-full">
 
-    <div
-        x-data="{
+        <div x-data="{
             show: false,
             message: '',
             type: 'success',
@@ -54,55 +60,42 @@
                     }
                 }, 100);
             }
-        }"
-        x-on:toast.window="
+        }" x-on:toast.window="
             message = $event.detail.message;
             type = $event.detail.type ?? 'success';
             show = true;
             start();
-        "
-        x-show="show"
-        x-transition
-        x-cloak
-        class="fixed z-50
+        " x-show="show" x-transition x-cloak class="fixed z-50
             top-4 right-4
-            w-[calc(100%-2rem)] sm:w-full sm:max-w-sm"
-    >
+            w-[calc(100%-2rem)] sm:w-full sm:max-w-sm">
 
-        <div
-            :class="{
+            <div :class="{
                 'bg-green-600': type === 'success',
                 'bg-red-600': type === 'error',
                 'bg-amber-500': type === 'warning',
                 'bg-sky-600': type === 'info'
-            }"
-            class="relative overflow-hidden
+            }" class="relative overflow-hidden
                 text-white
-                rounded-md shadow-xl"
-        >
+                rounded-md shadow-xl">
 
-            <!-- CONTENT -->
-            <div class="flex items-start gap-3 px-4 py-3">
-                <div class="flex-1 text-sm font-medium leading-snug"
-                    x-text="message"></div>
+                <!-- CONTENT -->
+                <div class="flex items-start gap-3 px-4 py-3">
+                    <div class="flex-1 text-sm font-medium leading-snug" x-text="message"></div>
 
-                <button
-                    @click="show = false; clearInterval(timer)"
-                    class="text-white/80 hover:text-white text-lg leading-none">
-                    ×
-                </button>
-            </div>
-
-            <!-- PROGRESS BAR -->
-            <div class="h-1 bg-white/20">
-                <div
-                    class="h-1 bg-white/80 transition-all duration-100"
-                    :style="`width: ${progress}%`">
+                    <button @click="show = false; clearInterval(timer)"
+                        class="text-white/80 hover:text-white text-lg leading-none">
+                        ×
+                    </button>
                 </div>
-            </div>
 
+                <!-- PROGRESS BAR -->
+                <div class="h-1 bg-white/20">
+                    <div class="h-1 bg-white/80 transition-all duration-100" :style="`width: ${progress}%`">
+                    </div>
+                </div>
+
+            </div>
         </div>
-    </div>
 
         <!-- ================= SIDEBAR ================= -->
         <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-white dark:bg-gray-800
@@ -123,54 +116,53 @@
                 @php
                     $linkBase = 'flex items-center gap-3 px-4 py-3 rounded-xl transition';
                     $active = 'bg-indigo-100 text-indigo-700 font-semibold
-                            dark:bg-indigo-900/40 dark:text-indigo-300';
+                                                                                                                                                                        dark:bg-indigo-900/40 dark:text-indigo-300';
                     $inactive = 'hover:bg-indigo-50 text-gray-700
-                                dark:text-gray-300 dark:hover:bg-gray-700';
+                                                                                                                                                                            dark:text-gray-300 dark:hover:bg-gray-700';
                 @endphp
 
                 <a wire:navigate href="{{ route('admin.dashboard') }}"
-                class="{{ $linkBase }} {{ request()->routeIs('admin.dashboard') ? $active : $inactive }}">
+                    class="{{ $linkBase }} {{ request()->routeIs('admin.dashboard') ? $active : $inactive }}">
                     <i class="fa-solid fa-chart-line"></i>
                     Dashboard
                 </a>
 
                 <a wire:navigate href="{{ route('admin.service') }}"
-                class="{{ $linkBase }} {{ request()->routeIs('admin.service') ? $active : $inactive }}">
+                    class="{{ $linkBase }} {{ request()->routeIs('admin.service') ? $active : $inactive }}">
                     <i class="fa-solid fa-screwdriver-wrench"></i>
                     Services
                 </a>
 
                 <a wire:navigate href="{{ route('admin.servicerate') }}"
-                class="{{ $linkBase }} {{ request()->routeIs('admin.servicerate') ? $active : $inactive }}">
+                    class="{{ $linkBase }} {{ request()->routeIs('admin.servicerate') ? $active : $inactive }}">
                     <i class="fa-solid fa-screwdriver-wrench"></i>
                     Services Rates
                 </a>
 
                 <a wire:navigate href="{{ route('admin.bookings') }}"
-                class="{{ $linkBase }} {{ request()->routeIs('admin.bookings','admin.bookingview') ? $active : $inactive }}">
+                    class="{{ $linkBase }} {{ request()->routeIs('admin.bookings', 'admin.bookingview') ? $active : $inactive }}">
                     <i class="fa-solid fa-calendar-check"></i>
                     Bookings
                 </a>
 
                 <a wire:navigate href="{{ route('admin.customer') }}"
-                class="{{ $linkBase }} {{ request()->routeIs('admin.customer','admin.customerview') ? $active : $inactive }}">
+                    class="{{ $linkBase }} {{ request()->routeIs('admin.customer', 'admin.customerview') ? $active : $inactive }}">
                     <i class="fa-solid fa-users"></i>
                     Customers
                 </a>
 
                 <a wire:navigate href="{{ route('admin.faqs') }}"
-                class="{{ $linkBase }} {{ request()->routeIs('admin.faqs*') ? $active : $inactive }}">
+                    class="{{ $linkBase }} {{ request()->routeIs('admin.faqs*') ? $active : $inactive }}">
                     <i class="fa-solid fa-circle-question"></i>
                     FAQs
                 </a>
                 <a wire:navigate href="{{ route('admin.apis') }}"
-                class="{{ $linkBase }} {{ request()->routeIs('admin.faqs*') ? $active : $inactive }}">
+                    class="{{ $linkBase }} {{ request()->routeIs('admin.faqs*') ? $active : $inactive }}">
                     <i class="fa-solid fa-circle-question"></i>
                     Api`s
                 </a>
 
-                <a href="#"
-                class="{{ $linkBase }} {{ $inactive }}">
+                <a href="#" class="{{ $linkBase }} {{ $inactive }}">
                     <i class="fa-solid fa-gear"></i>
                     Settings
                 </a>
@@ -224,7 +216,7 @@
             </header>
 
             <!-- CONTENT -->
-            <main class="flex-1 p-3 md:p-7 overflow-x-hidden">
+            <main class="flex-1 p-3 md:p-7">
                 {{ $slot }}
             </main>
 
