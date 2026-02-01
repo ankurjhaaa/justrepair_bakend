@@ -396,6 +396,48 @@
             </div>
         </div>
     </footer>
+    <!-- APP SPLASH : PREMIUM -->
+    <div id="app-loader" class="fixed inset-0 z-[9999] hidden flex-col items-center justify-center bg-white">
+
+        <!-- Logo block -->
+        <div class="flex flex-col items-center mb-8">
+            <img src="{{ asset('logo.jpeg') }}" alt="JustRepair" class="h-16 mb-3">
+
+            <p class="text-sm tracking-wide text-gray-500 font-medium">
+                Smart repair. Trusted care.
+            </p>
+        </div>
+
+        <!-- Accent line -->
+        <div class="w-16 h-[2px] bg-red-500/60 rounded-full mb-6"></div>
+
+        <!-- Dot animation -->
+        <div class="flex gap-3">
+            <span class="w-3 h-3 rounded-full bg-red-600 animate-bounce [animation-delay:0ms]"></span>
+            <span class="w-3 h-3 rounded-full bg-red-600 animate-bounce [animation-delay:150ms]"></span>
+            <span class="w-3 h-3 rounded-full bg-red-600 animate-bounce [animation-delay:300ms]"></span>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loader = document.getElementById('app-loader');
+            if (!loader) return;
+
+            loader.classList.remove('hidden');
+            loader.classList.add('flex');
+
+            setTimeout(() => {
+                loader.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+
+                setTimeout(() => {
+                    loader.classList.add('hidden');
+                    loader.classList.remove('flex', 'opacity-0');
+                }, 300);
+            }, 3000);
+        });
+    </script>
 
 
     @livewireScripts
