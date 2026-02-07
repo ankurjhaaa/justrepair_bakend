@@ -41,7 +41,7 @@ return new class extends Migration {
                 'failed',
                 'rescheduled'
             ])->default('pending');
-
+            $table->enum('source', ['app', 'web'])->default('app');
 
             $table->foreignId('assigned_to')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamp('assigned_at')->nullable();

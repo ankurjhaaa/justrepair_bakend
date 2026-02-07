@@ -198,6 +198,7 @@ class UserBooking extends Component
                 'city' => $this->city,
                 'landmark' => $this->landmark,
                 'requirements' => $this->allRequirements,
+                'source' => 'web',
             ]);
 
             DB::commit();
