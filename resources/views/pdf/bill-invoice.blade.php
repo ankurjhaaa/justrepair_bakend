@@ -108,9 +108,10 @@
     <div class="header">
         <div class="company">
             <strong style="font-size:16px">{{ $company['name'] }}</strong><br>
-            {{ $company['address'] }}<br>
             Phone: {{ $company['phone'] }}<br>
-            Email: {{ $company['email'] }}
+            Email: {{ $company['email'] }}<br>
+            Address: Chandni Chowk, Industrial Road <br>
+                        Purnia City 854302 <br>
         </div>
 
         <div class="invoice-box">

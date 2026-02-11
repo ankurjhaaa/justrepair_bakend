@@ -173,7 +173,8 @@
 
             <!-- LOGOUT -->
             <div class="px-4 py-4 border-t border-gray-200 dark:border-gray-700">
-                <form action="{{ route('logout') }}" method="get">
+                <form action="{{ route('logout') }}" method="post">
+                    @csrf
                     <button class="w-full flex items-center justify-center gap-2 px-4 py-3
                     rounded-xl bg-red-50 dark:bg-red-500/10
                     text-red-600 dark:text-red-400 hover:bg-red-100

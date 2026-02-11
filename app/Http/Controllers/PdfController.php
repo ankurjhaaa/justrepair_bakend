@@ -28,9 +28,9 @@ class PdfController extends Controller
         */
         $company = [
             'name' => 'JustRepair Services',
-            'address' => 'Delhi, India',
-            'phone' => '+91 9876543210',
-            'email' => 'support@justrepair.in',
+            'address' => 'Chandni Chowk, Industrial Road Purnia City 854302',
+            'phone' => '+91 7280080080',
+            'email' => 'JustRepair.info@gmail.com',
         ];
 
         /*

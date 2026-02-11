@@ -125,7 +125,7 @@
                         </a>
                     @endauth
                 </div>
-                <a href="tel:+919876543210" class="md:hidden flex items-center gap-2 bg-primary text-white
+                <a href="tel:+917280080080" class="md:hidden flex items-center gap-2 bg-primary text-white
           px-4 py-2 rounded-full font-semibold
           active:scale-95 transition
           select-none" style="-webkit-tap-highlight-color: transparent;">
@@ -425,19 +425,30 @@
             const loader = document.getElementById('app-loader');
             if (!loader) return;
 
+            // Agar is browser session me already splash dikha diya hai
+            if (sessionStorage.getItem('splash_shown')) {
+                loader.classList.add('hidden');
+                return;
+            }
+
+            // First time in this browser session
             loader.classList.remove('hidden');
             loader.classList.add('flex');
 
             setTimeout(() => {
-                loader.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+                loader.classList.add('opacity-0', 'transition-opacity', 'duration-500');
 
                 setTimeout(() => {
                     loader.classList.add('hidden');
                     loader.classList.remove('flex', 'opacity-0');
-                }, 300);
+
+                    // Mark splash as shown for this session
+                    sessionStorage.setItem('splash_shown', 'true');
+                }, 500);
             }, 3000);
         });
     </script>
+
 
 
     @livewireScripts
