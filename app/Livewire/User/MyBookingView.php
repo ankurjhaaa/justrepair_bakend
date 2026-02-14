@@ -27,7 +27,7 @@ class MyBookingView extends Component
         $this->servicesMap = Service::pluck('name', 'id')->toArray();
     }
 
-    public function render()
+    public function render() 
     {
         return view('livewire.user.my-booking-view');
     }

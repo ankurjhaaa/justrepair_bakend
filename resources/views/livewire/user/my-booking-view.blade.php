@@ -116,7 +116,7 @@
                 {{-- OTP --}}
                 @if($booking->otp)
                     <div class="mt-3 inline-flex items-center gap-3
-                                                        bg-gray-100 border rounded-md px-3 py-2">
+                                                            bg-gray-100 border rounded-md px-3 py-2">
                         <span class="text-xs text-gray-500">Service OTP</span>
 
                         <span class="text-lg font-bold tracking-widest text-primary">
@@ -147,10 +147,38 @@
                 </div>
 
                 <div class="text-right">
-                    <p class="text-xs text-gray-500">Total Amount</p>
-                    <p class="text-xl font-bold text-gray-900">
-                        ₹ {{ number_format($booking->total_amount, 2) }}
-                    </p>
+                    @php
+                        $additionalTotal = 0;
+                        if (isset($booking->additional_info['items']) && is_array($booking->additional_info['items'])) {
+                            foreach ($booking->additional_info['items'] as $item) {
+                                $additionalTotal += (float) ($item['total'] ?? $item['amount'] ?? 0);
+                            }
+                        }
+                    @endphp
+
+                    @if($additionalTotal > 0)
+                        <p class="text-xs text-gray-500">Booking Amount</p>
+                        <p class="text-lg font-semibold text-gray-800">
+                            ₹ {{ number_format($booking->total_amount, 2) }}
+                        </p>
+
+                        <p class="text-xs text-gray-500 mt-2">Additional Charges</p>
+                        <p class="text-lg font-semibold text-gray-800">
+                            + ₹ {{ number_format($additionalTotal, 2) }}
+                        </p>
+
+                        <div class="border-t border-gray-200 mt-2 pt-2"></div>
+
+                        <p class="text-xs text-gray-500">Grand Total</p>
+                        <p class="text-xl font-bold text-primary">
+                            ₹ {{ number_format($booking->total_amount + $additionalTotal, 2) }}
+                        </p>
+                    @else
+                        <p class="text-xs text-gray-500">Total Amount</p>
+                        <p class="text-xl font-bold text-gray-900">
+                            ₹ {{ number_format($booking->total_amount, 2) }}
+                        </p>
+                    @endif
                 </div>
             </div>
 
