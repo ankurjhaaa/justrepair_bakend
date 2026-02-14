@@ -73,3 +73,22 @@ Route::post('/logout', function () {
 // Route::post('pdf/generate', [PdfController::class, 'generatePdf'])->name('pdf.generate');
 
 Route::get('pdf/generate/{booking_id}', [PdfController::class, 'generatePdf'])->name('pdf.generate.livewire');
+
+
+Route::get('/fix-everything', function () {
+
+    Artisan::call('optimize:clear');
+    Artisan::call('config:clear');
+    Artisan::call('cache:clear');
+    Artisan::call('view:clear');
+    Artisan::call('route:clear');
+
+    // session table create (agar pehle nahi bana)
+    Artisan::call('session:table');
+
+
+    // config cache again
+    Artisan::call('config:cache');
+
+    return "<h2>All commands executed successfully ✅</h2> <a href='/' class='btn btn-primary'>Go to Home</a>";
+});
