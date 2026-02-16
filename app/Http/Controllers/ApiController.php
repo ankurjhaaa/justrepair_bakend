@@ -115,9 +115,8 @@ class ApiController extends Controller
             'landmark' => 'nullable|string',
             'date' => 'required|date',
             'time' => 'required|string',
-            'requirements' => 'nullable|array',
-            'requirements.*' => 'array',
-            'requirements.*.*' => 'string',
+            'requirements' => 'nullable|array|min:1',
+            'requirements.*' => 'string',
         ]);
 
         if ($validator->fails()) {
