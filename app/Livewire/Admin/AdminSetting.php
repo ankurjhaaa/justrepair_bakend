@@ -4,10 +4,15 @@ namespace App\Livewire\Admin;
 
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use Livewire\WithFileUploads;
+
 #[Layout('layouts.admin')]
 class AdminSetting extends Component
 {
+    use WithFileUploads;
+
     public $site_name, $site_tagline, $site_logo, $favicon;
+    public $existing_site_logo, $existing_favicon;
     public $contact_email, $contact_phone, $whatsapp_number, $support_email;
     public $address_line_1, $address_line_2, $city, $state, $country, $postal_code;
     public $facebook_url, $instagram_url, $twitter_url, $linkedin_url, $youtube_url;
@@ -16,36 +21,6 @@ class AdminSetting extends Component
     public $maintenance_mode = false;
     public $registration_enabled = true;
     public $settingId;
-
-    protected $rules = [
-        'site_name' => 'nullable|string',
-        'site_tagline' => 'nullable|string',
-        'contact_email' => 'nullable|email',
-        'contact_phone' => 'nullable|string',
-        'whatsapp_number' => 'nullable|string',
-        'support_email' => 'nullable|email',
-        'address_line_1' => 'nullable|string',
-        'address_line_2' => 'nullable|string',
-        'city' => 'nullable|string',
-        'state' => 'nullable|string',
-        'country' => 'nullable|string',
-        'postal_code' => 'nullable|string',
-        'facebook_url' => 'nullable|url',
-        'instagram_url' => 'nullable|url',
-        'twitter_url' => 'nullable|url',
-        'linkedin_url' => 'nullable|url',
-        'youtube_url' => 'nullable|url',
-        'meta_title' => 'nullable|string',
-        'meta_description' => 'nullable|string',
-        'meta_keywords' => 'nullable|string',
-        'business_hours' => 'nullable|string',
-        'maintenance_mode' => 'boolean',
-        'registration_enabled' => 'boolean',
-        'currency' => 'required|string',
-        'currency_symbol' => 'required|string',
-        'footer_about' => 'nullable|string',
-        'copyright_text' => 'nullable|string',
-    ];
 
     public function mount()
     {
@@ -64,6 +39,11 @@ class AdminSetting extends Component
         $this->settingId = $setting->id;
         $this->site_name = $setting->site_name;
         $this->site_tagline = $setting->site_tagline;
+
+        // Load existing paths
+        $this->existing_site_logo = $setting->site_logo;
+        $this->existing_favicon = $setting->favicon;
+
         $this->contact_email = $setting->contact_email;
         $this->contact_phone = $setting->contact_phone;
         $this->whatsapp_number = $setting->whatsapp_number;
@@ -91,19 +71,44 @@ class AdminSetting extends Component
         $this->copyright_text = $setting->copyright_text;
     }
 
-    public function render()
-    {
-        return view('livewire.admin.admin-setting');
-    }
-
     public function save()
     {
-        $this->validate();
+        $this->validate([
+            'site_name' => 'nullable|string',
+            'site_tagline' => 'nullable|string',
+            'site_logo' => 'nullable|image|max:2048',
+            'favicon' => 'nullable|image|max:1024',
+            'contact_email' => 'nullable|email',
+            'contact_phone' => 'nullable|string',
+            'whatsapp_number' => 'nullable|string',
+            'support_email' => 'nullable|email',
+            'address_line_1' => 'nullable|string',
+            'address_line_2' => 'nullable|string',
+            'city' => 'nullable|string',
+            'state' => 'nullable|string',
+            'country' => 'nullable|string',
+            'postal_code' => 'nullable|string',
+            'facebook_url' => 'nullable|url',
+            'instagram_url' => 'nullable|url',
+            'twitter_url' => 'nullable|url',
+            'linkedin_url' => 'nullable|url',
+            'youtube_url' => 'nullable|url',
+            'meta_title' => 'nullable|string',
+            'meta_description' => 'nullable|string',
+            'meta_keywords' => 'nullable|string',
+            'business_hours' => 'nullable|string',
+            'maintenance_mode' => 'boolean',
+            'registration_enabled' => 'boolean',
+            'currency' => 'required|string',
+            'currency_symbol' => 'required|string',
+            'footer_about' => 'nullable|string',
+            'copyright_text' => 'nullable|string',
+        ]);
 
         $setting = \App\Models\Setting::find($this->settingId);
 
         if ($setting) {
-            $setting->update([
+            $data = [
                 'site_name' => $this->site_name,
                 'site_tagline' => $this->site_tagline,
                 'contact_email' => $this->contact_email,
@@ -131,14 +136,32 @@ class AdminSetting extends Component
                 'currency_symbol' => $this->currency_symbol,
                 'footer_about' => $this->footer_about,
                 'copyright_text' => $this->copyright_text,
-            ]);
+            ];
+
+            // Handle Logo Upload
+            if ($this->site_logo) {
+                $data['site_logo'] = $this->site_logo->store('settings', 'public');
+            }
+
+            // Handle Favicon Upload
+            if ($this->favicon) {
+                $data['favicon'] = $this->favicon->store('settings', 'public');
+            }
+
+            $setting->update($data);
 
             session()->flash('success', 'Settings updated successfully.');
         } else {
-            // Redundant fallback if somehow deleted between mount and save
             \App\Models\Setting::create([
-                // ... fields ...
+                'site_name' => 'JustRepair',
+                'currency' => 'INR',
+                'currency_symbol' => '₹',
             ]);
         }
+    }
+
+    public function render()
+    {
+        return view('livewire.admin.admin-setting');
     }
 }

@@ -2,16 +2,58 @@
 <html lang="en">
 
 <head>
+    @php
+        $settings = \App\Models\Setting::first();
+        $siteName = $settings->site_name ?? 'JustRepair';
+
+        // Defaults from DB
+        $dbTitle = $settings->meta_title ?? 'JustRepair – Trusted Home Services';
+        $dbDesc = $settings->meta_description ?? 'Book trusted technicians for AC, plumbing, electrical & appliance repair services.';
+        $dbKeywords = $settings->meta_keywords ?? 'repair, home services, technician, ac repair, plumbing';
+
+        // Logo
+        $siteLogo = $settings->site_logo ? asset('storage/' . $settings->site_logo) : asset('logo.jpeg');
+
+        // Favicon
+        $favicon = $settings->favicon ? asset('storage/' . $settings->favicon) : asset('favicon.ico');
+
+        // Page Specific Overrides (passed from component)
+        // If $title is set (e.g. via @title('...')), use it.
+        // Otherwise use DB default.
+        $pageTitle = $title ?? $dbTitle;
+        $pageDesc = $description ?? $dbDesc;
+        $pageKeywords = $keywords ?? $dbKeywords;
+    @endphp
+
     <meta charset="UTF-8">
-    <title>JustRepair – Trusted Home Services</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="text/javascript">
-        (function (c, l, a, r, i, t, y) {
-            c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
-            t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
-            y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
-        })(window, document, "clarity", "script", "v8un8eh8rq");
-    </script>
+    <title>{{ $pageTitle }}</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{{ $pageDesc }}">
+    <meta name="keywords" content="{{ $pageKeywords }}">
+    <meta name="author" content="{{ $siteName }}">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ url()->current() }}">
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="{{ $pageTitle }}">
+    <meta property="og:description" content="{{ $pageDesc }}">
+    <meta property="og:image" content="{{ $siteLogo }}">
+    <meta property="og:site_name" content="{{ $siteName }}">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ url()->current() }}">
+    <meta name="twitter:title" content="{{ $pageTitle }}">
+    <meta name="twitter:description" content="{{ $pageDesc }}">
+    <meta name="twitter:image" content="{{ $siteLogo }}">
+
+    <!-- Favicon -->
+    <link rel="icon" href="{{ $favicon }}">
+
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
 

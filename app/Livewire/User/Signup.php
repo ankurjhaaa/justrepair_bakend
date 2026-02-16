@@ -6,9 +6,11 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
 #[Layout('layouts.user')]
+#[Title('Sign Up - JustRepair')]
 class Signup extends Component
 {
     public string $name = '';
@@ -16,8 +18,8 @@ class Signup extends Component
     public string $password = '';
 
     protected $rules = [
-        'name'     => 'required|string|min:3|max:100',
-        'mobile'   => 'required|digits:10|unique:users,phone',
+        'name' => 'required|string|min:3|max:100',
+        'mobile' => 'required|digits:10|unique:users,phone',
         'password' => 'required|min:6',
     ];
 
@@ -27,8 +29,8 @@ class Signup extends Component
 
         try {
             $user = User::create([
-                'name'     => $this->name,
-                'phone'    => $this->mobile,
+                'name' => $this->name,
+                'phone' => $this->mobile,
                 'password' => Hash::make($this->password),
             ]);
 
@@ -44,6 +46,9 @@ class Signup extends Component
 
     public function render()
     {
-        return view('livewire.user.signup');
+        return view('livewire.user.signup')->layoutData([
+            'description' => 'Create a free account to book reliable home services and track your orders.',
+            'keywords' => 'register, sign up, create account, join justrepair'
+        ]);
     }
 }

@@ -9,10 +9,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 #[Layout('layouts.user')]
+#[Title('Book a Service - JustRepair')]
 class UserBooking extends Component
 {
     public $services;
@@ -214,6 +216,9 @@ class UserBooking extends Component
 
     public function render()
     {
-        return view('livewire.user.user-booking');
+        return view('livewire.user.user-booking')->layoutData([
+            'description' => 'Schedule a service appointment with our expert technicians. Choose your service, date, and time.',
+            'keywords' => 'book service, schedule repair, appointment, request technician'
+        ]);
     }
 }

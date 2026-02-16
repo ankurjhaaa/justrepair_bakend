@@ -37,6 +37,73 @@
                         placeholder="Repair Services">
                     @error('site_tagline') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                 </div>
+
+                <!-- Site Logo -->
+                <div>
+                    <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Site Logo</label>
+                    <div class="flex items-center gap-4">
+                        @if ($site_logo)
+                            <img src="{{ $site_logo->temporaryUrl() }}"
+                                class="h-16 w-16 object-contain border rounded p-1 dark:border-gray-600">
+                        @elseif($existing_site_logo)
+                            <img src="{{ asset('storage/' . $existing_site_logo) }}"
+                                class="h-16 w-16 object-contain border rounded p-1 dark:border-gray-600">
+                        @else
+                            <div
+                                class="h-16 w-16 bg-gray-100 dark:bg-gray-700 border rounded flex items-center justify-center text-gray-400">
+                                <i class="fa-regular fa-image text-xl"></i>
+                            </div>
+                        @endif
+
+                        <div class="flex-1">
+                            <input type="file" wire:model="site_logo" accept="image/*" class="block w-full text-sm text-gray-500 dark:text-gray-400
+                                file:mr-4 file:py-2 file:px-4
+                                file:rounded-full file:border-0
+                                file:text-xs file:font-semibold
+                                file:bg-indigo-50 file:text-indigo-700
+                                hover:file:bg-indigo-100
+                                dark:file:bg-indigo-900/40 dark:file:text-indigo-300
+                            " />
+                            <div wire:loading wire:target="site_logo" class="text-xs text-indigo-500 mt-1">Uploading...
+                            </div>
+                        </div>
+                    </div>
+                    @error('site_logo') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                </div>
+
+                <!-- Favicon -->
+                <div>
+                    <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Favicon</label>
+                    <div class="flex items-center gap-4">
+                        @if ($favicon)
+                            <img src="{{ $favicon->temporaryUrl() }}"
+                                class="h-12 w-12 object-contain border rounded p-1 dark:border-gray-600">
+                        @elseif($existing_favicon)
+                            <img src="{{ asset('storage/' . $existing_favicon) }}"
+                                class="h-12 w-12 object-contain border rounded p-1 dark:border-gray-600">
+                        @else
+                            <div
+                                class="h-12 w-12 bg-gray-100 dark:bg-gray-700 border rounded flex items-center justify-center text-gray-400">
+                                <i class="fa-regular fa-image text-lg"></i>
+                            </div>
+                        @endif
+
+                        <div class="flex-1">
+                            <input type="file" wire:model="favicon" accept="image/*" class="block w-full text-sm text-gray-500 dark:text-gray-400
+                                file:mr-4 file:py-2 file:px-4
+                                file:rounded-full file:border-0
+                                file:text-xs file:font-semibold
+                                file:bg-indigo-50 file:text-indigo-700
+                                hover:file:bg-indigo-100
+                                dark:file:bg-indigo-900/40 dark:file:text-indigo-300
+                            " />
+                            <div wire:loading wire:target="favicon" class="text-xs text-indigo-500 mt-1">Uploading...
+                            </div>
+                        </div>
+                    </div>
+                    @error('favicon') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                </div>
+
                 <div>
                     <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Currency Code</label>
                     <input type="text" wire:model="currency"

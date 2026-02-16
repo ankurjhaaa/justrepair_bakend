@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Address;
 use App\Models\Booking;
+use App\Models\Config;
 use App\Models\Faq;
 use App\Models\Service;
 use App\Models\ServiceRate;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -158,7 +160,7 @@ class ApiController extends Controller
             }
 
             do {
-                $bookingId = 'JR-' . strtoupper(rand(1000,9999));
+                $bookingId = 'JR-' . strtoupper(rand(1000, 9999));
             } while (Booking::where('booking_id', $bookingId)->exists());
 
             $booking = Booking::create([
@@ -427,6 +429,40 @@ class ApiController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function config()
+    {
+        try {
+            $config = Config::first();
+            return response()->json([
+                "status" => true,
+                "message" => "config fetched successfully",
+                "data" => $config,
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                "status" => false,
+                "message" => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function settings()
+    {
+        try {
+            $settings = Setting::first();
+            return response()->json([
+                "status" => true,
+                "message" => "settings fetched successfully",
+                "data" => $settings,
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                "status" => false,
+                "message" => $e->getMessage()
             ]);
         }
     }

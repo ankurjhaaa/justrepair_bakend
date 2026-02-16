@@ -6,9 +6,11 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
 #[Layout('layouts.user')]
+#[Title('Login - JustRepair')]
 class Login extends Component
 {
     public string $mobile = '';
@@ -77,6 +79,9 @@ class Login extends Component
 
     public function render()
     {
-        return view('livewire.user.login');
+        return view('livewire.user.login')->layoutData([
+            'description' => 'Login to your JustRepair account to manage bookings and view history.',
+            'keywords' => 'login, sign in, user account, bookings'
+        ]);
     }
 }
