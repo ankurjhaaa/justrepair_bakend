@@ -4,12 +4,14 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PdfController;
 use App\Livewire\Admin\AdminBooking;
 use App\Livewire\Admin\AdminBookingView;
+use App\Livewire\Admin\AdminConfig;
 use App\Livewire\Admin\AdminCustomer;
 use App\Livewire\Admin\AdminCustomerView;
 use App\Livewire\Admin\AdminDashboard;
 use App\Livewire\Admin\AdminFaq;
 use App\Livewire\Admin\AdminService;
 use App\Livewire\Admin\AdminServiceRate;
+use App\Livewire\Admin\AdminSetting;
 use App\Livewire\User\AboutUs;
 use App\Livewire\User\BookingSuccess;
 use App\Livewire\User\Contact;
@@ -27,6 +29,7 @@ use App\Livewire\User\Service;
 use App\Livewire\User\Signup;
 use App\Livewire\User\TermsAndCondition;
 use App\Livewire\User\UserBooking;
+
 use Illuminate\Support\Facades\Route;
 use App\Livewire\ApiExplorer;
 
@@ -59,6 +62,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin/')->name('admin.')->gro
     Route::get('customers-view/{id}', AdminCustomerView::class)->name('customerview');
     Route::get('faqs', AdminFaq::class)->name('faqs');
     Route::get('/api-explorer', ApiExplorer::class)->name('apis');
+    Route::get('/config', AdminConfig::class)->name('config');
+    Route::get('/setting', AdminSetting::class)->name('setting');
 
 
 });
@@ -91,4 +96,15 @@ Route::get('/fix-everything', function () {
     Artisan::call('config:cache');
 
     return "<h2>All commands executed successfully ✅</h2> <a href='/' class='btn btn-primary'>Go to Home</a>";
+});
+
+use App\Notifications\ErrorNotification;
+use Illuminate\Support\Facades\Notification;
+
+Route::get('/slack', function () {
+
+    Notification::route('slack', config('services.slack.webhook_url'))
+        ->notify(new ErrorNotification());
+
+    return "Slack Notification Sent!";
 });

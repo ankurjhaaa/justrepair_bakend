@@ -5,13 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel</title>
-    <script type="text/javascript">
-        (function (c, l, a, r, i, t, y) {
-            c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
-            t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
-            y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
-        })(window, document, "clarity", "script", "v8un8eh8rq");
-    </script>
+
     <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -116,9 +110,9 @@
                 @php
                     $linkBase = 'flex items-center gap-3 px-4 py-3 rounded-xl transition';
                     $active = 'bg-indigo-100 text-indigo-700 font-semibold
-                                                                                                                                                                        dark:bg-indigo-900/40 dark:text-indigo-300';
+                                                                                                                                                                                                                                                                            dark:bg-indigo-900/40 dark:text-indigo-300';
                     $inactive = 'hover:bg-indigo-50 text-gray-700
-                                                                                                                                                                            dark:text-gray-300 dark:hover:bg-gray-700';
+                                                                                                                                                                                                                                                                                dark:text-gray-300 dark:hover:bg-gray-700';
                 @endphp
 
                 <a wire:navigate href="{{ route('admin.dashboard') }}"
@@ -157,14 +151,21 @@
                     FAQs
                 </a>
                 <a wire:navigate href="{{ route('admin.apis') }}"
-                    class="{{ $linkBase }} {{ request()->routeIs('admin.faqs*') ? $active : $inactive }}">
+                    class="{{ $linkBase }} {{ request()->routeIs('admin.apis*') ? $active : $inactive }}">
                     <i class="fa-solid fa-circle-question"></i>
                     Api`s
                 </a>
 
-                <a href="#" class="{{ $linkBase }} {{ $inactive }}">
+                <a wire:navigate href="{{ route('admin.config') }}"
+                    class="{{ $linkBase }} {{ request()->routeIs('admin.config') ? $active : $inactive }}">
+                    <i class="fa-solid fa-cogs"></i>
+                    App Config
+                </a>
+
+                <a wire:navigate href="{{ route('admin.setting') }}"
+                    class="{{ $linkBase }} {{ request()->routeIs('admin.setting') ? $active : $inactive }}">
                     <i class="fa-solid fa-gear"></i>
-                    Settings
+                    Site Settings
                 </a>
 
             </nav>
