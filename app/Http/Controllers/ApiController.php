@@ -116,7 +116,9 @@ class ApiController extends Controller
             'date' => 'required|date',
             'time' => 'required|string',
             'requirements' => 'nullable|array|min:1',
-            'requirements.*' => 'string',
+            'requirements.*' => 'array',
+            'requirements.*.*' => 'string',
+
         ]);
 
         if ($validator->fails()) {
