@@ -1,13 +1,25 @@
 <section class=" pb-20">
     
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+    <!-- LOCAL SEO HERO BANNER -->
+    <div class="bg-gradient-to-r from-red-600 to-red-800 text-white py-12 px-4 text-center sm:rounded-b-3xl shadow-lg mb-8">
+        <div class="max-w-3xl mx-auto">
+            <h1 class="text-3xl sm:text-4xl font-extrabold mb-3">
+                #1 Trusted Home Services in Purnea, Bihar
+            </h1>
+            <p class="text-red-100 text-lg">
+                Fast, affordable, and expert repair services right at your doorstep in Purnea. Select a service below to book now!
+            </p>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4">
 
         <!-- HEADER -->
-        <div class="mb-6">
+        <div class="mb-8 text-center sm:text-left">
             <h2 class="text-2xl font-bold text-gray-900">
-                Our Services
+                Explore Our Services
             </h2>
-
+            <p class="text-gray-500 text-sm mt-1">Professional technicians in Purnea & nearby areas</p>
         </div>
 
         <!-- SERVICES GRID -->
@@ -42,6 +54,25 @@
                     </div>
             @endforeach
 
+        </div>
+    </div>
+
+    <!-- AREAS WE SERVE IN PURNEA -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-12 border-t border-gray-100">
+        <h3 class="text-xl font-bold text-gray-900 mb-6 text-center sm:text-left">Areas We Serve in Purnea</h3>
+        <div class="flex flex-wrap gap-3 justify-center sm:justify-start">
+            @php
+                $localities = [
+                    'Line Bazar', 'Bhatta Bazar', 'Madhubani', 'Khazanchi Hat', 
+                    'Rambagh', 'Gulabbagh', 'Maranga', 'Chunapur', 'Kasba', 
+                    'Dagarua', 'Jalalgarh'
+                ];
+            @endphp
+            @foreach($localities as $loc)
+                <span class="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-sm font-medium border border-gray-200">
+                    <i class="fa-solid fa-location-dot text-primary mr-1"></i> {{ $loc }}
+                </span>
+            @endforeach
         </div>
     </div>
 

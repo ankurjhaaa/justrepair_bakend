@@ -6,10 +6,10 @@
         $settings = \App\Models\Setting::first();
         $siteName = $settings->site_name ?? 'JustRepair';
 
-        // Defaults from DB
-        $dbTitle = $settings->meta_title ?? 'JustRepair – Trusted Home Services';
-        $dbDesc = $settings->meta_description ?? 'Book trusted technicians for AC, plumbing, electrical & appliance repair services.';
-        $dbKeywords = $settings->meta_keywords ?? 'repair, home services, technician, ac repair, plumbing';
+        // Defaults from DB or Fallback for Purnea
+        $dbTitle = $settings->meta_title ?? 'JustRepair – Best Home Services & Technicians in Purnea';
+        $dbDesc = $settings->meta_description ?? 'Book top-rated, trusted technicians for AC, plumbing, electrical & appliance repair services in Purnea, Line Bazar, Bhatta Bazar and nearby areas.';
+        $dbKeywords = $settings->meta_keywords ?? 'repair in purnea, home services purnea, best technician purnea, ac repair purnea, plumbing purnea, justrepair purnea, line bazar purnea repair, bhatta bazar purnea services, madhubani purnea electrician';
 
         // Logo
         $siteLogo = $settings->site_logo ? asset('storage/' . $settings->site_logo) : asset('logo.jpeg');
@@ -35,6 +35,10 @@
     <meta name="author" content="{{ $siteName }}">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="{{ url()->current() }}">
+
+    @if(isset($schema))
+        {!! $schema !!}
+    @endif
 
     <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="website">
@@ -334,7 +338,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-16">
 
             <!-- TOP GRID -->
-            <div class="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="grid gap-12 sm:grid-cols-2 lg:grid-cols-5">
 
                 <!-- BRAND -->
                 <div>
@@ -371,6 +375,26 @@
                             </svg>
                         </a>
                     </div>
+                </div>
+
+                <!-- POPULAR SEARCHES -->
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Popular Searches</h4>
+                    <ul class="space-y-3 text-sm">
+                        @php
+                            $popCities = ['line-bazar-purnea', 'bhatta-bazar-purnea', 'madhubani-purnea'];
+                            $popServices = \App\Models\Service::whereNotNull('slug')->take(2)->get();
+                        @endphp
+                        @foreach($popCities as $cKey)
+                            @foreach($popServices as $pSvc)
+                                <li>
+                                    <a wire:navigate href="{{ url('/'.$cKey.'/'.$pSvc->slug) }}" class="hover:text-white text-gray-400 transition">
+                                        {{ $pSvc->name }} in {{ config("seo_cities.cities.$cKey", ucfirst($cKey)) }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        @endforeach
+                    </ul>
                 </div>
 
                 <!-- COMPANY -->
