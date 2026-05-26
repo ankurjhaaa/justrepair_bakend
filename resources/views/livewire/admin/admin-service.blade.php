@@ -1,55 +1,54 @@
-<div class="space-y-6">
+<div x-data="{ mobileFilterOpen: false }" class="space-y-5 pb-20 md:pb-0">
 
-    <!-- Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <!-- HEADER -->
+    <div class="flex items-center justify-between min-h-[60px]">
         <div>
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Services</h1>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Manage your service offerings</p>
+            <h1 class="text-xl font-bold text-gray-900">Services</h1>
+            <p class="text-xs text-gray-500 mt-1">Manage your service offerings</p>
         </div>
 
-        <button wire:click="create"
-            class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold shadow-sm transition-all active:scale-95 w-full sm:w-auto">
-            <i class="fa-solid fa-plus"></i>
-            <span>Add Service</span>
-        </button>
+        <div class="flex items-center gap-3">
+            <!-- Desktop Add Button -->
+            <button wire:click="create" class="hidden md:flex items-center gap-2 px-4 py-2 rounded-md bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm">
+                <i class="fa-solid fa-plus"></i> <span>Add Service</span>
+            </button>
+        </div>
     </div>
 
     <!-- CONTENT: Desktop Table & Mobile Cards -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+    <div class="bg-white border border-gray-200 rounded-md overflow-hidden">
         
         <!-- Desktop Table (Hidden on small screens) -->
         <div class="hidden md:block overflow-x-auto">
-            <table class="w-full text-left text-sm">
-                <thead>
-                    <tr class="bg-gray-50 dark:bg-gray-700/50 text-gray-500 dark:text-gray-400 uppercase tracking-wider text-xs border-b border-gray-100 dark:border-gray-700">
-                        <th class="px-6 py-4 font-semibold">Service Info</th>
-                        <th class="px-6 py-4 font-semibold">Requirements</th>
-                        <th class="px-6 py-4 font-semibold text-right">Actions</th>
+            <table class="w-full text-left text-sm whitespace-nowrap text-gray-700">
+                <thead class="bg-gray-50 text-gray-600 border-b border-gray-200">
+                    <tr>
+                        <th class="px-4 py-3 font-medium">Service Info</th>
+                        <th class="px-4 py-3 font-medium">Requirements</th>
+                        <th class="px-4 py-3 font-medium text-right">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+                <tbody class="divide-y divide-gray-100">
                     @forelse($services as $service)
-                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-4">
-                                    <div class="h-12 w-12 flex-shrink-0 rounded-lg bg-gray-100 dark:bg-gray-700 overflow-hidden border border-gray-200 dark:border-gray-600">
+                        <tr class="hover:bg-gray-50/50 transition-colors">
+                            <td class="px-4 py-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="h-10 w-10 flex-shrink-0 rounded-md bg-gray-50 overflow-hidden border border-gray-200">
                                         @if($service->image)
                                             <img src="{{ $service->image_url }}" alt="{{ $service->name }}" class="h-full w-full object-cover">
                                         @else
                                             <div class="h-full w-full flex items-center justify-center text-gray-400">
-                                                <i class="fa-regular fa-image text-lg"></i>
+                                                <i class="fa-regular fa-image"></i>
                                             </div>
                                         @endif
                                     </div>
-                                    <div>
-                                        <h3 class="font-medium text-gray-900 dark:text-white">{{ $service->name }}</h3>
-                                    </div>
+                                    <h3 class="font-medium text-gray-900">{{ $service->name }}</h3>
                                 </div>
                             </td>
-                            <td class="px-6 py-4">
-                                <div class="flex flex-wrap gap-2 max-w-md">
+                            <td class="px-4 py-3">
+                                <div class="flex flex-wrap gap-1.5 max-w-md">
                                     @forelse($service->requirements ?? [] as $req)
-                                        <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300 border border-indigo-100 dark:border-indigo-800">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium bg-gray-100 text-gray-700 border border-gray-200">
                                             {{ $req }}
                                         </span>
                                     @empty
@@ -57,14 +56,12 @@
                                     @endforelse
                                 </div>
                             </td>
-                            <td class="px-6 py-4 text-right">
+                            <td class="px-4 py-3 text-right">
                                 <div class="flex items-center justify-end gap-2">
-                                    <button wire:click="edit({{ $service->id }})" 
-                                        class="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg dark:text-indigo-400 dark:hover:bg-indigo-900/30 transition">
+                                    <button wire:click="edit({{ $service->id }})" class="p-1.5 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-colors" title="Edit">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </button>
-                                    <button wire:click="delete({{ $service->id }})" 
-                                        class="p-2 text-red-600 hover:bg-red-50 rounded-lg dark:text-red-400 dark:hover:bg-red-900/30 transition">
+                                    <button wire:click="delete({{ $service->id }})" class="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors" title="Delete">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </div>
@@ -72,13 +69,10 @@
                         </tr>
                     @empty
                          <tr>
-                            <td colspan="3" class="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
+                            <td colspan="3" class="px-4 py-10 text-center text-gray-500">
                                 <div class="flex flex-col items-center justify-center">
-                                    <div class="h-16 w-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4">
-                                        <i class="fa-solid fa-layer-group text-2xl text-gray-400"></i>
-                                    </div>
-                                    <p class="text-lg font-medium text-gray-900 dark:text-white">No services found</p>
-                                    <p class="text-sm mt-1">Get started by creating a new service.</p>
+                                    <i class="fa-solid fa-layer-group text-3xl mb-3 text-gray-300"></i>
+                                    <p class="text-sm">No services found</p>
                                 </div>
                             </td>
                         </tr>
@@ -88,34 +82,34 @@
         </div>
 
         <!-- Mobile Cards (Visible on small screens) -->
-        <div class="md:hidden divide-y divide-gray-100 dark:divide-gray-700">
+        <div class="md:hidden divide-y divide-gray-100">
             @forelse($services as $service)
-                <div class="p-4 space-y-4">
-                    <div class="flex items-center gap-4">
-                        <div class="h-14 w-14 flex-shrink-0 rounded-lg bg-gray-100 dark:bg-gray-700 overflow-hidden border border-gray-200 dark:border-gray-600">
+                <div class="p-4 space-y-3">
+                    <div class="flex items-center gap-3">
+                        <div class="h-12 w-12 flex-shrink-0 rounded-md bg-gray-50 overflow-hidden border border-gray-200">
                              @if($service->image)
                                 <img src="{{ $service->image_url }}" alt="{{ $service->name }}" class="h-full w-full object-cover">
                             @else
                                 <div class="h-full w-full flex items-center justify-center text-gray-400">
-                                    <i class="fa-regular fa-image text-xl"></i>
+                                    <i class="fa-regular fa-image"></i>
                                 </div>
                             @endif
                         </div>
                         <div class="flex-1 min-w-0">
-                            <h3 class="text-base font-semibold text-gray-900 dark:text-white truncate">{{ $service->name }}</h3>
-                             <div class="flex items-center gap-3 mt-1">
-                                <button wire:click="edit({{ $service->id }})" class="text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:underline">Edit</button>
-                                <span class="text-gray-300 dark:text-gray-600">|</span>
-                                <button wire:click="delete({{ $service->id }})" class="text-xs font-medium text-red-600 dark:text-red-400 hover:underline">Delete</button>
+                            <h3 class="text-sm font-semibold text-gray-900 truncate">{{ $service->name }}</h3>
+                             <div class="flex items-center gap-2 mt-1">
+                                <button wire:click="edit({{ $service->id }})" class="text-xs font-medium text-indigo-600 hover:underline">Edit</button>
+                                <span class="text-gray-300">|</span>
+                                <button wire:click="delete({{ $service->id }})" class="text-xs font-medium text-red-600 hover:underline">Delete</button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Mobile Requirements Scroll -->
                     @if(count($service->requirements ?? []) > 0)
-                        <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+                        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
                              @foreach($service->requirements as $req)
-                                <span class="flex-shrink-0 inline-flex items-center px-2 py-1 rounded text-[10px] font-medium bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300 whitespace-nowrap border border-gray-200 dark:border-gray-600">
+                                <span class="flex-shrink-0 inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-medium bg-gray-100 text-gray-700 whitespace-nowrap border border-gray-200">
                                     {{ $req }}
                                 </span>
                             @endforeach
@@ -123,111 +117,115 @@
                     @endif
                 </div>
             @empty
-                <div class="p-8 text-center text-gray-500 dark:text-gray-400">
-                    <p>No services found.</p>
+                <div class="p-8 text-center text-gray-500">
+                    <p class="text-sm">No services found.</p>
                 </div>
             @endforelse
         </div>
     </div>
 
-    <!-- Modal -->
-    @if($showModal)
-        <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <!-- MOBILE FLOATING ADD BUTTON -->
+    <button wire:click="create" class="md:hidden fixed bottom-6 right-6 z-40 flex items-center justify-center w-14 h-14 bg-indigo-600 text-white rounded-full shadow-lg hover:bg-indigo-700 hover:scale-105 transition-transform">
+        <i class="fa-solid fa-plus text-xl"></i>
+    </button>
 
-                <!-- Backdrop -->
-                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" wire:click="$set('showModal', false)"></div>
+    <!-- MODAL -->
+    <div x-show="$wire.showModal" class="relative z-50" x-cloak>
+        <div x-show="$wire.showModal" x-transition.opacity class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm" @click="$wire.showModal = false"></div>
 
-                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-
-                <!-- Modal Panel -->
-                <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full">
-
-                    <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4 border-b border-gray-100 dark:border-gray-700">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white" id="modal-title">
-                            {{ $isEdit ? 'Edit Service' : 'Add New Service' }}
-                        </h3>
-                    </div>
-
-                    <div class="px-4 py-5 sm:p-6 space-y-5">
-                         <!-- Name -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Service Name</label>
-                            <input type="text" wire:model.defer="name" placeholder="e.g. AC Repair"
-                                class="block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-3 py-2 bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
-                            @error('name') <span class="text-xs text-red-500 mt-1">{{ $message }}</span> @enderror
-                        </div>
-
-                        <!-- Image -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Service Icon/Image</label>
-
-                            <div class="mt-1 flex items-center gap-4">
-                                <div class="h-16 w-16 rounded-lg border border-gray-300 dark:border-gray-600 overflow-hidden bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-                                     @if ($image)
-                                        <img src="{{ $image->temporaryUrl() }}" class="h-full w-full object-cover">
-                                    @elseif($existingImageUrl)
-                                        <img src="{{ $existingImageUrl }}" class="h-full w-full object-cover">
-                                    @else
-                                        <i class="fa-regular fa-image text-gray-400"></i>
-                                    @endif
-                                </div>
-                                <div class="flex-1">
-                                    <input type="file" wire:model="image" accept="image/*"
-                                        class="block w-full text-sm text-gray-500 dark:text-gray-400
-                                        file:mr-4 file:py-2 file:px-4
-                                        file:rounded-full file:border-0
-                                        file:text-xs file:font-semibold
-                                        file:bg-indigo-50 file:text-indigo-700
-                                        hover:file:bg-indigo-100
-                                        dark:file:bg-indigo-900/40 dark:file:text-indigo-300
-                                    "/>
-                                    <div wire:loading wire:target="image" class="text-xs text-indigo-500 mt-1">Uploading...</div>
-                                </div>
-                            </div>
-                             @error('image') <span class="text-xs text-red-500 mt-1">{{ $message }}</span> @enderror
-                        </div>
-
-                        <!-- Requirements -->
-                        <div>
-                             <div class="flex items-center justify-between mb-2">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Requirements / Checklist</label>
-                                <button type="button" wire:click="addRequirement" class="text-xs font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">
-                                    + Add Item
+        <div class="fixed inset-0 z-50 overflow-y-auto pointer-events-none">
+            <div class="flex min-h-full items-end sm:items-center justify-center p-0 sm:p-4 text-center">
+                <div x-show="$wire.showModal" 
+                     x-transition:enter="transition ease-out duration-300" 
+                     x-transition:enter-start="translate-y-full sm:opacity-0 sm:translate-y-4 sm:scale-95" 
+                     x-transition:enter-end="translate-y-0 sm:opacity-100 sm:translate-y-0 sm:scale-100" 
+                     x-transition:leave="transition ease-in duration-200" 
+                     x-transition:leave-start="translate-y-0 sm:opacity-100 sm:translate-y-0 sm:scale-100" 
+                     x-transition:leave-end="translate-y-full sm:opacity-0 sm:translate-y-4 sm:scale-95" 
+                     class="pointer-events-auto relative transform overflow-hidden rounded-t-2xl sm:rounded-lg bg-white text-left shadow-2xl transition-all sm:my-8 w-full sm:max-w-md border-t sm:border border-gray-200 flex flex-col max-h-[90vh] sm:max-h-none">
+                    <form wire:submit.prevent="save" class="flex flex-col h-full overflow-hidden">
+                        <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4 border-b border-gray-100 flex flex-col flex-1 min-h-0">
+                            <div class="flex items-center justify-between mb-4 flex-shrink-0">
+                                <h3 class="text-lg font-semibold leading-6 text-gray-900">
+                                    {{ $isEdit ? 'Edit Service' : 'Add Service' }}
+                                </h3>
+                                <button @click="$wire.showModal = false" type="button" class="text-gray-400 hover:text-gray-600">
+                                    <i class="fa-solid fa-xmark text-lg"></i>
                                 </button>
                             </div>
+                            
+                            <div class="space-y-4 mt-2 overflow-y-auto pr-1 flex-1">
+                                <!-- Name -->
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-700 mb-1">Service Name</label>
+                                    <input type="text" wire:model.defer="name" placeholder="e.g. AC Repair" class="w-full h-10 px-3 text-sm border border-gray-300 rounded-md bg-white text-gray-900 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors">
+                                    @error('name') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
+                                </div>
 
-                            <div class="space-y-2 max-h-48 overflow-y-auto pr-1">
-                                @foreach($requirements as $index => $req)
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-gray-400 text-xs">{{ $loop->iteration }}.</span>
-                                        <input type="text"
-                                            wire:model.defer="requirements.{{ $index }}"
-                                            placeholder="Requirement details"
-                                            class="block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-xs px-3 py-2 bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
-                                        <button type="button" wire:click="removeRequirement({{ $index }})" class="text-gray-400 hover:text-red-500 transition">
-                                            <i class="fa-solid fa-xmark"></i>
+                                <!-- Image -->
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-700 mb-1">Service Icon/Image</label>
+                                    <div class="flex items-center gap-3">
+                                        <div class="h-14 w-14 rounded-md border border-gray-200 overflow-hidden bg-gray-50 flex items-center justify-center flex-shrink-0">
+                                             @if ($image)
+                                                <img src="{{ $image->temporaryUrl() }}" class="h-full w-full object-cover">
+                                            @elseif($existingImageUrl)
+                                                <img src="{{ $existingImageUrl }}" class="h-full w-full object-cover">
+                                            @else
+                                                <i class="fa-regular fa-image text-gray-400 text-lg"></i>
+                                            @endif
+                                        </div>
+                                        <div class="flex-1">
+                                            <input type="file" wire:model="image" accept="image/*"
+                                                class="block w-full text-xs text-gray-500
+                                                file:mr-3 file:py-1.5 file:px-3
+                                                file:rounded-md file:border-0
+                                                file:text-xs file:font-medium
+                                                file:bg-indigo-50 file:text-indigo-700
+                                                hover:file:bg-indigo-100 transition-colors
+                                            "/>
+                                            <div wire:loading wire:target="image" class="text-xs text-indigo-500 mt-1">Uploading...</div>
+                                        </div>
+                                    </div>
+                                     @error('image') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
+                                </div>
+
+                                <!-- Requirements -->
+                                <div>
+                                     <div class="flex items-center justify-between mb-2">
+                                        <label class="block text-xs font-medium text-gray-700">Requirements / Checklist</label>
+                                        <button type="button" wire:click="addRequirement" class="text-xs font-semibold text-indigo-600 hover:text-indigo-500">
+                                            + Add Item
                                         </button>
                                     </div>
-                                @endforeach
+
+                                    <div class="space-y-2">
+                                        @foreach($requirements as $index => $req)
+                                            <div class="flex items-center gap-2">
+                                                <span class="text-gray-400 text-xs w-4 text-right">{{ $loop->iteration }}.</span>
+                                                <input type="text"
+                                                    wire:model.defer="requirements.{{ $index }}"
+                                                    placeholder="Requirement details"
+                                                    class="flex-1 h-9 px-3 text-sm border border-gray-300 rounded-md bg-white text-gray-900 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors">
+                                                <button type="button" wire:click="removeRequirement({{ $index }})" class="p-1.5 text-gray-400 hover:text-red-500 transition-colors">
+                                                    <i class="fa-solid fa-xmark"></i>
+                                                </button>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                    </div>
-
-                    <div class="bg-gray-50 dark:bg-gray-700/30 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse border-t border-gray-100 dark:border-gray-700">
-                        <button type="button" wire:click="save" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
-                            Save Service
-                        </button>
-                        <button type="button" wire:click="$set('showModal', false)" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                            Cancel
-                        </button>
-                    </div>
-
+                        <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 mt-auto">
+                            <button type="submit" class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 sm:ml-3 sm:w-auto">Save Service</button>
+                            <button type="button" @click="$wire.showModal = false" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">Cancel</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-    @endif
+    </div>
 
     <style>
         .no-scrollbar::-webkit-scrollbar {

@@ -1,166 +1,233 @@
-<div>
-    <div class="space-y-6">
-        <!-- HEADER -->
-        <div class="flex items-center justify-between">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
-                    Customers
-                </h1>
-                <p class="text-sm text-gray-500 dark:text-gray-400">
-                    Manage all registered customers
-                </p>
-            </div>
-            <div>
-                <button wire:click="$set('showModal', true)"
-                    class="px-4 py-2 rounded-md bg-indigo-600 text-white text-sm">
-                    + Add User
-                </button>
-
-            </div>
+<div x-data="{ mobileFilterOpen: false }" class="space-y-5 pb-20 md:pb-0">
+    
+    <!-- HEADER -->
+    <div class="flex items-center justify-between min-h-[60px]">
+        <div>
+            <h1 class="text-xl font-bold text-gray-900">Customers</h1>
+            <p class="text-xs text-gray-500 mt-1">Manage all registered customers</p>
         </div>
-
-
-        <!-- FILTER BAR -->
-        <div class="bg-white dark:bg-gray-800 rounded-md shadow p-4">
-            <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
-
-                <!-- Search -->
-                <input type="text" wire:model.live="search" placeholder="Search name or mobile" class="h-11 px-3 rounded-md border
-                           bg-white text-gray-800
-                           dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600">
-
-                <!-- Date -->
-                <input type="date" wire:model.live="date" class="h-11 px-3 rounded-md border
-                           bg-white text-gray-800
-                           dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600">
-                <!-- Role Filter -->
-                <select wire:model.live="role" class="h-11 px-3 rounded-md border
-                        bg-white text-gray-800
-                        dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600">
-                    <option value="">All Roles</option>
-                    <option value="user">User</option>
-                    <option value="technician">Technician</option>
-                </select>
-
-                <!-- Reset -->
-                <button wire:click="resetFilters" class="h-11 rounded-md border
-                           bg-gray-50 text-gray-700
-                           hover:bg-gray-100
-                           dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600">
-                    Reset
-                </button>
-            </div>
+        
+        <div class="flex items-center gap-3">
+            <!-- Mobile Filter Button -->
+            <button @click="mobileFilterOpen = true" class="md:hidden flex items-center gap-2 px-3 py-2 text-sm font-medium border border-gray-200 rounded-md bg-white text-gray-700 hover:bg-gray-50 active:bg-gray-100 transition-colors">
+                <i class="fa-solid fa-filter text-gray-500"></i> <span>Filters</span>
+            </button>
+            
+            <!-- Desktop Add Button -->
+            <button wire:click="$set('showModal', true)" class="hidden md:flex items-center gap-2 px-4 py-2 rounded-md bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm">
+                <i class="fa-solid fa-plus"></i> <span>Add User</span>
+            </button>
         </div>
-
-        <!-- CUSTOMERS TABLE -->
-        <div class="bg-white dark:bg-gray-800 rounded-md shadow overflow-x-auto">
-
-            <table class="w-full text-sm whitespace-nowrap
-                          text-gray-700 dark:text-gray-200">
-                <thead class="bg-gray-50 dark:bg-gray-700">
-                    <tr>
-                        <th class="px-4 py-3 text-left">Customer</th>
-                        <th class="px-4 py-3 text-left">Mobile</th>
-                        <th class="px-4 py-3 text-left">Joined</th>
-                        <th class="px-4 py-3 text-left">Role</th>
-                        <th class="px-4 py-3 text-right">Action</th>
-                    </tr>
-                </thead>
-
-                <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
-
-                    @forelse($customers as $customer)
-                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/40">
-
-                            <td class="px-4 py-3">
-                                <p class="font-medium">
-                                    {{ $customer->name ?? '—' }}
-                                </p>
-                            </td>
-
-                            <td class="px-4 py-3">
-                                {{ $customer->phone ?? '—' }}
-                            </td>
-
-                            <td class="px-4 py-3 text-sm">
-                                {{ $customer->created_at->format('d M Y') }}
-                            </td>
-                            <td class="px-4 py-3 text-sm">
-                                {{ $customer->role }}
-                            </td>
-
-                            <td class="px-4 py-3 text-right">
-                                <a wire:navigate href="{{ route('admin.customerview', $customer->id) }}"
-                                    class="px-3 py-1.5 text-xs rounded-md bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-200">
-                                    View
-                                </a>
-                            </td>
-
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="4" class="px-4 py-6 text-center text-gray-500">
-                                No customers found
-                            </td>
-                        </tr>
-                    @endforelse
-
-                </tbody>
-            </table>
-
-            <!-- Pagination -->
-            <div class="p-4">
-                {{ $customers->links() }}
-            </div>
-        </div>
-
     </div>
-    @if($showModal)
-        <div class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-            <div class="bg-white dark:bg-gray-800 w-full max-w-md rounded-lg p-6">
 
-                <h2 class="text-lg font-semibold mb-4">Add User</h2>
+    <!-- DESKTOP FILTER BAR -->
+    <div class="hidden md:flex flex-wrap items-center gap-3 bg-white border border-gray-200 rounded-md p-3">
+        <!-- Search -->
+        <div class="relative flex-1 min-w-[240px]">
+            <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+            <input type="text" wire:model.live="search" placeholder="Search name or mobile" class="w-full h-9 pl-9 pr-3 text-sm rounded-md border border-gray-200 bg-white text-gray-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-colors">
+        </div>
 
-                <div class="space-y-3">
+        <!-- Role -->
+        <select wire:model.live="role" class="w-40 h-9 px-3 text-sm rounded-md border border-gray-200 bg-white text-gray-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-colors">
+            <option value="">All Roles</option>
+            <option value="user">User</option>
+            <option value="technician">Technician</option>
+        </select>
 
-                    <input wire:model="name" placeholder="Name"
-                        class="w-full h-10 px-3 border rounded-md bg-white text-gray-800 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500">
+        <!-- Date -->
+        <input type="date" wire:model.live="date" class="w-40 h-9 px-3 text-sm rounded-md border border-gray-200 bg-white text-gray-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-colors">
 
-                    <input wire:model="phone" placeholder="Mobile"
-                        class="w-full h-10 px-3 border rounded-md bg-white text-gray-800 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500">
+        <!-- Reset -->
+        <button wire:click="resetFilters" class="h-9 px-4 text-sm font-medium rounded-md border border-gray-200 bg-gray-50 text-gray-700 hover:bg-gray-100 transition-colors">
+            Reset
+        </button>
+    </div>
 
-                    <input wire:model="email" placeholder="Email (optional)"
-                        class="w-full h-10 px-3 border rounded-md bg-white text-gray-800 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500">
-
-                    <input wire:model="password" type="password" placeholder="Password"
-                        class="w-full h-10 px-3 border rounded-md bg-white text-gray-800 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500">
-
-                    <!-- ROLE (MANDATORY) -->
-                    <select wire:model="newRole"
-                        class="w-full h-10 px-3 border rounded-md bg-white text-gray-800 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500">
-                        <option value="">Select Role</option>
+    <!-- MOBILE FILTER BOTTOM SHEET -->
+    <div x-show="mobileFilterOpen" class="relative z-50 md:hidden" x-cloak>
+        <div x-show="mobileFilterOpen" x-transition.opacity class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm" @click="mobileFilterOpen = false"></div>
+        <div x-show="mobileFilterOpen" 
+             x-transition:enter="transition ease-out duration-300" 
+             x-transition:enter-start="translate-y-full" 
+             x-transition:enter-end="translate-y-0" 
+             x-transition:leave="transition ease-in duration-200" 
+             x-transition:leave-start="translate-y-0" 
+             x-transition:leave-end="translate-y-full" 
+             class="fixed inset-x-0 bottom-0 bg-white rounded-t-xl p-5 border-t border-gray-200 shadow-2xl">
+            
+            <div class="flex items-center justify-between mb-5">
+                <h3 class="text-base font-semibold text-gray-900">Filters</h3>
+                <button @click="mobileFilterOpen = false" class="p-1 text-gray-400 hover:text-gray-600 rounded-md">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-gray-500 mb-1">Search</label>
+                    <input type="text" wire:model.live="search" placeholder="Search name or mobile" class="w-full h-10 px-3 text-sm rounded-md border border-gray-200 bg-white text-gray-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none">
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-medium text-gray-500 mb-1">Role</label>
+                    <select wire:model.live="role" class="w-full h-10 px-3 text-sm rounded-md border border-gray-200 bg-white text-gray-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none">
+                        <option value="">All Roles</option>
                         <option value="user">User</option>
                         <option value="technician">Technician</option>
                     </select>
-
-                    @error('newRole')
-                        <p class="text-xs text-red-500">{{ $message }}</p>
-                    @enderror
-
                 </div>
 
+                <div>
+                    <label class="block text-xs font-medium text-gray-500 mb-1">Joined Date</label>
+                    <input type="date" wire:model.live="date" class="w-full h-10 px-3 text-sm rounded-md border border-gray-200 bg-white text-gray-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none">
+                </div>
 
-                <div class="flex justify-end gap-2 mt-6">
-                    <button wire:click="$set('showModal', false)" class="px-4 py-2 text-sm border rounded-md">
-                        Cancel
-                    </button>
-
-                    <button wire:click="addUser" class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-md">
-                        Save
-                    </button>
+                <div class="pt-3 flex gap-3">
+                    <button wire:click="resetFilters" @click="mobileFilterOpen = false" class="flex-1 h-10 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-700 hover:bg-gray-50">Reset</button>
+                    <button @click="mobileFilterOpen = false" class="flex-1 h-10 text-sm font-medium rounded-md bg-indigo-600 text-white hover:bg-indigo-700">Apply Filters</button>
                 </div>
             </div>
         </div>
-    @endif
+    </div>
 
+    <!-- CUSTOMERS TABLE -->
+    <div class="bg-white border border-gray-200 rounded-md overflow-x-auto">
+        <table class="w-full text-sm text-left whitespace-nowrap text-gray-700">
+            <thead class="bg-gray-50 text-gray-600 border-b border-gray-200">
+                <tr>
+                    <th class="px-4 py-3 font-medium">Customer</th>
+                    <th class="px-4 py-3 font-medium">Mobile</th>
+                    <th class="px-4 py-3 font-medium">Joined</th>
+                    <th class="px-4 py-3 font-medium">Role</th>
+                    <th class="px-4 py-3 font-medium text-right">Action</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                @forelse($customers as $customer)
+                    <tr class="hover:bg-gray-50/50 transition-colors">
+                        <td class="px-4 py-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold text-xs border border-indigo-100">
+                                    {{ strtoupper(substr($customer->name ?? 'U', 0, 1)) }}
+                                </div>
+                                <div class="font-medium text-gray-900">{{ $customer->name ?? '—' }}</div>
+                            </div>
+                        </td>
+                        <td class="px-4 py-3 font-medium text-gray-800">
+                            {{ $customer->phone ?? '—' }}
+                        </td>
+                        <td class="px-4 py-3 text-gray-600">
+                            {{ $customer->created_at->format('d M Y') }}
+                        </td>
+                        <td class="px-4 py-3">
+                            <span class="px-2 py-1 text-[11px] font-medium rounded-md border
+                                @class([
+                                    'bg-green-50 text-green-700 border-green-200' => $customer->role === 'user',
+                                    'bg-purple-50 text-purple-700 border-purple-200' => $customer->role === 'technician',
+                                    'bg-gray-50 text-gray-700 border-gray-200' => !in_array($customer->role, ['user', 'technician']),
+                                ])">
+                                {{ ucfirst($customer->role) }}
+                            </span>
+                        </td>
+                        <td class="px-4 py-3 text-right">
+                            <a wire:navigate href="{{ route('admin.customerview', $customer->id) }}" class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 text-gray-700 rounded-md hover:bg-gray-50 hover:text-indigo-600 transition-colors">
+                                View
+                            </a>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5" class="px-4 py-10 text-center text-gray-500">
+                            <div class="flex flex-col items-center justify-center">
+                                <i class="fa-solid fa-users text-3xl mb-3 text-gray-300"></i>
+                                <p class="text-sm">No customers found</p>
+                            </div>
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+
+        @if($customers->hasPages())
+            <div class="px-4 py-3 border-t border-gray-200 bg-gray-50">
+                {{ $customers->links() }}
+            </div>
+        @endif
+    </div>
+
+    <!-- MOBILE FLOATING ADD BUTTON -->
+    <button wire:click="$set('showModal', true)" class="md:hidden fixed bottom-6 right-6 z-40 flex items-center justify-center w-14 h-14 bg-indigo-600 text-white rounded-full shadow-lg hover:bg-indigo-700 hover:scale-105 transition-transform">
+        <i class="fa-solid fa-plus text-xl"></i>
+    </button>
+
+    <!-- ADD USER MODAL -->
+    <div x-show="$wire.showModal" class="relative z-50" x-cloak>
+        <!-- Backdrop -->
+        <div x-show="$wire.showModal" x-transition.opacity class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm" @click="$wire.showModal = false"></div>
+
+        <!-- Modal panel -->
+        <div class="fixed inset-0 z-50 overflow-y-auto pointer-events-none">
+            <div class="flex min-h-full items-end sm:items-center justify-center p-0 sm:p-4 text-center">
+                <div x-show="$wire.showModal" 
+                     x-transition:enter="transition ease-out duration-300" 
+                     x-transition:enter-start="translate-y-full sm:opacity-0 sm:translate-y-4 sm:scale-95" 
+                     x-transition:enter-end="translate-y-0 sm:opacity-100 sm:translate-y-0 sm:scale-100" 
+                     x-transition:leave="transition ease-in duration-200" 
+                     x-transition:leave-start="translate-y-0 sm:opacity-100 sm:translate-y-0 sm:scale-100" 
+                     x-transition:leave-end="translate-y-full sm:opacity-0 sm:translate-y-4 sm:scale-95" 
+                     class="pointer-events-auto relative transform overflow-hidden rounded-t-2xl sm:rounded-lg bg-white text-left shadow-2xl transition-all sm:my-8 w-full sm:max-w-md border-t sm:border border-gray-200 flex flex-col max-h-[90vh] sm:max-h-none">
+                    <form wire:submit.prevent="addUser" class="flex flex-col h-full overflow-hidden">
+                        <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4 border-b border-gray-100 overflow-y-auto flex-1">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold leading-6 text-gray-900" id="modal-title">Add New User</h3>
+                                <button @click="$wire.showModal = false" type="button" class="text-gray-400 hover:text-gray-600">
+                                    <i class="fa-solid fa-xmark text-lg"></i>
+                                </button>
+                            </div>
+                            <div class="space-y-4 mt-2">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-700 mb-1">Name</label>
+                                    <input wire:model="name" autocomplete="name" placeholder="John Doe" class="w-full h-10 px-3 text-sm border border-gray-300 rounded-md bg-white text-gray-900 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors">
+                                    @error('name') <span class="text-xs text-red-500 mt-1">{{ $message }}</span> @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-700 mb-1">Mobile</label>
+                                    <input wire:model="phone" autocomplete="tel" placeholder="9876543210" class="w-full h-10 px-3 text-sm border border-gray-300 rounded-md bg-white text-gray-900 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors">
+                                    @error('phone') <span class="text-xs text-red-500 mt-1">{{ $message }}</span> @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-700 mb-1">Email (Optional)</label>
+                                    <input wire:model="email" autocomplete="username email" placeholder="john@example.com" class="w-full h-10 px-3 text-sm border border-gray-300 rounded-md bg-white text-gray-900 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors">
+                                    @error('email') <span class="text-xs text-red-500 mt-1">{{ $message }}</span> @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-700 mb-1">Password</label>
+                                    <input wire:model="password" type="password" autocomplete="new-password" placeholder="••••••••" class="w-full h-10 px-3 text-sm border border-gray-300 rounded-md bg-white text-gray-900 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors">
+                                    @error('password') <span class="text-xs text-red-500 mt-1">{{ $message }}</span> @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-700 mb-1">Role <span class="text-red-500">*</span></label>
+                                    <select wire:model="newRole" class="w-full h-10 px-3 text-sm border border-gray-300 rounded-md bg-white text-gray-900 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors">
+                                        <option value="">Select Role</option>
+                                        <option value="user">User</option>
+                                        <option value="technician">Technician</option>
+                                    </select>
+                                    @error('newRole') <span class="text-xs text-red-500 mt-1">{{ $message }}</span> @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                            <button type="submit" class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 sm:ml-3 sm:w-auto">Save</button>
+                            <button @click="$wire.showModal = false" type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

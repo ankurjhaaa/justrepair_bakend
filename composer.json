@@ -16,6 +16,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/slack-notification-channel": "^3.7",
         "laravel/tinker": "^2.10.1",
+        "livewire/blaze": "^1.0",
         "livewire/livewire": "^3.7"
     },
     "require-dev": {
