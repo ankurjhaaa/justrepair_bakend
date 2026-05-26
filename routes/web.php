@@ -7,6 +7,8 @@ use App\Livewire\Admin\AdminBookingView;
 use App\Livewire\Admin\AdminConfig;
 use App\Livewire\Admin\AdminCustomer;
 use App\Livewire\Admin\AdminCustomerView;
+use App\Livewire\Admin\AdminTechnician;
+use App\Livewire\Admin\AdminTechnicianView;
 use App\Livewire\Admin\AdminDashboard;
 use App\Livewire\Admin\AdminFaq;
 use App\Livewire\Admin\AdminService;
@@ -60,6 +62,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin/')->name('admin.')->gro
     Route::get('booking-view/{id}', AdminBookingView::class)->name('bookingview');
     Route::get('customers', AdminCustomer::class)->name('customer');
     Route::get('customers-view/{id}', AdminCustomerView::class)->name('customerview');
+    Route::get('technicians', AdminTechnician::class)->name('technician');
+    Route::get('technicians-view/{id}', AdminTechnicianView::class)->name('technicianview');
     Route::get('faqs', AdminFaq::class)->name('faqs');
     Route::get('/api-explorer', ApiExplorer::class)->name('apis');
     Route::get('/config', AdminConfig::class)->name('config');

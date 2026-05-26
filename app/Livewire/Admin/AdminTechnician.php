@@ -9,7 +9,7 @@ use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Hash;
 
 #[Layout('layouts.admin')]
-class AdminCustomer extends Component
+class AdminTechnician extends Component
 {
     use WithPagination;
 
@@ -67,7 +67,7 @@ class AdminCustomer extends Component
     /* =======================
      |  ADD USER
      ======================= */
-    public function addUser()
+    public function addTechnician()
     {
         $this->validate();
 
@@ -76,7 +76,7 @@ class AdminCustomer extends Component
             'phone' => $this->phone,
             'email' => $this->email,
             'password' => Hash::make($this->password),
-            'role' => 'user',
+            'role' => 'technician',
         ]);
 
         $this->reset([
@@ -93,7 +93,7 @@ class AdminCustomer extends Component
      ======================= */
     public function render()
     {
-        $customers = User::query()
+        $technicians = User::query()
 
             // 🔍 Search (name / phone)
             ->when($this->search, function ($q) {
@@ -108,13 +108,13 @@ class AdminCustomer extends Component
                 $q->whereDate('created_at', $this->date);
             })
             
-            ->where('role', 'user') // Restrict to only users
+            ->where('role', 'technician') // Restrict to only technicians
 
             ->latest()
             ->paginate(30);
 
-        return view('livewire.admin.admin-customer', [
-            'customers' => $customers,
+        return view('livewire.admin.admin-technician', [
+            'technicians' => $technicians,
         ]);
     }
 }

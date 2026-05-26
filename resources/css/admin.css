@@ -1,0 +1,12 @@
+@import 'tailwindcss';
+
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --color-brand: #6366f1;
+}
+
+[x-cloak] {
+    display: none !important;
+}

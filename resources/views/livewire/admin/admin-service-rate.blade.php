@@ -70,7 +70,7 @@
     </div>
 
     <!-- MOBILE FLOATING ADD BUTTON -->
-    <button wire:click="create" class="md:hidden fixed bottom-6 right-6 z-40 flex items-center justify-center w-14 h-14 bg-indigo-600 text-white rounded-full shadow-lg hover:bg-indigo-700 hover:scale-105 transition-transform">
+    <button wire:click="create" class="md:hidden fixed bottom-24 right-6 z-40 flex items-center justify-center w-14 h-14 bg-indigo-600 text-white rounded-full shadow-lg hover:bg-indigo-700 hover:scale-105 transition-transform">
         <i class="fa-solid fa-plus text-xl"></i>
     </button>
 

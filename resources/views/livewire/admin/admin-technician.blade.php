@@ -3,8 +3,8 @@
     <!-- HEADER -->
     <div class="flex items-center justify-between min-h-[60px]">
         <div>
-            <h1 class="text-xl font-bold text-gray-900">Customers</h1>
-            <p class="text-xs text-gray-500 mt-1">Manage all registered customers</p>
+            <h1 class="text-xl font-bold text-gray-900">Technicians</h1>
+            <p class="text-xs text-gray-500 mt-1">Manage all service technicians</p>
         </div>
         
         <div class="flex items-center gap-3">
@@ -13,9 +13,8 @@
                 <i class="fa-solid fa-filter text-gray-500"></i> <span>Filters</span>
             </button>
             
-            <!-- Desktop Add Button -->
             <button wire:click="$set('showModal', true)" class="hidden md:flex items-center gap-2 px-4 py-2 rounded-md bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm">
-                <i class="fa-solid fa-plus"></i> <span>Add User</span>
+                <i class="fa-solid fa-plus"></i> <span>Add Technician</span>
             </button>
         </div>
     </div>
@@ -77,12 +76,12 @@
         </div>
     </div>
 
-    <!-- CUSTOMERS TABLE -->
+    <!-- TECHNICIANS TABLE -->
     <div class="bg-white border border-gray-200 rounded-md overflow-x-auto">
         <table class="w-full text-sm text-left whitespace-nowrap text-gray-700">
             <thead class="bg-gray-50 text-gray-600 border-b border-gray-200">
                 <tr>
-                    <th class="px-4 py-3 font-medium">Customer</th>
+                    <th class="px-4 py-3 font-medium">Technician</th>
                     <th class="px-4 py-3 font-medium">Mobile</th>
                     <th class="px-4 py-3 font-medium">Joined</th>
                     <th class="px-4 py-3 font-medium">Role</th>
@@ -90,34 +89,29 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">
-                @forelse($customers as $customer)
+                @forelse($technicians as $technician)
                     <tr class="hover:bg-gray-50/50 transition-colors">
                         <td class="px-4 py-3">
                             <div class="flex items-center gap-3">
                                 <div class="w-8 h-8 rounded-full bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold text-xs border border-indigo-100">
-                                    {{ strtoupper(substr($customer->name ?? 'U', 0, 1)) }}
+                                    {{ strtoupper(substr($technician->name ?? 'T', 0, 1)) }}
                                 </div>
-                                <div class="font-medium text-gray-900">{{ $customer->name ?? '—' }}</div>
+                                <div class="font-medium text-gray-900">{{ $technician->name ?? '—' }}</div>
                             </div>
                         </td>
                         <td class="px-4 py-3 font-medium text-gray-800">
-                            {{ $customer->phone ?? '—' }}
+                            {{ $technician->phone ?? '—' }}
                         </td>
                         <td class="px-4 py-3 text-gray-600">
-                            {{ $customer->created_at->format('d M Y') }}
+                            {{ $technician->created_at->format('d M Y') }}
                         </td>
                         <td class="px-4 py-3">
-                            <span class="px-2 py-1 text-[11px] font-medium rounded-md border
-                                @class([
-                                    'bg-green-50 text-green-700 border-green-200' => $customer->role === 'user',
-                                    'bg-purple-50 text-purple-700 border-purple-200' => $customer->role === 'technician',
-                                    'bg-gray-50 text-gray-700 border-gray-200' => !in_array($customer->role, ['user', 'technician']),
-                                ])">
-                                {{ ucfirst($customer->role) }}
+                            <span class="px-2 py-1 text-[11px] font-medium rounded-md border bg-purple-50 text-purple-700 border-purple-200">
+                                {{ ucfirst($technician->role) }}
                             </span>
                         </td>
                         <td class="px-4 py-3 text-right">
-                            <a wire:navigate href="{{ route('admin.customerview', $customer->id) }}" class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 text-gray-700 rounded-md hover:bg-gray-50 hover:text-indigo-600 transition-colors">
+                            <a wire:navigate href="{{ route('admin.technicianview', $technician->id) }}" class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 text-gray-700 rounded-md hover:bg-gray-50 hover:text-indigo-600 transition-colors">
                                 View
                             </a>
                         </td>
@@ -127,7 +121,7 @@
                         <td colspan="5" class="px-4 py-10 text-center text-gray-500">
                             <div class="flex flex-col items-center justify-center">
                                 <i class="fa-solid fa-users text-3xl mb-3 text-gray-300"></i>
-                                <p class="text-sm">No customers found</p>
+                                <p class="text-sm">No technicians found</p>
                             </div>
                         </td>
                     </tr>
@@ -135,9 +129,9 @@
             </tbody>
         </table>
 
-        @if($customers->hasPages())
+        @if($technicians->hasPages())
             <div class="px-4 py-3 border-t border-gray-200 bg-gray-50">
-                {{ $customers->links() }}
+                {{ $technicians->links() }}
             </div>
         @endif
     </div>
@@ -147,7 +141,7 @@
         <i class="fa-solid fa-plus text-xl"></i>
     </button>
 
-    <!-- ADD USER MODAL -->
+    <!-- ADD TECHNICIAN MODAL -->
     <div x-show="$wire.showModal" class="relative z-50" x-cloak>
         <!-- Backdrop -->
         <div x-show="$wire.showModal" x-transition.opacity class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm" @click="$wire.showModal = false"></div>
@@ -163,10 +157,10 @@
                      x-transition:leave-start="translate-y-0 sm:opacity-100 sm:translate-y-0 sm:scale-100" 
                      x-transition:leave-end="translate-y-full sm:opacity-0 sm:translate-y-4 sm:scale-95" 
                      class="pointer-events-auto relative transform overflow-hidden rounded-t-2xl sm:rounded-lg bg-white text-left shadow-2xl transition-all sm:my-8 w-full sm:max-w-md border-t sm:border border-gray-200 flex flex-col max-h-[90vh] sm:max-h-none">
-                    <form wire:submit.prevent="addUser" class="flex flex-col h-full overflow-hidden">
+                    <form wire:submit.prevent="addTechnician" class="flex flex-col h-full overflow-hidden">
                         <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4 border-b border-gray-100 overflow-y-auto flex-1">
                             <div class="flex items-center justify-between mb-4">
-                                <h3 class="text-lg font-semibold leading-6 text-gray-900" id="modal-title">Add New User</h3>
+                                <h3 class="text-lg font-semibold leading-6 text-gray-900" id="modal-title">Add New Technician</h3>
                                 <button @click="$wire.showModal = false" type="button" class="text-gray-400 hover:text-gray-600">
                                     <i class="fa-solid fa-xmark text-lg"></i>
                                 </button>
