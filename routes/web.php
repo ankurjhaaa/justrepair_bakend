@@ -54,9 +54,6 @@ Route::get('profile', Profile::class)->name('profile');
 Route::get('/booking-success/{booking_id}', BookingSuccess::class)->name('bookingsuccess');
 Route::get('/mobile-profile', MobileProfile::class)->name('mobileprofile');
 
-// Programmatic SEO Routes
-Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
-Route::get('/{city}/{service}', \App\Livewire\User\SeoServicePage::class)->name('seo.service');
 Route::middleware(['auth', 'role:admin'])->prefix('admin/')->name('admin.')->group(function () {
     Route::get('dashboard', AdminDashboard::class)->name('dashboard');
     Route::get('service', AdminService::class)->name('service');
@@ -115,3 +112,7 @@ Route::get('/slack', function () {
 
     return "Slack Notification Sent!";
 });
+
+// Programmatic SEO Routes
+Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
+Route::get('/{city}/{service}', \App\Livewire\User\SeoServicePage::class)->name('seo.service');
