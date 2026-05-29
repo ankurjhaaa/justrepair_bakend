@@ -59,20 +59,29 @@
 
     <!-- AREAS WE SERVE IN PURNEA -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-12 border-t border-gray-100">
-        <h3 class="text-xl font-bold text-gray-900 mb-6 text-center sm:text-left">Areas We Serve in Purnea</h3>
+        <h3 class="text-xl font-bold text-gray-900 mb-6 text-center sm:text-left">Areas We Serve in Purnea District</h3>
+        <p class="text-gray-600 mb-6 text-center sm:text-left max-w-4xl">
+            We provide fast, reliable, and affordable home repair services across all major localities in Purnea. Need an electrician in Line Bazar? AC repair in Bhatta Bazar? Or plumbing in Madhubani? JustRepair has you covered!
+        </p>
         <div class="flex flex-wrap gap-3 justify-center sm:justify-start">
             @php
-                $localities = [
-                    'Line Bazar', 'Bhatta Bazar', 'Madhubani', 'Khazanchi Hat', 
-                    'Rambagh', 'Gulabbagh', 'Maranga', 'Chunapur', 'Kasba', 
-                    'Dagarua', 'Jalalgarh'
-                ];
+                $localities = config('seo_cities.cities', []);
+                // Filter out non-purnea cities from the main list if needed, or just display all.
+                // We'll display all the purnea ones.
+                $purneaLocalities = collect($localities)->filter(function($value, $key) {
+                    return str_contains($key, 'purnea') && $key !== 'purnea';
+                })->take(20);
+                
+                $firstService = \App\Models\Service::whereNotNull('slug')->first();
             @endphp
-            @foreach($localities as $loc)
-                <span class="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-sm font-medium border border-gray-200">
+            @foreach($purneaLocalities as $key => $loc)
+                <a wire:navigate href="{{ url('/' . $key . '/' . ($firstService->slug ?? '')) }}" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-sm font-medium border border-gray-200 hover:border-primary hover:text-primary transition">
                     <i class="fa-solid fa-location-dot text-primary mr-1"></i> {{ $loc }}
-                </span>
+                </a>
             @endforeach
+            <a wire:navigate href="{{ route('service') }}" class="bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium border border-primary/20 hover:bg-primary hover:text-white transition">
+                Explore all areas &rarr;
+            </a>
         </div>
     </div>
 

@@ -7,7 +7,6 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 
 #[Layout('layouts.user')]
-#[Title('Privacy Policy - JustRepair')]
 class PrivacyPolicy extends Component
 {
     public function render()

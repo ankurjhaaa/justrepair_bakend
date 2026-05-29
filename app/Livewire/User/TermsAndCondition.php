@@ -7,7 +7,6 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 
 #[Layout('layouts.user')]
-#[Title('Terms and Conditions - JustRepair')]
 class TermsAndCondition extends Component
 {
     public function render()

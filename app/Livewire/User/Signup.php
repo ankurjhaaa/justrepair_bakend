@@ -10,7 +10,6 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 
 #[Layout('layouts.user')]
-#[Title('Sign Up - JustRepair')]
 class Signup extends Component
 {
     public string $name = '';

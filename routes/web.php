@@ -115,4 +115,5 @@ Route::get('/slack', function () {
 
 // Programmatic SEO Routes
 Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
+Route::get('/services/{slug}', \App\Livewire\User\ServiceDetail::class)->name('seo.service.detail');
 Route::get('/{city}/{service}', \App\Livewire\User\SeoServicePage::class)->name('seo.service');

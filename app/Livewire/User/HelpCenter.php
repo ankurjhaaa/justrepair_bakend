@@ -7,7 +7,6 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 
 #[Layout('layouts.user')]
-#[Title('Help Center - JustRepair')]
 class HelpCenter extends Component
 {
     public function render()

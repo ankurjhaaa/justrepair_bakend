@@ -7,26 +7,13 @@ use Livewire\Component;
 use Livewire\Attributes\Layout;
 
 #[Layout('layouts.user')]
-class SeoServicePage extends Component
+class ServiceDetail extends Component
 {
-    public $city;
-    public $cityKey;
     public $service;
 
-    public function mount($city, $service)
+    public function mount($slug)
     {
-        $cities = config('seo_cities.cities');
-        
-        $this->cityKey = strtolower($city);
-        
-        // 1. Verify City
-        if (!array_key_exists($this->cityKey, $cities)) {
-            abort(404);
-        }
-        $this->city = $cities[$this->cityKey];
-
-        // 2. Verify Service
-        $this->service = Service::where('slug', strtolower($service))->first();
+        $this->service = Service::where('slug', strtolower($slug))->first();
         if (!$this->service) {
             abort(404);
         }
@@ -35,13 +22,12 @@ class SeoServicePage extends Component
     public function render()
     {
         $serviceName = $this->service->name;
-        $cityName = $this->city;
         $appName = \App\Models\Setting::first()->site_name ?? 'JustRepair';
 
-        // SEO Meta
-        $title = "Best {$serviceName} in {$cityName} | Top Rated Technicians | {$appName}";
-        $description = "Looking for professional {$serviceName} in {$cityName}? Book verified and expert technicians at your doorstep with {$appName}. Affordable rates & fast service.";
-        $keywords = strtolower("{$serviceName} {$cityName}, best {$serviceName} in {$cityName}, {$cityName} {$serviceName} technicians, {$serviceName} near me");
+        // Purnea SEO Focus
+        $title = "Best {$serviceName} in Purnea | Top Rated Technicians | {$appName}";
+        $description = "Looking for professional {$serviceName} in Purnea? Book verified and expert technicians at your doorstep with {$appName}. Serving Line Bazar, Bhatta Bazar & more.";
+        $keywords = strtolower("{$serviceName} purnea, best {$serviceName} in purnea, purnea {$serviceName} technicians, {$serviceName} near me purnea");
         
         // JSON-LD Schema
         $schema = [
@@ -49,20 +35,20 @@ class SeoServicePage extends Component
             "@graph" => [
                 [
                     "@type" => "Service",
-                    "name" => "{$serviceName} in {$cityName}",
+                    "name" => "{$serviceName} in Purnea",
                     "provider" => [
                         "@type" => "LocalBusiness",
                         "name" => $appName,
                         "address" => [
                             "@type" => "PostalAddress",
-                            "addressLocality" => $cityName,
+                            "addressLocality" => "Purnea",
                             "addressRegion" => "Bihar",
                             "addressCountry" => "IN"
                         ]
                     ],
                     "areaServed" => [
                         "@type" => "City",
-                        "name" => $cityName
+                        "name" => "Purnea"
                     ],
                     "description" => $description,
                     "url" => url()->current(),
@@ -91,13 +77,7 @@ class SeoServicePage extends Component
                         [
                             "@type" => "ListItem",
                             "position" => 3,
-                            "name" => $serviceName,
-                            "item" => url('/services/' . $this->service->slug)
-                        ],
-                        [
-                            "@type" => "ListItem",
-                            "position" => 4,
-                            "name" => "{$serviceName} in {$cityName}"
+                            "name" => $serviceName
                         ]
                     ]
                 ],
@@ -106,15 +86,15 @@ class SeoServicePage extends Component
                     "mainEntity" => [
                         [
                             "@type" => "Question",
-                            "name" => "How soon can a technician reach my home in {$cityName}?",
+                            "name" => "How soon can a technician reach my home in Purnea?",
                             "acceptedAnswer" => [
                                 "@type" => "Answer",
-                                "text" => "Depending on availability, our professionals can usually reach your location within a few hours of booking."
+                                "text" => "Depending on availability, our professionals can usually reach your location in Purnea within a few hours of booking."
                             ]
                         ],
                         [
                             "@type" => "Question",
-                            "name" => "Is there a warranty on the " . strtolower($serviceName) . "?",
+                            "name" => "Is there a warranty on the {$serviceName}?",
                             "acceptedAnswer" => [
                                 "@type" => "Answer",
                                 "text" => "Yes, we provide a service warranty. Any issues post-service are handled with priority."
@@ -127,7 +107,7 @@ class SeoServicePage extends Component
         
         $schemaScript = '<script type="application/ld+json">' . json_encode($schema, JSON_UNESCAPED_SLASHES) . '</script>';
 
-        return view('livewire.user.seo-service-page')
+        return view('livewire.user.service-detail')
             ->layoutData([
                 'title' => $title,
                 'description' => $description,

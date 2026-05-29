@@ -14,7 +14,6 @@ use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 #[Layout('layouts.user')]
-#[Title('Book a Service - JustRepair')]
 class UserBooking extends Component
 {
     public $services;

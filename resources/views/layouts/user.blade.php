@@ -15,7 +15,7 @@
         $siteLogo = $settings->site_logo ? asset('storage/' . $settings->site_logo) : asset('logo.jpeg');
 
         // Favicon
-        $favicon = $settings->favicon ? asset('storage/' . $settings->favicon) : asset('favicon.ico');
+        $favicon = asset('favicon.ico');
 
         // Page Specific Overrides (passed from component)
         // If $title is set (e.g. via @title('...')), use it.
@@ -33,8 +33,21 @@
     <meta name="description" content="{{ $pageDesc }}">
     <meta name="keywords" content="{{ $pageKeywords }}">
     <meta name="author" content="{{ $siteName }}">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="theme-color" content="#8B0000">
+    <meta name="application-name" content="{{ $siteName }}">
     <link rel="canonical" href="{{ url()->current() }}">
+    
+    <!-- GeoMeta Tags for Purnea, Bihar -->
+    <meta name="geo.region" content="IN-BR" />
+    <meta name="geo.placename" content="Purnea" />
+    <meta name="geo.position" content="25.7771;87.4753" />
+    <meta name="ICBM" content="25.7771, 87.4753" />
+    
+    <!-- Hreflang for Language/Region -->
+    <link rel="alternate" hreflang="en-in" href="{{ url()->current() }}" />
+    <link rel="alternate" hreflang="hi-in" href="{{ url()->current() }}" />
+    <link rel="alternate" hreflang="x-default" href="{{ url()->current() }}" />
 
     @if(isset($schema))
         {!! $schema !!}
@@ -361,14 +374,14 @@
                             </svg>
                         </a>
 
-                        <a href="#" class="hover:text-white transition">
+                        <a href="{{ $settings->youtube_url ?? '#' }}" class="hover:text-white transition">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                                 <path
                                     d="M21.5 6.5a4.9 4.9 0 0 1-1.4.4 2.4 2.4 0 0 0 1-1.3 4.7 4.7 0 0 1-1.5.6A2.4 2.4 0 0 0 16.3 8c0 .2 0 .4.1.6A6.8 6.8 0 0 1 6.8 6.1a2.4 2.4 0 0 0 .7 3.2 2.4 2.4 0 0 1-1.1-.3v.1c0 1.2.9 2.3 2.1 2.6a2.4 2.4 0 0 1-1.1.1 2.4 2.4 0 0 0 2.2 1.7A4.8 4.8 0 0 1 6 14.7 6.8 6.8 0 0 0 16.5 9c0-.1 0-.3 0-.4a4.9 4.9 0 0 0 1.2-1.3z" />
                             </svg>
                         </a>
 
-                        <a href="#" class="hover:text-white transition">
+                        <a href="{{ $settings->instagram_url ?? '#' }}" class="hover:text-white transition">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                                 <path
                                     d="M12 2.2c3.2 0 3.6 0 4.8.1 1.1.1 1.7.2 2.1.4.5.2.9.4 1.3.8.4.4.6.8.8 1.3.2.4.3 1 .4 2.1.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.1-.2 1.7-.4 2.1-.2.5-.4.9-.8 1.3-.4.4-.8.6-1.3.8-.4.2-1 .3-2.1.4-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.1-.1-1.7-.2-2.1-.4-.5-.2-.9-.4-1.3-.8-.4-.4-.6-.8-.8-1.3-.2-.4-.3-1-.4-2.1C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8c.1-1.1.2-1.7.4-2.1.2-.5.4-.9.8-1.3.4-.4.8-.6 1.3-.8.4-.2 1-.3 2.1-.4C8.4 2.2 8.8 2.2 12 2.2zm0 3.4a6.4 6.4 0 1 0 0 12.8 6.4 6.4 0 0 0 0-12.8zm0 10.5a4.1 4.1 0 1 1 0-8.2 4.1 4.1 0 0 1 0 8.2zm6.6-10.7a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
@@ -379,20 +392,37 @@
 
                 <!-- POPULAR SEARCHES -->
                 <div>
-                    <h4 class="text-white font-semibold mb-4">Popular Searches</h4>
+                    <h4 class="text-white font-semibold mb-4">Top Locations in Purnea</h4>
                     <ul class="space-y-3 text-sm">
                         @php
-                            $popCities = ['line-bazar-purnea', 'bhatta-bazar-purnea', 'madhubani-purnea'];
-                            $popServices = \App\Models\Service::whereNotNull('slug')->take(2)->get();
+                            $popCities = ['line-bazar-purnea', 'bhatta-bazar-purnea', 'madhubani-purnea', 'khazanchi-hat-purnea', 'rambagh-purnea'];
+                            $popServices = \App\Models\Service::whereNotNull('slug')->take(3)->get();
                         @endphp
                         @foreach($popCities as $cKey)
-                            @foreach($popServices as $pSvc)
-                                <li>
-                                    <a wire:navigate href="{{ url('/'.$cKey.'/'.$pSvc->slug) }}" class="hover:text-white text-gray-400 transition">
-                                        {{ $pSvc->name }} in {{ config("seo_cities.cities.$cKey", ucfirst($cKey)) }}
-                                    </a>
-                                </li>
-                            @endforeach
+                            <li>
+                                <a wire:navigate href="{{ url('/'.$cKey.'/'.($popServices->first()->slug ?? '')) }}" class="hover:text-white text-gray-400 transition">
+                                    {{ config("seo_cities.cities.$cKey", ucfirst($cKey)) }}
+                                </a>
+                            </li>
+                        @endforeach
+                        <li>
+                            <a wire:navigate href="{{ route('service') }}" class="hover:text-white text-primary transition font-medium">
+                                View all areas &rarr;
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- SERVICES -->
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Our Services</h4>
+                    <ul class="space-y-3 text-sm">
+                        @foreach(\App\Models\Service::whereNotNull('slug')->take(5)->get() as $ftrSvc)
+                            <li>
+                                <a wire:navigate href="{{ url('/services/'.$ftrSvc->slug) }}" class="hover:text-white text-gray-400 transition">
+                                    {{ $ftrSvc->name }} in Purnea
+                                </a>
+                            </li>
                         @endforeach
                     </ul>
                 </div>
@@ -401,10 +431,12 @@
                 <div>
                     <h4 class="text-white font-semibold mb-4">Company</h4>
                     <ul class="space-y-3 text-sm">
-                        <li><a wire:navigate href="{{ route('aboutus') }}" class="hover:text-white">About Us</a></li>
-                        <li><a wire:navigate href="{{ route('service') }}" class="hover:text-white">Services</a></li>
-                        <li><a href="#" class="hover:text-white">Become a Technician</a></li>
-                        <li><a href="#" class="hover:text-white">Careers</a></li>
+                        <li><a wire:navigate href="{{ route('aboutus') }}" class="hover:text-white text-gray-400 transition">About Us</a></li>
+                        <li><a wire:navigate href="{{ route('service') }}" class="hover:text-white text-gray-400 transition">Services</a></li>
+                        <li><a wire:navigate href="{{ route('contact') }}" class="hover:text-white text-gray-400 transition">Contact Us</a></li>
+                        <li><a wire:navigate href="{{ route('helpcenter') }}" class="hover:text-white text-gray-400 transition">Help Center</a></li>
+                        <li><a wire:navigate href="{{ route('termsandcondition') }}" class="hover:text-white text-gray-400 transition">Terms & Conditions</a></li>
+                        <li><a wire:navigate href="{{ route('privacypolicy') }}" class="hover:text-white text-gray-400 transition">Privacy Policy</a></li>
                     </ul>
                 </div>
 
@@ -429,7 +461,7 @@
                     </p>
 
                     <div class="space-y-4">
-                        <a href="#" class="flex items-center gap-4 px-5 py-3 rounded-xl
+                        <a href="https://play.google.com/store/apps/details?id=com.rupeshsaha.justrepairtechnician" class="flex items-center gap-4 px-5 py-3 rounded-xl
                               bg-[#1a1a1f] hover:bg-[#222229]
                               transition border border-white/10">
                             <span class="text-2xl">📱</span>
@@ -441,7 +473,7 @@
                             </div>
                         </a>
 
-                        <a href="#" class="flex items-center gap-4 px-5 py-3 rounded-xl
+                        <!-- <a href="#" class="flex items-center gap-4 px-5 py-3 rounded-xl
                               bg-[#1a1a1f] hover:bg-[#222229]
                               transition border border-white/10">
                             <span class="text-2xl">🍎</span>
@@ -451,7 +483,7 @@
                                     App Store
                                 </p>
                             </div>
-                        </a>
+                        </a> -->
                     </div>
                 </div>
             </div>

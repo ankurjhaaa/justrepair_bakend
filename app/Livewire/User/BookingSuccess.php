@@ -8,7 +8,6 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 
 #[Layout('layouts.user')]
-#[Title('Booking Successful - JustRepair')]
 class BookingSuccess extends Component
 {
     public Booking $booking;

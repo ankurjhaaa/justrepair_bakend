@@ -8,16 +8,37 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 
 #[Layout('layouts.user')]
-#[Title('Our Services - JustRepair')]
 class Service extends Component
 {
     public function render()
     {
         $services = ServiceModel::latest()->get();
+        
+        $itemList = [];
+        $position = 1;
+        foreach ($services as $service) {
+            if (!empty($service->slug)) {
+                $itemList[] = [
+                    "@type" => "ListItem",
+                    "position" => $position++,
+                    "url" => url("/services/{$service->slug}")
+                ];
+            }
+        }
+        
+        $schema = [
+            "@context" => "https://schema.org",
+            "@type" => "ItemList",
+            "itemListElement" => $itemList
+        ];
+        
+        $schemaScript = '<script type="application/ld+json">' . json_encode($schema, JSON_UNESCAPED_SLASHES) . '</script>';
 
         return view('livewire.user.service', compact('services'))->layoutData([
-            'description' => 'Explore our wide range of home repair and maintenance services available near you.',
-            'keywords' => 'services, repair list, technician categories, home maintenance'
+            'title' => 'All Home Services & Repairs in Purnea - JustRepair',
+            'description' => 'Explore our wide range of professional home repair and maintenance services available in Purnea. Book AC repair, plumbing, and electricians today.',
+            'keywords' => 'services purnea, repair list purnea, technician categories, home maintenance purnea',
+            'schema' => $schemaScript
         ]);
     }
 }
