@@ -461,7 +461,7 @@
                     </p>
 
                     <div class="space-y-4">
-                        <a href="https://play.google.com/store/apps/details?id=com.rupeshsaha.justrepairtechnician" class="flex items-center gap-4 px-5 py-3 rounded-xl
+                        <a href="https://play.google.com/store/apps/details?id=com.rupeshsaha.justrepair" class="flex items-center gap-4 px-5 py-3 rounded-xl
                               bg-[#1a1a1f] hover:bg-[#222229]
                               transition border border-white/10">
                             <span class="text-2xl">📱</span>
